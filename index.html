@@ -1,749 +1,834 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Latte Coffee Checker</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #6B4E3D 0%, #8B6F47 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-            transition: all 0.3s ease;
-        }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: linear-gradient(135deg, #6b4e3d 0%, #8b6f47 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #333;
+        transition: all 0.3s ease;
+      }
 
-        body.light-theme {
-            background: linear-gradient(135deg, #F5F5F5 0%, #E8E8E8 100%);
-            color: #333;
-        }
+      body.light-theme {
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        color: #333;
+      }
 
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
 
-        body.light-theme .container {
-            background: white;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-        }
+      body.light-theme .container {
+        background: white;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      }
 
-        .header {
-            background: linear-gradient(135deg, #3E2723 0%, #5D4037 100%);
-            color: white;
-            text-align: center;
-            padding: 30px 20px;
-            position: relative;
-        }
+      .header {
+        background: linear-gradient(135deg, #3e2723 0%, #5d4037 100%);
+        color: white;
+        text-align: center;
+        padding: 30px 20px;
+        position: relative;
+      }
 
-        body.light-theme .header {
-            background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
-        }
+      body.light-theme .header {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      }
 
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 18px;
-        }
+      .theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 18px;
+      }
 
-        .theme-toggle:hover {
-            background: rgba(255,255,255,0.3);
-            transform: rotate(180deg);
-        }
+      .theme-toggle:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(180deg);
+      }
 
-        .header h1 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
+      .header h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
 
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 20px;
-        }
+      .header p {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 20px;
+      }
 
-        .header-buttons {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+      .header-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
 
-        .header-btn {
-            padding: 8px 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 20px;
-            color: white;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-        }
+      .header-btn {
+        padding: 8px 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        color: white;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+      }
 
-        .header-btn:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: rgba(255,255,255,0.5);
-            transform: translateY(-1px);
-        }
+      .header-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-1px);
+      }
 
-        .form-container {
-            padding: 30px 20px;
-        }
+      .form-container {
+        padding: 30px 20px;
+      }
 
-        .form-group {
-            margin-bottom: 25px;
-        }
+      .form-group {
+        margin-bottom: 25px;
+      }
 
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            color: #3E2723;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
+      .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #3e2723;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
 
-        select, input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #E0E0E0;
-            border-radius: 12px;
-            font-size: 16px;
-            background: white;
-            transition: all 0.3s ease;
-        }
+      select,
+      input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 16px;
+        background: white;
+        transition: all 0.3s ease;
+      }
 
-        select:focus, input:focus {
-            outline: none;
-            border-color: #6B4E3D;
-            box-shadow: 0 0 0 3px rgba(107, 78, 61, 0.1);
-        }
+      select:focus,
+      input:focus {
+        outline: none;
+        border-color: #6b4e3d;
+        box-shadow: 0 0 0 3px rgba(107, 78, 61, 0.1);
+      }
 
-        .blend-group {
-            display: block;
-            flex-direction: column;
-            gap: 15px;
-        }
+      .blend-group {
+        display: block;
+        flex-direction: column;
+        gap: 15px;
+      }
 
-        .blend-group.active {
-            display: flex;
-        }
+      .blend-group.active {
+        display: flex;
+      }
 
-        .blend-item {
-            display: flex;
-            gap: 10px;
-            align-items: end;
-        }
+      .blend-item {
+        display: flex;
+        gap: 10px;
+        align-items: end;
+      }
 
-        .blend-item select {
-            flex: 2;
-        }
+      .blend-item select {
+        flex: 2;
+      }
 
-        .blend-item input {
-            flex: 1;
-            max-width: 80px;
-        }
+      .blend-item input {
+        flex: 1;
+        max-width: 80px;
+      }
 
-        .check-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #6B4E3D 0%, #8B6F47 100%);
-            color: white;
-            border: none;
-            padding: 18px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
+      .check-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #6b4e3d 0%, #8b6f47 100%);
+        color: white;
+        border: none;
+        padding: 18px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
 
-        .check-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(107, 78, 61, 0.3);
-        }
+      .check-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(107, 78, 61, 0.3);
+      }
 
-        body.light-theme .check-btn {
-            background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
-        }
+      body.light-theme .check-btn {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      }
 
-        body.light-theme .check-btn:hover {
-            box-shadow: 0 10px 20px rgba(44, 62, 80, 0.3);
-        }
+      body.light-theme .check-btn:hover {
+        box-shadow: 0 10px 20px rgba(44, 62, 80, 0.3);
+      }
 
-        .result {
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
+      .result {
+        margin-top: 30px;
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        display: none;
+        animation: fadeIn 0.5s ease;
+      }
 
-        .result.perfect {
-            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
-            color: white;
-        }
+      .result.perfect {
+        background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+        color: white;
+      }
 
-        .result.good {
-            background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
-            color: white;
-        }
+      .result.good {
+        background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+        color: white;
+      }
 
-        .result.bad {
-            background: linear-gradient(135deg, #F44336 0%, #EF5350 100%);
-            color: white;
-        }
+      .result.bad {
+        background: linear-gradient(135deg, #f44336 0%, #ef5350 100%);
+        color: white;
+      }
 
-        .result-grade {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
+      .result-grade {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
 
-        .result-emoji {
-            font-size: 32px;
-            margin-bottom: 15px;
-            display: block;
-        }
+      .result-emoji {
+        font-size: 32px;
+        margin-bottom: 15px;
+        display: block;
+      }
 
-        .result-description {
-            font-size: 14px;
-            line-height: 1.5;
-            opacity: 0.95;
-        }
+      .result-description {
+        font-size: 14px;
+        line-height: 1.5;
+        opacity: 0.95;
+      }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-        .coffee-emoji {
-            font-size: 20px;
-            margin-right: 8px;
-        }
+      .coffee-emoji {
+        font-size: 20px;
+        margin-right: 8px;
+      }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-        }
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+      }
 
-        .modal-content {
-            position: relative;
-            background-color: white;
-            margin: 10% auto;
-            padding: 0;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            animation: modalSlideIn 0.3s ease;
-        }
+      .modal-content {
+        position: relative;
+        background-color: white;
+        margin: 10% auto;
+        padding: 0;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        animation: modalSlideIn 0.3s ease;
+      }
 
-        @keyframes modalSlideIn {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
+      @keyframes modalSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-50px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-        .modal-header {
-            background: linear-gradient(135deg, #3E2723 0%, #5D4037 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 20px 20px 0 0;
-            text-align: center;
-            position: relative;
-        }
+      .modal-header {
+        background: linear-gradient(135deg, #3e2723 0%, #5d4037 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 20px 20px 0 0;
+        text-align: center;
+        position: relative;
+      }
 
-        .close {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background-color 0.3s ease;
-        }
+      .close {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background-color 0.3s ease;
+      }
 
-        .close:hover {
-            background-color: rgba(255,255,255,0.2);
-        }
+      .close:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
 
-        .modal-body {
-            padding: 30px;
-        }
+      .modal-body {
+        padding: 30px;
+      }
 
-        .modal-form-group {
-            margin-bottom: 20px;
-        }
+      .modal-form-group {
+        margin-bottom: 20px;
+      }
 
-        .modal-form-group label {
-            display: block;
-            font-weight: 600;
-            color: #3E2723;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
+      .modal-form-group label {
+        display: block;
+        font-weight: 600;
+        color: #3e2723;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
 
-        .modal-form-group input,
-        .modal-form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #E0E0E0;
-            border-radius: 10px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.3s ease;
-        }
+      .modal-form-group input,
+      .modal-form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: inherit;
+        transition: border-color 0.3s ease;
+      }
 
-        .modal-form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
+      .modal-form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
 
-        .modal-form-group input:focus,
-        .modal-form-group textarea:focus {
-            outline: none;
-            border-color: #6B4E3D;
-        }
+      .modal-form-group input:focus,
+      .modal-form-group textarea:focus {
+        outline: none;
+        border-color: #6b4e3d;
+      }
 
-        .modal-submit-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #6B4E3D 0%, #8B6F47 100%);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+      .modal-submit-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #6b4e3d 0%, #8b6f47 100%);
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
 
-        .modal-submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(107, 78, 61, 0.3);
-        }
+      .modal-submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(107, 78, 61, 0.3);
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="header">
-            <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-                <span id="themeIcon">☀️</span>
-            </div>
-            <h1><span class="coffee-emoji">☕</span>Latte Coffee Checker</h1>
-            <p>Find the perfect coffee for your milk drinks</p>
-            <div class="header-buttons">
-                <a href="#" class="header-btn" onclick="openContactModal()">📧 Contact</a>
-                <a href="https://buymeacoffee.com/lattechecker" class="header-btn" target="_blank">☕ Buy Me a Coffee</a>
-            </div>
+      <div class="header">
+        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+          <span id="themeIcon">☀️</span>
         </div>
-        
-        <div class="form-container">
-            <div class="form-group">
-                <label for="coffeeType">Coffee Type</label>
-                <select id="coffeeType" onchange="toggleBlendInputs()">
-                    <option value="">Select coffee type</option>
-                    <option value="single">Single Origin</option>
-                    <option value="blend">Blend</option>
-                </select>
-            </div>
-
-            <div class="form-group" id="singleOriginGroup" style="display: none;">
-                <label for="country">Country of Origin</label>
-                <select id="country">
-                    <option value="">Select country</option>
-                    <option value="brazil">Brazil</option>
-                    <option value="colombia">Colombia</option>
-                    <option value="ethiopia">Ethiopia</option>
-                    <option value="guatemala">Guatemala</option>
-                    <option value="costa-rica">Costa Rica</option>
-                    <option value="honduras">Honduras</option>
-                    <option value="nicaragua">Nicaragua</option>
-                    <option value="peru">Peru</option>
-                    <option value="mexico">Mexico</option>
-                    <option value="jamaica">Jamaica</option>
-                    <option value="kenya">Kenya</option>
-                    <option value="rwanda">Rwanda</option>
-                    <option value="burundi">Burundi</option>
-                    <option value="tanzania">Tanzania</option>
-                    <option value="yemen">Yemen</option>
-                    <option value="indonesia">Indonesia</option>
-                    <option value="vietnam">Vietnam</option>
-                    <option value="india">India</option>
-                    <option value="papua-new-guinea">Papua New Guinea</option>
-                </select>
-            </div>
-
-            <div class="form-group" id="blendGroup" style="display: none;">
-                <label>Blend Composition (%)</label>
-                <div class="blend-group" id="blendInputs">
-                    <div class="blend-item">
-                        <select id="blend1Country">
-                            <option value="">Country 1</option>
-                            <option value="brazil">Brazil</option>
-                            <option value="colombia">Colombia</option>
-                            <option value="ethiopia">Ethiopia</option>
-                            <option value="guatemala">Guatemala</option>
-                            <option value="costa-rica">Costa Rica</option>
-                            <option value="honduras">Honduras</option>
-                            <option value="nicaragua">Nicaragua</option>
-                            <option value="peru">Peru</option>
-                            <option value="mexico">Mexico</option>
-                            <option value="jamaica">Jamaica</option>
-                            <option value="kenya">Kenya</option>
-                            <option value="rwanda">Rwanda</option>
-                            <option value="burundi">Burundi</option>
-                            <option value="tanzania">Tanzania</option>
-                            <option value="yemen">Yemen</option>
-                            <option value="indonesia">Indonesia</option>
-                            <option value="vietnam">Vietnam</option>
-                            <option value="india">India</option>
-                            <option value="papua-new-guinea">Papua New Guinea</option>
-                        </select>
-                        <input type="number" id="blend1Percent" placeholder="%" min="0" max="100" oninput="validateBlend()">
-                    </div>
-                    <div class="blend-item">
-                        <select id="blend2Country">
-                            <option value="">Country 2</option>
-                            <option value="brazil">Brazil</option>
-                            <option value="colombia">Colombia</option>
-                            <option value="ethiopia">Ethiopia</option>
-                            <option value="guatemala">Guatemala</option>
-                            <option value="costa-rica">Costa Rica</option>
-                            <option value="honduras">Honduras</option>
-                            <option value="nicaragua">Nicaragua</option>
-                            <option value="peru">Peru</option>
-                            <option value="mexico">Mexico</option>
-                            <option value="jamaica">Jamaica</option>
-                            <option value="kenya">Kenya</option>
-                            <option value="rwanda">Rwanda</option>
-                            <option value="burundi">Burundi</option>
-                            <option value="tanzania">Tanzania</option>
-                            <option value="yemen">Yemen</option>
-                            <option value="indonesia">Indonesia</option>
-                            <option value="vietnam">Vietnam</option>
-                            <option value="india">India</option>
-                            <option value="papua-new-guinea">Papua New Guinea</option>
-                        </select>
-                        <input type="number" id="blend2Percent" placeholder="%" min="0" max="100" oninput="validateBlend()">
-                    </div>
-                </div>
-                <div id="blendValidation" style="display: none; color: #F44336; font-size: 12px; margin-top: 8px;"></div>
-            </div>
-
-            <div class="form-group">
-                <label for="processing">Processing Method</label>
-                <select id="processing">
-                    <option value="">I do not know</option>
-                    <option value="washed">Washed (Wet Process)</option>
-                    <option value="natural">Natural (Dry Process)</option>
-                    <option value="honey">Honey Process</option>
-                    <option value="semi-washed">Semi-Washed</option>
-                    <option value="wet-hulled">Wet-Hulled</option>
-                </select>
-            </div>
-
-            <button class="check-btn" onclick="checkCoffee()">
-                Check Latte Compatibility
-            </button>
-
-            <div id="result" class="result"></div>
+        <h1><span class="coffee-emoji">☕</span>Latte Coffee Checker</h1>
+        <p>Find the perfect coffee for your milk drinks</p>
+        <div class="header-buttons">
+          <a href="#" class="header-btn" onclick="openContactModal()"
+            >📧 Contact</a
+          >
+          <a
+            href="https://buymeacoffee.com/lattechecker"
+            class="header-btn"
+            target="_blank"
+            >☕ Buy Me a Coffee</a
+          >
         </div>
+      </div>
+
+      <div class="form-container">
+        <div class="form-group">
+          <label for="coffeeType">Coffee Type</label>
+          <select id="coffeeType" onchange="toggleBlendInputs()">
+            <option value="">Select coffee type</option>
+            <option value="single">Single Origin</option>
+            <option value="blend">Blend</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="singleOriginGroup" style="display: none">
+          <label for="country">Country of Origin</label>
+          <select id="country">
+            <option value="">Select country</option>
+            <option value="brazil">Brazil</option>
+            <option value="colombia">Colombia</option>
+            <option value="ethiopia">Ethiopia</option>
+            <option value="guatemala">Guatemala</option>
+            <option value="costa-rica">Costa Rica</option>
+            <option value="honduras">Honduras</option>
+            <option value="nicaragua">Nicaragua</option>
+            <option value="peru">Peru</option>
+            <option value="mexico">Mexico</option>
+            <option value="jamaica">Jamaica</option>
+            <option value="kenya">Kenya</option>
+            <option value="rwanda">Rwanda</option>
+            <option value="burundi">Burundi</option>
+            <option value="tanzania">Tanzania</option>
+            <option value="yemen">Yemen</option>
+            <option value="indonesia">Indonesia</option>
+            <option value="vietnam">Vietnam</option>
+            <option value="india">India</option>
+            <option value="papua-new-guinea">Papua New Guinea</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="blendGroup" style="display: none">
+          <label>Blend Composition (%)</label>
+          <div class="blend-group" id="blendInputs">
+            <div class="blend-item">
+              <select id="blend1Country">
+                <option value="">Country 1</option>
+                <option value="brazil">Brazil</option>
+                <option value="colombia">Colombia</option>
+                <option value="ethiopia">Ethiopia</option>
+                <option value="guatemala">Guatemala</option>
+                <option value="costa-rica">Costa Rica</option>
+                <option value="honduras">Honduras</option>
+                <option value="nicaragua">Nicaragua</option>
+                <option value="peru">Peru</option>
+                <option value="mexico">Mexico</option>
+                <option value="jamaica">Jamaica</option>
+                <option value="kenya">Kenya</option>
+                <option value="rwanda">Rwanda</option>
+                <option value="burundi">Burundi</option>
+                <option value="tanzania">Tanzania</option>
+                <option value="yemen">Yemen</option>
+                <option value="indonesia">Indonesia</option>
+                <option value="vietnam">Vietnam</option>
+                <option value="india">India</option>
+                <option value="papua-new-guinea">Papua New Guinea</option>
+              </select>
+              <input
+                type="number"
+                id="blend1Percent"
+                placeholder="%"
+                min="0"
+                max="100"
+                oninput="validateBlend()"
+              />
+            </div>
+            <div class="blend-item">
+              <select id="blend2Country">
+                <option value="">Country 2</option>
+                <option value="brazil">Brazil</option>
+                <option value="colombia">Colombia</option>
+                <option value="ethiopia">Ethiopia</option>
+                <option value="guatemala">Guatemala</option>
+                <option value="costa-rica">Costa Rica</option>
+                <option value="honduras">Honduras</option>
+                <option value="nicaragua">Nicaragua</option>
+                <option value="peru">Peru</option>
+                <option value="mexico">Mexico</option>
+                <option value="jamaica">Jamaica</option>
+                <option value="kenya">Kenya</option>
+                <option value="rwanda">Rwanda</option>
+                <option value="burundi">Burundi</option>
+                <option value="tanzania">Tanzania</option>
+                <option value="yemen">Yemen</option>
+                <option value="indonesia">Indonesia</option>
+                <option value="vietnam">Vietnam</option>
+                <option value="india">India</option>
+                <option value="papua-new-guinea">Papua New Guinea</option>
+              </select>
+              <input
+                type="number"
+                id="blend2Percent"
+                placeholder="%"
+                min="0"
+                max="100"
+                oninput="validateBlend()"
+              />
+            </div>
+          </div>
+          <div
+            id="blendValidation"
+            style="
+              display: none;
+              color: #f44336;
+              font-size: 12px;
+              margin-top: 8px;
+            "
+          ></div>
+        </div>
+
+        <div class="form-group">
+          <label for="processing">Processing Method</label>
+          <select id="processing">
+            <option value="">I do not know</option>
+            <option value="washed">Washed (Wet Process)</option>
+            <option value="natural">Natural (Dry Process)</option>
+            <option value="honey">Honey Process</option>
+            <option value="semi-washed">Semi-Washed</option>
+            <option value="wet-hulled">Wet-Hulled</option>
+          </select>
+        </div>
+
+        <button class="check-btn" onclick="checkCoffee()">
+          Check Latte Compatibility
+        </button>
+
+        <div id="result" class="result"></div>
+      </div>
     </div>
 
     <!-- Contact Modal -->
     <div id="contactModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Get in Touch</h2>
-                <span class="close" onclick="closeContactModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <form action="https://formsubmit.co/your-email@example.com" method="POST">
-                    <input type="hidden" name="_subject" value="New message from Latte Coffee Checker">
-                    <input type="hidden" name="_captcha" value="false">
-                    <input type="hidden" name="_next" value="#contact-success">
-                    
-                    <div class="modal-form-group">
-                        <label for="contactName">Name *</label>
-                        <input type="text" id="contactName" name="name" required>
-                    </div>
-                    
-                    <div class="modal-form-group">
-                        <label for="contactEmail">Email *</label>
-                        <input type="email" id="contactEmail" name="email" required>
-                    </div>
-                    
-                    <div class="modal-form-group">
-                        <label for="contactMessage">Message *</label>
-                        <textarea id="contactMessage" name="message" placeholder="Tell us about your coffee experience or suggestions..." required></textarea>
-                    </div>
-                    
-                    <button type="submit" class="modal-submit-btn">Send Message</button>
-                </form>
-            </div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Get in Touch</h2>
+          <span class="close" onclick="closeContactModal()">&times;</span>
         </div>
+        <div class="modal-body">
+          <form
+            action="https://formsubmit.co/your-email@example.com"
+            method="POST"
+          >
+            <input
+              type="hidden"
+              name="_subject"
+              value="New message from Latte Coffee Checker"
+            />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_next" value="#contact-success" />
+
+            <div class="modal-form-group">
+              <label for="contactName">Name *</label>
+              <input type="text" id="contactName" name="name" required />
+            </div>
+
+            <div class="modal-form-group">
+              <label for="contactEmail">Email *</label>
+              <input type="email" id="contactEmail" name="email" required />
+            </div>
+
+            <div class="modal-form-group">
+              <label for="contactMessage">Message *</label>
+              <textarea
+                id="contactMessage"
+                name="message"
+                placeholder="Tell us about your coffee experience or suggestions..."
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="modal-submit-btn">Send Message</button>
+          </form>
+        </div>
+      </div>
     </div>
 
     <script>
-        const coffeeProfiles = {
-            'brazil': { sweetness: 8, acidity: 5, body: 8, balance: 9 },
-            'colombia': { sweetness: 7, acidity: 6, body: 7, balance: 8 },
-            'ethiopia': { sweetness: 6, acidity: 9, body: 5, balance: 6 },
-            'guatemala': { sweetness: 7, acidity: 7, body: 8, balance: 8 },
-            'costa-rica': { sweetness: 6, acidity: 8, body: 6, balance: 7 },
-            'honduras': { sweetness: 7, acidity: 6, body: 7, balance: 7 },
-            'nicaragua': { sweetness: 7, acidity: 6, body: 7, balance: 7 },
-            'peru': { sweetness: 6, acidity: 7, body: 6, balance: 7 },
-            'mexico': { sweetness: 6, acidity: 6, body: 7, balance: 7 },
-            'jamaica': { sweetness: 8, acidity: 5, body: 8, balance: 9 },
-            'kenya': { sweetness: 5, acidity: 9, body: 7, balance: 6 },
-            'rwanda': { sweetness: 6, acidity: 8, body: 6, balance: 7 },
-            'burundi': { sweetness: 6, acidity: 8, body: 6, balance: 7 },
-            'tanzania': { sweetness: 6, acidity: 8, body: 7, balance: 7 },
-            'yemen': { sweetness: 7, acidity: 6, body: 9, balance: 8 },
-            'indonesia': { sweetness: 7, acidity: 4, body: 9, balance: 7 },
-            'vietnam': { sweetness: 5, acidity: 4, body: 8, balance: 6 },
-            'india': { sweetness: 6, acidity: 5, body: 8, balance: 7 },
-            'papua-new-guinea': { sweetness: 6, acidity: 6, body: 8, balance: 7 }
-        };
+      const coffeeProfiles = {
+        brazil: { sweetness: 8, acidity: 5, body: 8, balance: 9 },
+        colombia: { sweetness: 7, acidity: 6, body: 7, balance: 8 },
+        ethiopia: { sweetness: 6, acidity: 9, body: 5, balance: 6 },
+        guatemala: { sweetness: 7, acidity: 7, body: 8, balance: 8 },
+        "costa-rica": { sweetness: 6, acidity: 8, body: 6, balance: 7 },
+        honduras: { sweetness: 7, acidity: 6, body: 7, balance: 7 },
+        nicaragua: { sweetness: 7, acidity: 6, body: 7, balance: 7 },
+        peru: { sweetness: 6, acidity: 7, body: 6, balance: 7 },
+        mexico: { sweetness: 6, acidity: 6, body: 7, balance: 7 },
+        jamaica: { sweetness: 8, acidity: 5, body: 8, balance: 9 },
+        kenya: { sweetness: 5, acidity: 9, body: 7, balance: 6 },
+        rwanda: { sweetness: 6, acidity: 8, body: 6, balance: 7 },
+        burundi: { sweetness: 6, acidity: 8, body: 6, balance: 7 },
+        tanzania: { sweetness: 6, acidity: 8, body: 7, balance: 7 },
+        yemen: { sweetness: 7, acidity: 6, body: 9, balance: 8 },
+        indonesia: { sweetness: 7, acidity: 4, body: 9, balance: 7 },
+        vietnam: { sweetness: 5, acidity: 4, body: 8, balance: 6 },
+        india: { sweetness: 6, acidity: 5, body: 8, balance: 7 },
+        "papua-new-guinea": { sweetness: 6, acidity: 6, body: 8, balance: 7 },
+      };
 
-        const processingEffects = {
-            '': { sweetness: 0, acidity: 1, body: -1, balance: 1 },
-            'washed': { sweetness: 0, acidity: 1, body: -1, balance: 1 },
-            'natural': { sweetness: 2, acidity: -1, body: 1, balance: 0 },
-            'honey': { sweetness: 1, acidity: 0, body: 0, balance: 1 },
-            'semi-washed': { sweetness: 1, acidity: 0, body: 0, balance: 0 },
-            'wet-hulled': { sweetness: 0, acidity: -1, body: 2, balance: 0 }
-        };
+      const processingEffects = {
+        "": { sweetness: 0, acidity: 1, body: -1, balance: 1 },
+        washed: { sweetness: 0, acidity: 1, body: -1, balance: 1 },
+        natural: { sweetness: 2, acidity: -1, body: 1, balance: 0 },
+        honey: { sweetness: 1, acidity: 0, body: 0, balance: 1 },
+        "semi-washed": { sweetness: 1, acidity: 0, body: 0, balance: 0 },
+        "wet-hulled": { sweetness: 0, acidity: -1, body: 2, balance: 0 },
+      };
 
-        function toggleBlendInputs() {
-            const coffeeType = document.getElementById('coffeeType').value;
-            const singleGroup = document.getElementById('singleOriginGroup');
-            const blendGroup = document.getElementById('blendGroup');
-            
-            if (coffeeType === 'single') {
-                singleGroup.style.display = 'block';
-                blendGroup.style.display = 'none';
-            } else if (coffeeType === 'blend') {
-                singleGroup.style.display = 'none';
-                blendGroup.style.display = 'block';
-            } else {
-                singleGroup.style.display = 'none';
-                blendGroup.style.display = 'none';
-            }
+      function toggleBlendInputs() {
+        const coffeeType = document.getElementById("coffeeType").value;
+        const singleGroup = document.getElementById("singleOriginGroup");
+        const blendGroup = document.getElementById("blendGroup");
+
+        if (coffeeType === "single") {
+          singleGroup.style.display = "block";
+          blendGroup.style.display = "none";
+        } else if (coffeeType === "blend") {
+          singleGroup.style.display = "none";
+          blendGroup.style.display = "block";
+        } else {
+          singleGroup.style.display = "none";
+          blendGroup.style.display = "none";
+        }
+      }
+
+      function validateBlend() {
+        const percent1 =
+          parseInt(document.getElementById("blend1Percent").value) || 0;
+        const percent2 =
+          parseInt(document.getElementById("blend2Percent").value) || 0;
+        const total = percent1 + percent2;
+        const validationDiv = document.getElementById("blendValidation");
+
+        if (total === 0) {
+          validationDiv.style.display = "none";
+          return;
         }
 
-        function validateBlend() {
-            const percent1 = parseInt(document.getElementById('blend1Percent').value) || 0;
-            const percent2 = parseInt(document.getElementById('blend2Percent').value) || 0;
-            const total = percent1 + percent2;
-            const validationDiv = document.getElementById('blendValidation');
-            
-            if (total === 0) {
-                validationDiv.style.display = 'none';
-                return;
-            }
-            
-            if (total !== 100) {
-                validationDiv.textContent = `Percentages must add up to 100% (currently ${total}%)`;
-                validationDiv.style.display = 'block';
-            } else {
-                validationDiv.style.display = 'none';
-            }
+        if (total !== 100) {
+          validationDiv.textContent = `Percentages must add up to 100% (currently ${total}%)`;
+          validationDiv.style.display = "block";
+        } else {
+          validationDiv.style.display = "none";
+        }
+      }
+
+      function openContactModal() {
+        document.getElementById("contactModal").style.display = "block";
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeContactModal() {
+        document.getElementById("contactModal").style.display = "none";
+        document.body.style.overflow = "auto";
+      }
+
+      // Close modal when clicking outside
+      window.addEventListener("click", function (event) {
+        const modal = document.getElementById("contactModal");
+        if (event.target === modal) {
+          closeContactModal();
+        }
+      });
+
+      function toggleTheme() {
+        const body = document.body;
+        const themeIcon = document.getElementById("themeIcon");
+
+        body.classList.toggle("light-theme");
+
+        if (body.classList.contains("light-theme")) {
+          themeIcon.textContent = "🌙";
+          localStorage.setItem("theme", "light");
+        } else {
+          themeIcon.textContent = "☀️";
+          localStorage.setItem("theme", "dark");
+        }
+      }
+
+      // Load saved theme on page load
+      window.addEventListener("load", function () {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "light") {
+          document.body.classList.add("light-theme");
+          document.getElementById("themeIcon").textContent = "🌙";
+        }
+      });
+
+      function calculateLatteScore(profile) {
+        return profile.balance * 0.3 +
+          profile.body * 0.3 +
+          profile.sweetness * 0.25 +
+          Math.min(profile.acidity, 6.5) * 0.15 -
+          (profile.acidity > 6.5 ? (profile.acidity - 6.5) * 0.2 : 0) -
+          (profile.bitterness > 5 ? (profile.bitterness - 5) * 0.25 : 0);
+      }
+
+      function checkCoffee() {
+        const coffeeType = document.getElementById("coffeeType").value;
+        const processing = document.getElementById("processing").value;
+        const resultDiv = document.getElementById("result");
+
+        // Basic validation
+        if (!coffeeType) {
+          alert("Please select a coffee type");
+          return;
         }
 
-        function openContactModal() {
-            document.getElementById('contactModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
+        let finalProfile = { sweetness: 0, acidity: 0, body: 0, balance: 0 };
+
+        if (coffeeType === "single") {
+          const country = document.getElementById("country").value;
+          if (!country) {
+            alert("Please select a country");
+            return;
+          }
+          finalProfile = { ...coffeeProfiles[country] };
+        } else if (coffeeType === "blend") {
+          const country1 = document.getElementById("blend1Country").value;
+          const percent1 =
+            parseInt(document.getElementById("blend1Percent").value) || 0;
+          const country2 = document.getElementById("blend2Country").value;
+          const percent2 =
+            parseInt(document.getElementById("blend2Percent").value) || 0;
+
+          // Enhanced validation for blends
+          if (!country1) {
+            alert("Please select the first country for your blend");
+            return;
+          }
+
+          if (!country2) {
+            alert("Please select the second country for your blend");
+            return;
+          }
+
+          if (percent1 <= 0) {
+            alert("Please enter a valid percentage for the first country");
+            return;
+          }
+
+          if (percent2 <= 0) {
+            alert("Please enter a valid percentage for the second country");
+            return;
+          }
+
+          if (percent1 + percent2 !== 100) {
+            alert(
+              `Blend percentages must add up to 100% (currently ${
+                percent1 + percent2
+              }%)`
+            );
+            return;
+          }
+
+          const profile1 = coffeeProfiles[country1];
+          const profile2 = coffeeProfiles[country2];
+
+          finalProfile.sweetness =
+            (profile1.sweetness * percent1 + profile2.sweetness * percent2) /
+            100;
+          finalProfile.acidity =
+            (profile1.acidity * percent1 + profile2.acidity * percent2) / 100;
+          finalProfile.body =
+            (profile1.body * percent1 + profile2.body * percent2) / 100;
+          finalProfile.balance =
+            (profile1.balance * percent1 + profile2.balance * percent2) / 100;
         }
 
-        function closeContactModal() {
-            document.getElementById('contactModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
+        // Apply processing effects
+        const processingEffect = processingEffects[processing];
+        finalProfile.sweetness = Math.max(
+          0,
+          Math.min(10, finalProfile.sweetness + processingEffect.sweetness)
+        );
+        finalProfile.acidity = Math.max(
+          0,
+          Math.min(10, finalProfile.acidity + processingEffect.acidity)
+        );
+        finalProfile.body = Math.max(
+          0,
+          Math.min(10, finalProfile.body + processingEffect.body)
+        );
+        finalProfile.balance = Math.max(
+          0,
+          Math.min(10, finalProfile.balance + processingEffect.balance)
+        );
+
+        const latteScoreRaw = calculateLatteScore(finalProfile);
+        const latteScore = latteScoreRaw * 9.5/7.85
+
+        let grade, emoji, description, className;
+
+        if (latteScore >= 8) {
+          grade = "Perfect";
+          emoji = "🤩";
+          className = "perfect";
+          description =
+            "Excellent choice for lattes! This coffee will create a harmonious blend with milk, offering great balance and smooth body.";
+        } else if (latteScore >= 6) {
+          grade = "Good";
+          emoji = "😊";
+          className = "good";
+          description =
+            "Good for lattes. This coffee will work well with milk, though you might notice some flavor nuances that could benefit from a touch of sweetener.";
+        } else {
+          grade = "Fair";
+          emoji = "😐";
+          className = "bad";
+          description =
+            "May not be ideal for lattes. This coffee might clash with milk or lack the body needed for a satisfying latte experience. Consider it for black coffee instead.";
         }
 
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('contactModal');
-            if (event.target === modal) {
-                closeContactModal();
-            }
-        });
-
-        function toggleTheme() {
-            const body = document.body;
-            const themeIcon = document.getElementById('themeIcon');
-            
-            body.classList.toggle('light-theme');
-            
-            if (body.classList.contains('light-theme')) {
-                themeIcon.textContent = '🌙';
-                localStorage.setItem('theme', 'light');
-            } else {
-                themeIcon.textContent = '☀️';
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-
-        // Load saved theme on page load
-        window.addEventListener('load', function() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-theme');
-                document.getElementById('themeIcon').textContent = '🌙';
-            }
-        });
-
-        function calculateLatteScore(profile) {
-            (profile.balance * 0.3) + 
-   (profile.body * 0.3) + 
-   (profile.sweetness * 0.25) + 
-   (Math.min(profile.acidity, 6.5) * 0.15) -
-   (profile.acidity > 6.5 ? (profile.acidity - 6.5) * 0.2 : 0) -
-   (profile.bitterness > 5 ? (profile.bitterness - 5) * 0.25 : 0)
-        }
-
-        function checkCoffee() {
-            const coffeeType = document.getElementById('coffeeType').value;
-            const processing = document.getElementById('processing').value;
-            const resultDiv = document.getElementById('result');
-
-            // Basic validation
-            if (!coffeeType) {
-                alert('Please select a coffee type');
-                return;
-            }
-            
-            let finalProfile = { sweetness: 0, acidity: 0, body: 0, balance: 0 };
-
-            if (coffeeType === 'single') {
-                const country = document.getElementById('country').value;
-                if (!country) {
-                    alert('Please select a country');
-                    return;
-                }
-                finalProfile = { ...coffeeProfiles[country] };
-            } else if (coffeeType === 'blend') {
-                const country1 = document.getElementById('blend1Country').value;
-                const percent1 = parseInt(document.getElementById('blend1Percent').value) || 0;
-                const country2 = document.getElementById('blend2Country').value;
-                const percent2 = parseInt(document.getElementById('blend2Percent').value) || 0;
-
-                // Enhanced validation for blends
-                if (!country1) {
-                    alert('Please select the first country for your blend');
-                    return;
-                }
-                
-                if (!country2) {
-                    alert('Please select the second country for your blend');
-                    return;
-                }
-                
-                if (percent1 <= 0) {
-                    alert('Please enter a valid percentage for the first country');
-                    return;
-                }
-                
-                if (percent2 <= 0) {
-                    alert('Please enter a valid percentage for the second country');
-                    return;
-                }
-                
-                if (percent1 + percent2 !== 100) {
-                    alert(`Blend percentages must add up to 100% (currently ${percent1 + percent2}%)`);
-                    return;
-                }
-
-                const profile1 = coffeeProfiles[country1];
-                const profile2 = coffeeProfiles[country2];
-
-                finalProfile.sweetness = (profile1.sweetness * percent1 + profile2.sweetness * percent2) / 100;
-                finalProfile.acidity = (profile1.acidity * percent1 + profile2.acidity * percent2) / 100;
-                finalProfile.body = (profile1.body * percent1 + profile2.body * percent2) / 100;
-                finalProfile.balance = (profile1.balance * percent1 + profile2.balance * percent2) / 100;
-            }
-
-            // Apply processing effects
-            const processingEffect = processingEffects[processing];
-            finalProfile.sweetness = Math.max(0, Math.min(10, finalProfile.sweetness + processingEffect.sweetness));
-            finalProfile.acidity = Math.max(0, Math.min(10, finalProfile.acidity + processingEffect.acidity));
-            finalProfile.body = Math.max(0, Math.min(10, finalProfile.body + processingEffect.body));
-            finalProfile.balance = Math.max(0, Math.min(10, finalProfile.balance + processingEffect.balance));
-
-            const latteScore = calculateLatteScore(finalProfile);
-            
-            let grade, emoji, description, className;
-            
-            if (latteScore >= 8) {
-                grade = 'Perfect';
-                emoji = '🤩';
-                className = 'perfect';
-                description = 'Excellent choice for lattes! This coffee will create a harmonious blend with milk, offering great balance and smooth body.';
-            } else if (latteScore >= 6) {
-                grade = 'Good';
-                emoji = '😊';
-                className = 'good';
-                description = 'Good for lattes. This coffee will work well with milk, though you might notice some flavor nuances that could benefit from a touch of sweetener.';
-            } else {
-                grade = 'Fair';
-                emoji = '😐';
-                className = 'bad';
-                description = 'May not be ideal for lattes. This coffee might clash with milk or lack the body needed for a satisfying latte experience. Consider it for black coffee instead.';
-            }
-
-            resultDiv.innerHTML = `
+        resultDiv.innerHTML = `
                 <span class="result-emoji">${emoji}</span>
                 <div class="result-grade">${grade}</div>
                 <div class="result-description">${description}</div>
             `;
-            
-            resultDiv.className = `result ${className}`;
-            resultDiv.style.display = 'block';
-        }
+
+        resultDiv.className = `result ${className}`;
+        resultDiv.style.display = "block";
+      }
     </script>
-</body>
+  </body>
 </html>
