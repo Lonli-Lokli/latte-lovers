@@ -1,7 +1,7 @@
 {
     "type": "module",
     "scripts": {
-        "serve": "http-server -c-1",
+        "start": "http-server -c-1",
         "test": "vitest run"
     },
     "dependencies": {

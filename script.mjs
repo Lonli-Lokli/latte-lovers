@@ -110,36 +110,62 @@ export const coffeeProfiles = {
   },
 };
 
-export const processingEffects = {
+export const processingMethods = {
   washed: {
-    sweetness: 0,
-    acidity: 1,
-    body: -1,
-    balance: 1,
-    bitterness: 0,
+    displayName: "Washed (Wet Process)",
+    description: "Coffee cherries are pulped and fermented to remove the mucilage before drying",
+    effects: {
+      sweetness: 0,
+      acidity: 1,
+      body: -1,
+      balance: 1,
+      bitterness: 0,
+    }
   },
   natural: {
-    sweetness: 2,
-    acidity: -1,
-    body: 1,
-    balance: 0,
-    bitterness: 0,
+    displayName: "Natural (Dry Process)",
+    description: "Coffee cherries are dried whole, allowing the fruit to naturally ferment",
+    effects: {
+      sweetness: 2,
+      acidity: -1,
+      body: 1,
+      balance: 0,
+      bitterness: 0,
+    }
   },
-  honey: { sweetness: 1, acidity: 0, body: 0, balance: 1, bitterness: 0 },
+  honey: {
+    displayName: "Honey Process",
+    description: "Partial removal of the fruit pulp, leaving some mucilage during drying",
+    effects: {
+      sweetness: 1,
+      acidity: 0,
+      body: 0,
+      balance: 1,
+      bitterness: 0,
+    }
+  },
   "semi-washed": {
-    sweetness: 1,
-    acidity: 0,
-    body: 0,
-    balance: 0,
-    bitterness: 0,
+    displayName: "Semi-Washed",
+    description: "Combines elements of both washed and natural processing",
+    effects: {
+      sweetness: 1,
+      acidity: 0,
+      body: 0,
+      balance: 0,
+      bitterness: 0,
+    }
   },
   "wet-hulled": {
-    sweetness: 0,
-    acidity: -1,
-    body: 2,
-    balance: 0,
-    bitterness: 0,
-  },
+    displayName: "Wet-Hulled",
+    description: "Unique to Indonesia, beans are hulled while still wet",
+    effects: {
+      sweetness: 0,
+      acidity: -1,
+      body: 2,
+      balance: 0,
+      bitterness: 0,
+    }
+  }
 };
 
 export const roastLevelEffects = {
@@ -169,11 +195,11 @@ export const roastLevelEffects = {
 function applyFullProcessingEffects(
   baseProfile,
   processingName,
-  allProcessingEffects
+  allProcessingMethods
 ) {
-  const effect = allProcessingEffects[processingName];
+  const method = allProcessingMethods[processingName];
 
-  if (!effect) {
+  if (!method) {
     return {
       sweetness: Math.max(1, Math.min(10, baseProfile.sweetness)),
       acidity: Math.max(1, Math.min(10, baseProfile.acidity)),
@@ -183,6 +209,7 @@ function applyFullProcessingEffects(
     };
   }
 
+  const effect = method.effects;
   return {
     sweetness: Math.max(
       1,
@@ -310,7 +337,7 @@ export function createFinalProfile(initialProfile, processing, roast) {
   const processedProfile = applyFullProcessingEffects(
     initialProfile,
     processing,
-    processingEffects
+    processingMethods
   );
 
   const finalProfile = applyRoastEffects(

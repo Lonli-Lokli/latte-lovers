@@ -489,8 +489,7 @@
           max-height: calc(100dvh - 100px); /* Slightly reduced for mobile */
         }
 
-        .floating-label select,
-        .floating-label input {
+        .floating-label select {
           padding: 12px;
           font-size: 13px;
           height: 44px; /* Ensure consistent height */
@@ -501,6 +500,14 @@
           background-position: right 12px center;
           background-size: 12px;
           padding-right: 30px;
+        }
+
+        .floating-label input {
+          padding: 12px;
+          font-size: 13px;
+          height: 44px; /* Ensure consistent height */
+          -webkit-appearance: none; /* Remove default iOS styling */
+          appearance: none;
         }
 
         .floating-label label {
@@ -593,14 +600,13 @@
   <body>
     <div class="container">
       <div class="header">
-        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+        <div class="theme-toggle" title="Toggle theme">
           <span id="themeIcon">☀️</span>
         </div>
         <h1><span class="coffee-emoji">☕</span>Latte Coffee Checker</h1>
         <p>Find the perfect coffee for your milk drinks</p>
         <div class="header-buttons">
-          <a href="#" class="header-btn" onclick="openContactModal()"
-            >📧 Contact</a
+          <a href="#" class="header-btn"       >📧 Contact</a
           >
           <a
             href="https://buymeacoffee.com/lonlilokliV"
@@ -630,25 +636,6 @@
           <div class="floating-label">
             <select id="country">
               <option value="" disabled selected></option>
-              <option value="brazil">Brazil</option>
-              <option value="burundi">Burundi</option>
-              <option value="colombia">Colombia</option>
-              <option value="costa-rica">Costa Rica</option>
-              <option value="ethiopia">Ethiopia</option>
-              <option value="guatemala">Guatemala</option>
-              <option value="honduras">Honduras</option>
-              <option value="india">India</option>
-              <option value="indonesia">Indonesia</option>
-              <option value="jamaica">Jamaica</option>
-              <option value="kenya">Kenya</option>
-              <option value="mexico">Mexico</option>
-              <option value="nicaragua">Nicaragua</option>
-              <option value="papua-new-guinea">Papua New Guinea</option>
-              <option value="peru">Peru</option>
-              <option value="rwanda">Rwanda</option>
-              <option value="tanzania">Tanzania</option>
-              <option value="vietnam">Vietnam</option>
-              <option value="yemen">Yemen</option>
             </select>
             <label for="country">Country of Origin</label>
           </div>
@@ -661,25 +648,6 @@
                 <div class="floating-label">
                   <select id="blend1Country">
                     <option value="" disabled selected></option>
-                    <option value="brazil">Brazil</option>
-                    <option value="burundi">Burundi</option>
-                    <option value="colombia">Colombia</option>
-                    <option value="costa-rica">Costa Rica</option>
-                    <option value="ethiopia">Ethiopia</option>
-                    <option value="guatemala">Guatemala</option>
-                    <option value="honduras">Honduras</option>
-                    <option value="india">India</option>
-                    <option value="indonesia">Indonesia</option>
-                    <option value="jamaica">Jamaica</option>
-                    <option value="kenya">Kenya</option>
-                    <option value="mexico">Mexico</option>
-                    <option value="nicaragua">Nicaragua</option>
-                    <option value="papua-new-guinea">Papua New Guinea</option>
-                    <option value="peru">Peru</option>
-                    <option value="rwanda">Rwanda</option>
-                    <option value="tanzania">Tanzania</option>
-                    <option value="vietnam">Vietnam</option>
-                    <option value="yemen">Yemen</option>
                   </select>
                   <label for="blend1Country">Country 1</label>
                 </div>
@@ -698,25 +666,6 @@
                 <div class="floating-label">
                   <select id="blend2Country">
                     <option value="" disabled selected></option>
-                    <option value="brazil">Brazil</option>
-                    <option value="burundi">Burundi</option>
-                    <option value="colombia">Colombia</option>
-                    <option value="costa-rica">Costa Rica</option>
-                    <option value="ethiopia">Ethiopia</option>
-                    <option value="guatemala">Guatemala</option>
-                    <option value="honduras">Honduras</option>
-                    <option value="india">India</option>
-                    <option value="indonesia">Indonesia</option>
-                    <option value="jamaica">Jamaica</option>
-                    <option value="kenya">Kenya</option>
-                    <option value="mexico">Mexico</option>
-                    <option value="nicaragua">Nicaragua</option>
-                    <option value="papua-new-guinea">Papua New Guinea</option>
-                    <option value="peru">Peru</option>
-                    <option value="rwanda">Rwanda</option>
-                    <option value="tanzania">Tanzania</option>
-                    <option value="vietnam">Vietnam</option>
-                    <option value="yemen">Yemen</option>
                   </select>
                   <label for="blend2Country">Country 2</label>
                 </div>
@@ -748,11 +697,7 @@
         <div class="form-group">
           <div class="floating-label">
             <select id="processing">
-              <option value="washed" selected>Washed (Wet Process)</option>
-              <option value="natural" >Natural (Dry Process)</option>
-              <option value="honey">Honey Process</option>
-              <option value="semi-washed">Semi-Washed</option>
-              <option value="wet-hulled">Wet-Hulled</option>
+              <option value="" disabled selected></option>
             </select>
             <label for="processing">Processing Method</label>
           </div>
@@ -830,57 +775,99 @@
         checkCoffee, 
         toggleTheme, 
         openContactModal, 
-        closeContactModal 
+        closeContactModal,
+        coffeeProfiles,
+        processingMethods
       } from './script.mjs';
 
-      // Add event listeners
-      document.getElementById('coffeeType').addEventListener('change', toggleBlendInputs);
-      document.getElementById('blend1Percent').addEventListener('input', validateBlend);
-      document.getElementById('blend2Percent').addEventListener('input', validateBlend);
-      document.querySelector('.check-btn').addEventListener('click', checkCoffee);
-      document.querySelector('.theme-toggle').addEventListener('click', toggleTheme);
-      document.querySelector('.header-btn').addEventListener('click', openContactModal);
-      document.querySelector('.close').addEventListener('click', closeContactModal);
-      
-      // PWA Installation
-      let deferredPrompt;
-      const installButton = document.getElementById('installPWA');
-
-      // Check if the app is already installed
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        installButton.style.display = 'none';
+      // Initialize country options
+      function initializeCountryOptions() {
+        const countrySelects = ['country', 'blend1Country', 'blend2Country'];
+        const countries = Object.keys(coffeeProfiles).sort();
+        
+        countrySelects.forEach(selectId => {
+          const select = document.getElementById(selectId);
+          countries.forEach(country => {
+            const option = document.createElement('option');
+            option.value = country;
+            option.textContent = country.split('-').map(word => 
+              word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+            select.appendChild(option);
+          });
+        });
       }
 
-      // Show install button for iOS
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      if (isIOS) {
-        installButton.style.display = 'inline-block';
-        installButton.addEventListener('click', () => {
-          alert('To install this app on your device, tap the Share button and then "Add to Home Screen"');
+      // Initialize processing options
+      function initializeProcessingOptions() {
+        const processingSelect = document.getElementById('processing');
+        const methods = Object.entries(processingMethods);
+        
+        methods.forEach(([value, { displayName }]) => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = displayName;
+          if (value === 'washed') {
+            option.selected = true;
+          }
+          processingSelect.appendChild(option);
         });
-      } else {
-        // Handle standard PWA installation for other devices
-        window.addEventListener('beforeinstallprompt', (e) => {
-          e.preventDefault();
-          deferredPrompt = e;
-          installButton.style.display = 'inline-block';
-        });
+      }
 
-        installButton.addEventListener('click', async () => {
-          if (!deferredPrompt) return;
-          deferredPrompt.prompt();
-          const { outcome } = await deferredPrompt.userChoice;
-          deferredPrompt = null;
+      // Initialize options when DOM is loaded
+      document.addEventListener('DOMContentLoaded', () => {
+        initializeCountryOptions();
+        initializeProcessingOptions();
+        
+        // Add event listeners
+        document.getElementById('coffeeType').addEventListener('change', toggleBlendInputs);
+        document.getElementById('blend1Percent').addEventListener('input', validateBlend);
+        document.getElementById('blend2Percent').addEventListener('input', validateBlend);
+        document.querySelector('.check-btn').addEventListener('click', checkCoffee);
+        document.querySelector('.theme-toggle').addEventListener('click', toggleTheme);
+        document.querySelector('.header-btn').addEventListener('click', openContactModal);
+        document.querySelector('.close').addEventListener('click', closeContactModal);
+        
+        // PWA Installation
+        let deferredPrompt;
+        const installButton = document.getElementById('installPWA');
+
+        // Check if the app is already installed
+        if (window.matchMedia('(display-mode: standalone)').matches) {
           installButton.style.display = 'none';
-        });
-      }
-
-      // Close modal when clicking outside
-      window.addEventListener('click', (event) => {
-        const modal = document.getElementById('contactModal');
-        if (event.target === modal) {
-          closeContactModal();
         }
+
+        // Show install button for iOS
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (isIOS) {
+          installButton.style.display = 'inline-block';
+          installButton.addEventListener('click', () => {
+            alert('To install this app on your device, tap the Share button and then "Add to Home Screen"');
+          });
+        } else {
+          // Handle standard PWA installation for other devices
+          window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installButton.style.display = 'inline-block';
+          });
+
+          installButton.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            installButton.style.display = 'none';
+          });
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+          const modal = document.getElementById('contactModal');
+          if (event.target === modal) {
+            closeContactModal();
+          }
+        });
       });
     </script>
   </body>
