@@ -1,8 +1,14 @@
 {
+    "type": "module",
     "scripts": {
-        "serve": "http-server -c-1"
+        "serve": "http-server -c-1",
+        "test": "vitest run"
     },
     "dependencies": {
         "http-server": "14.1.1"
+    },
+    "devDependencies": {
+        "vite": "^6.3.5",
+        "vitest": "^3.1.4"
     }
 }

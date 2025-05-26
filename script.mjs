@@ -1,4 +1,4 @@
-const coffeeProfiles = {
+export const coffeeProfiles = {
   brazil: {
     sweetness: 8,
     acidity: 5,
@@ -110,8 +110,7 @@ const coffeeProfiles = {
   },
 };
 
-const processingEffects = {
-  "": { sweetness: 0, acidity: 1, body: -1, balance: 1, bitterness: 0 },
+export const processingEffects = {
   washed: {
     sweetness: 0,
     acidity: 1,
@@ -143,14 +142,7 @@ const processingEffects = {
   },
 };
 
-const roastLevelEffects = {
-  "": {
-    sweetness: +0.75,
-    acidity: -0.75,
-    body: +0.75,
-    balance: +1.0,
-    bitterness: +0.75,
-  },
+export const roastLevelEffects = {
   light: {
     sweetness: 0,
     acidity: +1.5,
@@ -251,7 +243,7 @@ function applyRoastEffects(processedProfile, roastName, allRoastEffects) {
   return roastedProfile;
 }
 
-function toggleBlendInputs() {
+export function toggleBlendInputs() {
   const coffeeType = document.getElementById("coffeeType").value;
   const singleGroup = document.getElementById("singleOriginGroup");
   const blendGroup = document.getElementById("blendGroup");
@@ -268,9 +260,11 @@ function toggleBlendInputs() {
   }
 }
 
-function validateBlend() {
-  const percent1 = parseInt(document.getElementById("blend1Percent").value) || 0;
-  const percent2 = parseInt(document.getElementById("blend2Percent").value) || 0;
+export function validateBlend() {
+  const percent1 =
+    parseInt(document.getElementById("blend1Percent").value) || 0;
+  const percent2 =
+    parseInt(document.getElementById("blend2Percent").value) || 0;
   const total = percent1 + percent2;
   const validationDiv = document.getElementById("blendValidation");
 
@@ -287,17 +281,17 @@ function validateBlend() {
   }
 }
 
-function openContactModal() {
+export function openContactModal() {
   document.getElementById("contactModal").style.display = "block";
   document.body.style.overflow = "hidden";
 }
 
-function closeContactModal() {
+export function closeContactModal() {
   document.getElementById("contactModal").style.display = "none";
   document.body.style.overflow = "auto";
 }
 
-function toggleTheme() {
+export function toggleTheme() {
   const body = document.body;
   const themeIcon = document.getElementById("themeIcon");
 
@@ -312,7 +306,22 @@ function toggleTheme() {
   }
 }
 
-function calculateLatteScore(profile) {
+export function createFinalProfile(initialProfile, processing, roast) {
+  const processedProfile = applyFullProcessingEffects(
+    initialProfile,
+    processing,
+    processingEffects
+  );
+
+  const finalProfile = applyRoastEffects(
+    processedProfile,
+    roast,
+    roastLevelEffects
+  );
+
+  return finalProfile;
+}
+export function calculateLatteScore(profile) {
   return (
     profile.balance * 0.3 +
     profile.body * 0.3 +
@@ -323,7 +332,23 @@ function calculateLatteScore(profile) {
   );
 }
 
-function checkCoffee() {
+export const ACTUAL_MIN_RAW = 3.55;
+export const ACTUAL_MAX_RAW = 8.915;
+
+export function mergeProfiles(profile1, percent1, profile2, percent2) {
+  return {
+    sweetness:
+      (profile1.sweetness * percent1 + profile2.sweetness * percent2) / 100,
+    acidity:
+      (profile1.acidity * percent1 + profile2.acidity * percent2) / 100,
+    body: (profile1.body * percent1 + profile2.body * percent2) / 100,
+    balance:
+      (profile1.balance * percent1 + profile2.balance * percent2) / 100,
+    bitterness:
+      (profile1.bitterness * percent1 + profile2.bitterness * percent2) / 100,
+  }
+}
+export function checkCoffee() {
   const coffeeType = document.getElementById("coffeeType").value;
   const processing = document.getElementById("processing").value;
   const roast = document.getElementById("roastLevel")
@@ -347,9 +372,11 @@ function checkCoffee() {
     initialProfile = { ...coffeeProfiles[country] };
   } else if (coffeeType === "blend") {
     const country1 = document.getElementById("blend1Country").value;
-    const percent1 = parseInt(document.getElementById("blend1Percent").value) || 0;
+    const percent1 =
+      parseInt(document.getElementById("blend1Percent").value) || 0;
     const country2 = document.getElementById("blend2Country").value;
-    const percent2 = parseInt(document.getElementById("blend2Percent").value) || 0;
+    const percent2 =
+      parseInt(document.getElementById("blend2Percent").value) || 0;
 
     if (
       !country1 ||
@@ -367,50 +394,19 @@ function checkCoffee() {
     const profile1 = coffeeProfiles[country1];
     const profile2 = coffeeProfiles[country2];
 
-    initialProfile = {
-      sweetness:
-        (profile1.sweetness * percent1 + profile2.sweetness * percent2) / 100,
-      acidity:
-        (profile1.acidity * percent1 + profile2.acidity * percent2) / 100,
-      body: (profile1.body * percent1 + profile2.body * percent2) / 100,
-      balance:
-        (profile1.balance * percent1 + profile2.balance * percent2) / 100,
-      bitterness:
-        (profile1.bitterness * percent1 + profile2.bitterness * percent2) / 100,
-    };
+    initialProfile = mergeProfiles(profile1, percent1, profile2, percent2);
   } else {
     alert("Invalid coffee type selected.");
     return;
   }
 
-  const processedProfile = applyFullProcessingEffects(
-    initialProfile,
-    processing,
-    processingEffects
-  );
+  const latteScoreRaw = calculateLatteScore(createFinalProfile(initialProfile, processing, roast));
 
-  const finalProfile = applyRoastEffects(
-    processedProfile,
-    roast,
-    roastLevelEffects
-  );
-
-  const latteScoreRaw = calculateLatteScore(finalProfile);
-
-  const ACTUAL_MIN_RAW = 3.55;
-  const ACTUAL_MAX_RAW = 8.913;
   const TARGET_DISPLAY_SCALE = 10;
 
-  let normalizedLatteScore;
-
-  if (ACTUAL_MAX_RAW === ACTUAL_MIN_RAW) {
-    normalizedLatteScore = TARGET_DISPLAY_SCALE / 2;
-  } else {
-    normalizedLatteScore =
-      ((latteScoreRaw - ACTUAL_MIN_RAW) / (ACTUAL_MAX_RAW - ACTUAL_MIN_RAW)) *
-      TARGET_DISPLAY_SCALE;
-  }
-
+  let normalizedLatteScore =
+    ((latteScoreRaw - ACTUAL_MIN_RAW) / (ACTUAL_MAX_RAW - ACTUAL_MIN_RAW)) *
+    TARGET_DISPLAY_SCALE;
   normalizedLatteScore = Math.max(
     0,
     Math.min(TARGET_DISPLAY_SCALE, normalizedLatteScore)
@@ -462,4 +458,23 @@ window.addEventListener("click", function (event) {
   if (event.target === modal) {
     closeContactModal();
   }
-}); 
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Add event listeners
+  document
+    .getElementById("coffeeType")
+    .addEventListener("change", toggleBlendInputs);
+  document.querySelector(".check-btn").addEventListener("click", checkCoffee);
+  document
+    .querySelector(".theme-toggle")
+    .addEventListener("click", toggleTheme);
+
+  // Close modal when clicking outside
+  window.addEventListener("click", (event) => {
+    const modal = document.getElementById("contactModal");
+    if (event.target === modal) {
+      closeContactModal();
+    }
+  });
+});

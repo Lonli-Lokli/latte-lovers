@@ -57,7 +57,7 @@
         background: linear-gradient(135deg, #3e2723 0%, #5d4037 100%);
         color: white;
         text-align: center;
-        padding: 30px 20px;
+        padding: 20px 15px;
         position: relative;
       }
 
@@ -88,31 +88,31 @@
       }
 
       .header h1 {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 600;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
       }
 
       .header p {
-        font-size: 14px;
+        font-size: 13px;
         opacity: 0.9;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
       }
 
       .header-buttons {
         display: flex;
-        gap: 12px;
+        gap: 8px;
         justify-content: center;
         flex-wrap: wrap;
       }
 
       .header-btn {
-        padding: 8px 16px;
+        padding: 6px 12px;
         border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 20px;
         color: white;
         text-decoration: none;
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 500;
         transition: all 0.3s ease;
         background: rgba(255, 255, 255, 0.1);
@@ -126,22 +126,22 @@
       }
 
       .form-container {
-        padding: 30px 20px;
+        padding: 20px 15px;
       }
 
       .form-group {
-        margin-bottom: 25px;
+        margin-bottom: 15px;
       }
 
       .floating-label {
         position: relative;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
       }
 
       .floating-label label {
         position: absolute;
-        top: 15px;
-        left: 15px;
+        top: 12px;
+        left: 12px;
         color: #999;
         transition: all 0.3s ease;
         pointer-events: none;
@@ -152,10 +152,10 @@
       .floating-label select,
       .floating-label input {
         width: 100%;
-        padding: 15px;
+        padding: 12px;
         border: 2px solid #e0e0e0;
-        border-radius: 12px;
-        font-size: 16px;
+        border-radius: 10px;
+        font-size: 14px;
         background: white;
         transition: all 0.3s ease;
       }
@@ -185,14 +185,14 @@
         display: block;
         font-weight: 600;
         color: #3e2723;
-        margin-bottom: 8px;
-        font-size: 14px;
+        margin-bottom: 6px;
+        font-size: 13px;
       }
 
       .blend-group {
         display: block;
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
       }
 
       .blend-group.active {
@@ -201,9 +201,9 @@
 
       .blend-item {
         display: flex;
-        gap: 15px;
+        gap: 10px;
         align-items: flex-start;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
       }
 
       .blend-item:last-child {
@@ -218,7 +218,7 @@
       .blend-item .floating-label:last-child {
         flex: 1;
         min-width: 100px;
-        max-width: 120px;
+        max-width: 110px;
       }
 
       .blend-item input {
@@ -235,13 +235,13 @@
         background: linear-gradient(135deg, #6b4e3d 0%, #8b6f47 100%);
         color: white;
         border: none;
-        padding: 18px;
-        border-radius: 12px;
-        font-size: 16px;
+        padding: 14px;
+        border-radius: 10px;
+        font-size: 15px;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
-        margin-top: 10px;
+        margin-top: 5px;
       }
 
       .check-btn:hover {
@@ -258,9 +258,9 @@
       }
 
       .result {
-        margin-top: 30px;
-        padding: 25px;
-        border-radius: 15px;
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 12px;
         text-align: center;
         display: none;
         animation: fadeIn 0.5s ease;
@@ -282,20 +282,20 @@
       }
 
       .result-grade {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 700;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
       }
 
       .result-emoji {
-        font-size: 32px;
-        margin-bottom: 15px;
+        font-size: 28px;
+        margin-bottom: 12px;
         display: block;
       }
 
       .result-description {
-        font-size: 14px;
-        line-height: 1.5;
+        font-size: 13px;
+        line-height: 1.4;
         opacity: 0.95;
       }
 
@@ -437,6 +437,118 @@
         transform: translateY(-2px);
         box-shadow: 0 10px 20px rgba(107, 78, 61, 0.3);
       }
+
+      @media screen and (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        .container {
+          margin: 5px auto;
+        }
+
+        .header {
+          padding: 15px 10px;
+        }
+
+        .form-container {
+          padding: 15px 10px;
+        }
+
+        .floating-label select,
+        .floating-label input {
+          padding: 10px;
+          font-size: 13px;
+        }
+
+        .floating-label label {
+          top: 10px;
+          left: 10px;
+          font-size: 13px;
+        }
+
+        .blend-item {
+          gap: 8px;
+          margin-bottom: 8px;
+        }
+
+        .blend-item .floating-label:last-child {
+          min-width: 90px;
+          max-width: 100px;
+        }
+      }
+
+      .blend-panel {
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 15px;
+        position: relative;
+        background: white;
+        transition: all 0.3s ease;
+      }
+
+      .blend-panel:focus-within {
+        border-color: #6b4e3d;
+        box-shadow: 0 0 0 3px rgba(107, 78, 61, 0.1);
+      }
+
+      .blend-panel > label {
+        position: absolute;
+        top: -10px;
+        left: 12px;
+        background: white;
+        padding: 0 5px;
+        color: #999;
+        font-size: 12px;
+        transition: all 0.3s ease;
+      }
+
+      .blend-panel:focus-within > label {
+        color: #6b4e3d;
+      }
+
+      .blend-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .blend-item {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+
+      .blend-item .floating-label {
+        flex: 2;
+        margin-bottom: 0;
+      }
+
+      .blend-item .floating-label:last-child {
+        flex: 1;
+        min-width: 100px;
+        max-width: 110px;
+      }
+
+      .blend-item input {
+        width: 100%;
+        text-align: center;
+      }
+
+      @media screen and (max-width: 768px) {
+        .blend-panel {
+          padding: 12px;
+        }
+
+        .blend-item {
+          gap: 8px;
+        }
+
+        .blend-item .floating-label:last-child {
+          min-width: 90px;
+          max-width: 100px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -463,7 +575,7 @@
       <div class="form-container">
         <div class="form-group">
           <div class="floating-label">
-            <select id="coffeeType" onchange="toggleBlendInputs()">
+            <select id="coffeeType">
               <option value="" disabled selected></option>
               <option value="single">Single Origin</option>
               <option value="blend">Blend</option>
@@ -501,84 +613,84 @@
         </div>
 
         <div class="form-group" id="blendGroup" style="display: none">
-          <label class="section-label">Blend Composition (%)</label>
-          <div class="blend-group" id="blendInputs">
-            <div class="blend-item">
-              <div class="floating-label">
-                <select id="blend1Country">
-                  <option value="" disabled selected></option>
-                  <option value="brazil">Brazil</option>
-                  <option value="burundi">Burundi</option>
-                  <option value="colombia">Colombia</option>
-                  <option value="costa-rica">Costa Rica</option>
-                  <option value="ethiopia">Ethiopia</option>
-                  <option value="guatemala">Guatemala</option>
-                  <option value="honduras">Honduras</option>
-                  <option value="india">India</option>
-                  <option value="indonesia">Indonesia</option>
-                  <option value="jamaica">Jamaica</option>
-                  <option value="kenya">Kenya</option>
-                  <option value="mexico">Mexico</option>
-                  <option value="nicaragua">Nicaragua</option>
-                  <option value="papua-new-guinea">Papua New Guinea</option>
-                  <option value="peru">Peru</option>
-                  <option value="rwanda">Rwanda</option>
-                  <option value="tanzania">Tanzania</option>
-                  <option value="vietnam">Vietnam</option>
-                  <option value="yemen">Yemen</option>
-                </select>
-                <label for="blend1Country">Country 1</label>
+          <div class="floating-label blend-panel">
+            <div class="blend-group" id="blendInputs">
+              <div class="blend-item">
+                <div class="floating-label">
+                  <select id="blend1Country">
+                    <option value="" disabled selected></option>
+                    <option value="brazil">Brazil</option>
+                    <option value="burundi">Burundi</option>
+                    <option value="colombia">Colombia</option>
+                    <option value="costa-rica">Costa Rica</option>
+                    <option value="ethiopia">Ethiopia</option>
+                    <option value="guatemala">Guatemala</option>
+                    <option value="honduras">Honduras</option>
+                    <option value="india">India</option>
+                    <option value="indonesia">Indonesia</option>
+                    <option value="jamaica">Jamaica</option>
+                    <option value="kenya">Kenya</option>
+                    <option value="mexico">Mexico</option>
+                    <option value="nicaragua">Nicaragua</option>
+                    <option value="papua-new-guinea">Papua New Guinea</option>
+                    <option value="peru">Peru</option>
+                    <option value="rwanda">Rwanda</option>
+                    <option value="tanzania">Tanzania</option>
+                    <option value="vietnam">Vietnam</option>
+                    <option value="yemen">Yemen</option>
+                  </select>
+                  <label for="blend1Country">Country 1</label>
+                </div>
+                <div class="floating-label">
+                  <input
+                    type="number"
+                    id="blend1Percent"
+                    placeholder=" "
+                    min="0"
+                    max="100"
+                  />
+                  <label for="blend1Percent">Percentage</label>
+                </div>
               </div>
-              <div class="floating-label">
-                <input
-                  type="number"
-                  id="blend1Percent"
-                  placeholder=" "
-                  min="0"
-                  max="100"
-                  oninput="validateBlend()"
-                />
-                <label for="blend1Percent">Percentage</label>
+              <div class="blend-item">
+                <div class="floating-label">
+                  <select id="blend2Country">
+                    <option value="" disabled selected></option>
+                    <option value="brazil">Brazil</option>
+                    <option value="burundi">Burundi</option>
+                    <option value="colombia">Colombia</option>
+                    <option value="costa-rica">Costa Rica</option>
+                    <option value="ethiopia">Ethiopia</option>
+                    <option value="guatemala">Guatemala</option>
+                    <option value="honduras">Honduras</option>
+                    <option value="india">India</option>
+                    <option value="indonesia">Indonesia</option>
+                    <option value="jamaica">Jamaica</option>
+                    <option value="kenya">Kenya</option>
+                    <option value="mexico">Mexico</option>
+                    <option value="nicaragua">Nicaragua</option>
+                    <option value="papua-new-guinea">Papua New Guinea</option>
+                    <option value="peru">Peru</option>
+                    <option value="rwanda">Rwanda</option>
+                    <option value="tanzania">Tanzania</option>
+                    <option value="vietnam">Vietnam</option>
+                    <option value="yemen">Yemen</option>
+                  </select>
+                  <label for="blend2Country">Country 2</label>
+                </div>
+                <div class="floating-label">
+                  <input
+                    type="number"
+                    id="blend2Percent"
+                    placeholder=" "
+                    min="0"
+                    max="100"
+                  />
+                  <label for="blend2Percent">Percentage</label>
+                </div>
               </div>
             </div>
-            <div class="blend-item">
-              <div class="floating-label">
-                <select id="blend2Country">
-                  <option value="" disabled selected></option>
-                  <option value="brazil">Brazil</option>
-                  <option value="burundi">Burundi</option>
-                  <option value="colombia">Colombia</option>
-                  <option value="costa-rica">Costa Rica</option>
-                  <option value="ethiopia">Ethiopia</option>
-                  <option value="guatemala">Guatemala</option>
-                  <option value="honduras">Honduras</option>
-                  <option value="india">India</option>
-                  <option value="indonesia">Indonesia</option>
-                  <option value="jamaica">Jamaica</option>
-                  <option value="kenya">Kenya</option>
-                  <option value="mexico">Mexico</option>
-                  <option value="nicaragua">Nicaragua</option>
-                  <option value="papua-new-guinea">Papua New Guinea</option>
-                  <option value="peru">Peru</option>
-                  <option value="rwanda">Rwanda</option>
-                  <option value="tanzania">Tanzania</option>
-                  <option value="vietnam">Vietnam</option>
-                  <option value="yemen">Yemen</option>
-                </select>
-                <label for="blend2Country">Country 2</label>
-              </div>
-              <div class="floating-label">
-                <input
-                  type="number"
-                  id="blend2Percent"
-                  placeholder=" "
-                  min="0"
-                  max="100"
-                  oninput="validateBlend()"
-                />
-                <label for="blend2Percent">Percentage</label>
-              </div>
-            </div>
+            <label>Blend Composition</label>
           </div>
           <div
             id="blendValidation"
@@ -594,9 +706,8 @@
         <div class="form-group">
           <div class="floating-label">
             <select id="processing">
-              <option value="" disabled selected></option>
-              <option value="washed">Washed (Wet Process)</option>
-              <option value="natural">Natural (Dry Process)</option>
+              <option value="washed" selected>Washed (Wet Process)</option>
+              <option value="natural" >Natural (Dry Process)</option>
               <option value="honey">Honey Process</option>
               <option value="semi-washed">Semi-Washed</option>
               <option value="wet-hulled">Wet-Hulled</option>
@@ -608,16 +719,15 @@
         <div class="form-group">
           <div class="floating-label">
             <select id="roastLevel">
-              <option value="" disabled selected></option>
               <option value="light">Light</option>
-              <option value="medium">Medium</option>
+              <option value="medium" selected>Medium</option>
               <option value="dark">Dark</option>
             </select>
             <label for="roastLevel">Roast Level</label>
           </div>
         </div>
 
-        <button class="check-btn" onclick="checkCoffee()">
+        <button class="check-btn">
           Check Latte Compatibility
         </button>
 
@@ -630,7 +740,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2>Get in Touch</h2>
-          <span class="close" onclick="closeContactModal()">&times;</span>
+          <span class="close">&times;</span>
         </div>
         <div class="modal-body">
           <form
@@ -671,6 +781,32 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module">
+      import { 
+        toggleBlendInputs, 
+        validateBlend, 
+        checkCoffee, 
+        toggleTheme, 
+        openContactModal, 
+        closeContactModal 
+      } from './script.mjs';
+
+      // Add event listeners
+      document.getElementById('coffeeType').addEventListener('change', toggleBlendInputs);
+      document.getElementById('blend1Percent').addEventListener('input', validateBlend);
+      document.getElementById('blend2Percent').addEventListener('input', validateBlend);
+      document.querySelector('.check-btn').addEventListener('click', checkCoffee);
+      document.querySelector('.theme-toggle').addEventListener('click', toggleTheme);
+      document.querySelector('.header-btn').addEventListener('click', openContactModal);
+      document.querySelector('.close').addEventListener('click', closeContactModal);
+      
+      // Close modal when clicking outside
+      window.addEventListener('click', (event) => {
+        const modal = document.getElementById('contactModal');
+        if (event.target === modal) {
+          closeContactModal();
+        }
+      });
+    </script>
   </body>
 </html>
