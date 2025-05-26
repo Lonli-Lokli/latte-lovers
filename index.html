@@ -71,6 +71,7 @@
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         overflow: hidden;
         transition: all 0.3s ease;
+        max-height: 100dvh; /* Prevent container from being taller than viewport */
       }
 
       body.light-theme .container {
@@ -152,6 +153,8 @@
 
       .form-container {
         padding: 20px 15px;
+        overflow-y: auto; /* Allow scrolling within form if needed */
+        max-height: calc(100dvh - 120px); /* Account for header height */
       }
 
       .form-group {
@@ -466,10 +469,12 @@
       @media screen and (max-width: 768px) {
         body {
           padding: 10px;
+          overflow-x: hidden;
         }
 
         .container {
           margin: 5px auto;
+          max-height: calc(100dvh - 20px); /* Account for body padding */
         }
 
         .header {
@@ -478,6 +483,7 @@
 
         .form-container {
           padding: 15px 10px;
+          max-height: calc(100dvh - 100px); /* Slightly reduced for mobile */
         }
 
         .floating-label select,
@@ -500,20 +506,17 @@
           font-size: 13px;
         }
 
+        .blend-group {
+          gap: 8px; /* Reduce gap between blend items */
+        }
+
         .blend-item {
           gap: 8px;
-          margin-bottom: 8px;
+          margin-bottom: 6px; /* Reduce margin between items */
         }
 
-        .blend-item .floating-label:last-child {
-          min-width: 90px;
-          max-width: 100px;
-        }
-
-        /* Ensure select and input have the same height in blend items */
-        .blend-item .floating-label select,
-        .blend-item .floating-label input {
-          height: 44px;
+        .form-group {
+          margin-bottom: 12px; /* Reduce margin between form groups */
         }
       }
 
@@ -846,26 +849,34 @@
       let deferredPrompt;
       const installButton = document.getElementById('installPWA');
 
-      window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent Chrome 67 and earlier from automatically showing the prompt
-        e.preventDefault();
-        // Stash the event so it can be triggered later
-        deferredPrompt = e;
-        // Show the install button
-        installButton.style.display = 'inline-block';
-      });
-
-      installButton.addEventListener('click', async () => {
-        if (!deferredPrompt) return;
-        // Show the install prompt
-        deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
-        const { outcome } = await deferredPrompt.userChoice;
-        // We no longer need the prompt. Clear it up
-        deferredPrompt = null;
-        // Hide the install button
+      // Check if the app is already installed
+      if (window.matchMedia('(display-mode: standalone)').matches) {
         installButton.style.display = 'none';
-      });
+      }
+
+      // Show install button for iOS
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (isIOS) {
+        installButton.style.display = 'inline-block';
+        installButton.addEventListener('click', () => {
+          alert('To install this app on your device, tap the Share button and then "Add to Home Screen"');
+        });
+      } else {
+        // Handle standard PWA installation for other devices
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
+          installButton.style.display = 'inline-block';
+        });
+
+        installButton.addEventListener('click', async () => {
+          if (!deferredPrompt) return;
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          deferredPrompt = null;
+          installButton.style.display = 'none';
+        });
+      }
 
       // Close modal when clicking outside
       window.addEventListener('click', (event) => {
