@@ -1,0 +1,22 @@
+{
+    "name": "Latte Lovers",
+    "short_name": "LatteLovers",
+    "description": "Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2196F3",
+    "orientation": "portrait-primary",
+    "icons": [
+      {
+        "src": "icon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "icon-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }

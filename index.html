@@ -4,7 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="favicon.svg" type="image/svg" />
+    <link rel="manifest" href="manifest.json">
     <title>Latte Coffee Checker</title>
+
+    <!-- OpenGraph Meta Tags -->
+    <meta property="og:title" content="Latte Coffee Checker ☕" />
+    <meta property="og:description" content="Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://latte-lovers.vercel.app" />
+    <meta property="og:image" content="https://latte-lovers.vercel.app/og-image.png" />
+    <meta property="og:image:alt" content="Latte Coffee Checker - Find your perfect coffee" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:title" content="Latte Coffee Checker ☕" />
+    <meta name="twitter:description" content="Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes." />
+    <meta name="twitter:image" content="https://latte-lovers.vercel.app/og-image.png" />
+    
+    <!-- Additional Meta Tags -->
+    <meta name="description" content="Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes." />
+    <meta name="keywords" content="coffee, latte, coffee checker, coffee compatibility, milk drinks, coffee origins, processing methods, roast levels" />
+    <meta name="author" content="Lonli-Lokli" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Latte Lovers">
+    <link rel="apple-touch-icon" href="192x192.png">
+
     <style>
       * {
         margin: 0;
@@ -569,6 +594,9 @@
             target="_blank"
             >☕ Buy Me a Coffee</a
           >
+          <button id="installPWA" class="header-btn" style="display: none;">
+            📱 Install App
+          </button>
         </div>
       </div>
 
@@ -800,6 +828,31 @@
       document.querySelector('.header-btn').addEventListener('click', openContactModal);
       document.querySelector('.close').addEventListener('click', closeContactModal);
       
+      // PWA Installation
+      let deferredPrompt;
+      const installButton = document.getElementById('installPWA');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later
+        deferredPrompt = e;
+        // Show the install button
+        installButton.style.display = 'inline-block';
+      });
+
+      installButton.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        // Show the install prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        const { outcome } = await deferredPrompt.userChoice;
+        // We no longer need the prompt. Clear it up
+        deferredPrompt = null;
+        // Hide the install button
+        installButton.style.display = 'none';
+      });
+
       // Close modal when clicking outside
       window.addEventListener('click', (event) => {
         const modal = document.getElementById('contactModal');
