@@ -129,7 +129,8 @@
         display: flex;
         gap: 8px;
         justify-content: center;
-        flex-wrap: wrap;
+        flex-wrap: nowrap; /* Prevent wrapping */
+        padding: 0 5px; /* Add some padding on sides */
       }
 
       .header-btn {
@@ -143,6 +144,8 @@
         transition: all 0.3s ease;
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
+        white-space: nowrap; /* Prevent text wrapping */
+        flex-shrink: 0; /* Prevent button shrinking */
       }
 
       .header-btn:hover {
@@ -518,6 +521,15 @@
         .form-group {
           margin-bottom: 12px; /* Reduce margin between form groups */
         }
+
+        .header-buttons {
+          gap: 6px; /* Slightly reduce gap on mobile */
+        }
+
+        .header-btn {
+          padding: 6px 10px; /* Slightly reduce padding on mobile */
+          font-size: 11px; /* Slightly smaller font on mobile */
+        }
       }
 
       .blend-panel {
@@ -575,21 +587,6 @@
       .blend-item input {
         width: 100%;
         text-align: center;
-      }
-
-      @media screen and (max-width: 768px) {
-        .blend-panel {
-          padding: 12px;
-        }
-
-        .blend-item {
-          gap: 8px;
-        }
-
-        .blend-item .floating-label:last-child {
-          min-width: 90px;
-          max-width: 100px;
-        }
       }
     </style>
   </head>
