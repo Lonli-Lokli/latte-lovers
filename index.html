@@ -133,16 +133,24 @@
         margin-bottom: 25px;
       }
 
-      .form-group label {
-        display: block;
-        font-weight: 600;
-        color: #3e2723;
-        margin-bottom: 8px;
-        font-size: 14px;
+      .floating-label {
+        position: relative;
+        margin-bottom: 15px;
       }
 
-      select,
-      input {
+      .floating-label label {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        color: #999;
+        transition: all 0.3s ease;
+        pointer-events: none;
+        background: white;
+        padding: 0 5px;
+      }
+
+      .floating-label select,
+      .floating-label input {
         width: 100%;
         padding: 15px;
         border: 2px solid #e0e0e0;
@@ -152,11 +160,33 @@
         transition: all 0.3s ease;
       }
 
-      select:focus,
-      input:focus {
+      .floating-label select:focus,
+      .floating-label input:focus {
         outline: none;
         border-color: #6b4e3d;
         box-shadow: 0 0 0 3px rgba(107, 78, 61, 0.1);
+      }
+
+      .floating-label select:focus + label,
+      .floating-label input:focus + label,
+      .floating-label select:not([value=""]):not(:focus) + label,
+      .floating-label input:not(:placeholder-shown) + label {
+        top: -10px;
+        font-size: 12px;
+        color: #6b4e3d;
+      }
+
+      .floating-label select:not([value=""]):not(:focus) + label,
+      .floating-label input:not(:placeholder-shown) + label {
+        color: #666;
+      }
+
+      .section-label {
+        display: block;
+        font-weight: 600;
+        color: #3e2723;
+        margin-bottom: 8px;
+        font-size: 14px;
       }
 
       .blend-group {
@@ -171,17 +201,33 @@
 
       .blend-item {
         display: flex;
-        gap: 10px;
-        align-items: end;
+        gap: 15px;
+        align-items: flex-start;
+        margin-bottom: 15px;
       }
 
-      .blend-item select {
+      .blend-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .blend-item .floating-label {
         flex: 2;
+        margin-bottom: 0;
+      }
+
+      .blend-item .floating-label:last-child {
+        flex: 1;
+        min-width: 100px;
+        max-width: 120px;
       }
 
       .blend-item input {
-        flex: 1;
-        max-width: 80px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .blend-item .floating-label label {
+        white-space: nowrap;
       }
 
       .check-btn {
@@ -416,106 +462,122 @@
 
       <div class="form-container">
         <div class="form-group">
-          <label for="coffeeType">Coffee Type</label>
-          <select id="coffeeType" onchange="toggleBlendInputs()">
-            <option value="">Select coffee type</option>
-            <option value="single">Single Origin</option>
-            <option value="blend">Blend</option>
-          </select>
+          <div class="floating-label">
+            <select id="coffeeType" onchange="toggleBlendInputs()">
+              <option value="" disabled selected></option>
+              <option value="single">Single Origin</option>
+              <option value="blend">Blend</option>
+            </select>
+            <label for="coffeeType">Coffee Type</label>
+          </div>
         </div>
 
         <div class="form-group" id="singleOriginGroup" style="display: none">
-          <label for="country">Country of Origin</label>
-          <select id="country">
-            <option value="">Select country</option>
-            <option value="brazil">Brazil</option>
-            <option value="colombia">Colombia</option>
-            <option value="ethiopia">Ethiopia</option>
-            <option value="guatemala">Guatemala</option>
-            <option value="costa-rica">Costa Rica</option>
-            <option value="honduras">Honduras</option>
-            <option value="nicaragua">Nicaragua</option>
-            <option value="peru">Peru</option>
-            <option value="mexico">Mexico</option>
-            <option value="jamaica">Jamaica</option>
-            <option value="kenya">Kenya</option>
-            <option value="rwanda">Rwanda</option>
-            <option value="burundi">Burundi</option>
-            <option value="tanzania">Tanzania</option>
-            <option value="yemen">Yemen</option>
-            <option value="indonesia">Indonesia</option>
-            <option value="vietnam">Vietnam</option>
-            <option value="india">India</option>
-            <option value="papua-new-guinea">Papua New Guinea</option>
-          </select>
+          <div class="floating-label">
+            <select id="country">
+              <option value="" disabled selected></option>
+              <option value="brazil">Brazil</option>
+              <option value="burundi">Burundi</option>
+              <option value="colombia">Colombia</option>
+              <option value="costa-rica">Costa Rica</option>
+              <option value="ethiopia">Ethiopia</option>
+              <option value="guatemala">Guatemala</option>
+              <option value="honduras">Honduras</option>
+              <option value="india">India</option>
+              <option value="indonesia">Indonesia</option>
+              <option value="jamaica">Jamaica</option>
+              <option value="kenya">Kenya</option>
+              <option value="mexico">Mexico</option>
+              <option value="nicaragua">Nicaragua</option>
+              <option value="papua-new-guinea">Papua New Guinea</option>
+              <option value="peru">Peru</option>
+              <option value="rwanda">Rwanda</option>
+              <option value="tanzania">Tanzania</option>
+              <option value="vietnam">Vietnam</option>
+              <option value="yemen">Yemen</option>
+            </select>
+            <label for="country">Country of Origin</label>
+          </div>
         </div>
 
         <div class="form-group" id="blendGroup" style="display: none">
-          <label>Blend Composition (%)</label>
+          <label class="section-label">Blend Composition (%)</label>
           <div class="blend-group" id="blendInputs">
             <div class="blend-item">
-              <select id="blend1Country">
-                <option value="">Country 1</option>
-                <option value="brazil">Brazil</option>
-                <option value="colombia">Colombia</option>
-                <option value="ethiopia">Ethiopia</option>
-                <option value="guatemala">Guatemala</option>
-                <option value="costa-rica">Costa Rica</option>
-                <option value="honduras">Honduras</option>
-                <option value="nicaragua">Nicaragua</option>
-                <option value="peru">Peru</option>
-                <option value="mexico">Mexico</option>
-                <option value="jamaica">Jamaica</option>
-                <option value="kenya">Kenya</option>
-                <option value="rwanda">Rwanda</option>
-                <option value="burundi">Burundi</option>
-                <option value="tanzania">Tanzania</option>
-                <option value="yemen">Yemen</option>
-                <option value="indonesia">Indonesia</option>
-                <option value="vietnam">Vietnam</option>
-                <option value="india">India</option>
-                <option value="papua-new-guinea">Papua New Guinea</option>
-              </select>
-              <input
-                type="number"
-                id="blend1Percent"
-                placeholder="%"
-                min="0"
-                max="100"
-                oninput="validateBlend()"
-              />
+              <div class="floating-label">
+                <select id="blend1Country">
+                  <option value="" disabled selected></option>
+                  <option value="brazil">Brazil</option>
+                  <option value="burundi">Burundi</option>
+                  <option value="colombia">Colombia</option>
+                  <option value="costa-rica">Costa Rica</option>
+                  <option value="ethiopia">Ethiopia</option>
+                  <option value="guatemala">Guatemala</option>
+                  <option value="honduras">Honduras</option>
+                  <option value="india">India</option>
+                  <option value="indonesia">Indonesia</option>
+                  <option value="jamaica">Jamaica</option>
+                  <option value="kenya">Kenya</option>
+                  <option value="mexico">Mexico</option>
+                  <option value="nicaragua">Nicaragua</option>
+                  <option value="papua-new-guinea">Papua New Guinea</option>
+                  <option value="peru">Peru</option>
+                  <option value="rwanda">Rwanda</option>
+                  <option value="tanzania">Tanzania</option>
+                  <option value="vietnam">Vietnam</option>
+                  <option value="yemen">Yemen</option>
+                </select>
+                <label for="blend1Country">Country 1</label>
+              </div>
+              <div class="floating-label">
+                <input
+                  type="number"
+                  id="blend1Percent"
+                  placeholder=" "
+                  min="0"
+                  max="100"
+                  oninput="validateBlend()"
+                />
+                <label for="blend1Percent">Percentage</label>
+              </div>
             </div>
             <div class="blend-item">
-              <select id="blend2Country">
-                <option value="">Country 2</option>
-                <option value="brazil">Brazil</option>
-                <option value="colombia">Colombia</option>
-                <option value="ethiopia">Ethiopia</option>
-                <option value="guatemala">Guatemala</option>
-                <option value="costa-rica">Costa Rica</option>
-                <option value="honduras">Honduras</option>
-                <option value="nicaragua">Nicaragua</option>
-                <option value="peru">Peru</option>
-                <option value="mexico">Mexico</option>
-                <option value="jamaica">Jamaica</option>
-                <option value="kenya">Kenya</option>
-                <option value="rwanda">Rwanda</option>
-                <option value="burundi">Burundi</option>
-                <option value="tanzania">Tanzania</option>
-                <option value="yemen">Yemen</option>
-                <option value="indonesia">Indonesia</option>
-                <option value="vietnam">Vietnam</option>
-                <option value="india">India</option>
-                <option value="papua-new-guinea">Papua New Guinea</option>
-              </select>
-              <input
-                type="number"
-                id="blend2Percent"
-                placeholder="%"
-                min="0"
-                max="100"
-                oninput="validateBlend()"
-              />
+              <div class="floating-label">
+                <select id="blend2Country">
+                  <option value="" disabled selected></option>
+                  <option value="brazil">Brazil</option>
+                  <option value="burundi">Burundi</option>
+                  <option value="colombia">Colombia</option>
+                  <option value="costa-rica">Costa Rica</option>
+                  <option value="ethiopia">Ethiopia</option>
+                  <option value="guatemala">Guatemala</option>
+                  <option value="honduras">Honduras</option>
+                  <option value="india">India</option>
+                  <option value="indonesia">Indonesia</option>
+                  <option value="jamaica">Jamaica</option>
+                  <option value="kenya">Kenya</option>
+                  <option value="mexico">Mexico</option>
+                  <option value="nicaragua">Nicaragua</option>
+                  <option value="papua-new-guinea">Papua New Guinea</option>
+                  <option value="peru">Peru</option>
+                  <option value="rwanda">Rwanda</option>
+                  <option value="tanzania">Tanzania</option>
+                  <option value="vietnam">Vietnam</option>
+                  <option value="yemen">Yemen</option>
+                </select>
+                <label for="blend2Country">Country 2</label>
+              </div>
+              <div class="floating-label">
+                <input
+                  type="number"
+                  id="blend2Percent"
+                  placeholder=" "
+                  min="0"
+                  max="100"
+                  oninput="validateBlend()"
+                />
+                <label for="blend2Percent">Percentage</label>
+              </div>
             </div>
           </div>
           <div
@@ -530,25 +592,29 @@
         </div>
 
         <div class="form-group">
-          <label for="processing">Processing Method</label>
-          <select id="processing">
-            <option value="">Default (Washed)</option>
-            <option value="washed">Washed (Wet Process)</option>
-            <option value="natural">Natural (Dry Process)</option>
-            <option value="honey">Honey Process</option>
-            <option value="semi-washed">Semi-Washed</option>
-            <option value="wet-hulled">Wet-Hulled</option>
-          </select>
+          <div class="floating-label">
+            <select id="processing">
+              <option value="" disabled selected></option>
+              <option value="washed">Washed (Wet Process)</option>
+              <option value="natural">Natural (Dry Process)</option>
+              <option value="honey">Honey Process</option>
+              <option value="semi-washed">Semi-Washed</option>
+              <option value="wet-hulled">Wet-Hulled</option>
+            </select>
+            <label for="processing">Processing Method</label>
+          </div>
         </div>
 
         <div class="form-group">
-          <label for="roasting">Roast Level</label>
-          <select id="roastLevel">
-            <option value="">Default (Medium)</option>
-            <option value="light">Light</option>
-            <option value="medium">Medium</option>
-            <option value="dark">Dark</option>
-          </select>
+          <div class="floating-label">
+            <select id="roastLevel">
+              <option value="" disabled selected></option>
+              <option value="light">Light</option>
+              <option value="medium">Medium</option>
+              <option value="dark">Dark</option>
+            </select>
+            <label for="roastLevel">Roast Level</label>
+          </div>
         </div>
 
         <button class="check-btn" onclick="checkCoffee()">
@@ -605,505 +671,6 @@
       </div>
     </div>
 
-    <script>
-      const coffeeProfiles = {
-        brazil: {
-          sweetness: 8,
-          acidity: 5,
-          body: 8,
-          balance: 9,
-          bitterness: 6,
-        },
-        colombia: {
-          sweetness: 7,
-          acidity: 6,
-          body: 7,
-          balance: 8,
-          bitterness: 5,
-        },
-        ethiopia: {
-          sweetness: 6,
-          acidity: 9,
-          body: 5,
-          balance: 6,
-          bitterness: 3,
-        },
-        guatemala: {
-          sweetness: 7,
-          acidity: 7,
-          body: 8,
-          balance: 8,
-          bitterness: 5,
-        },
-        "costa-rica": {
-          sweetness: 6,
-          acidity: 8,
-          body: 6,
-          balance: 7,
-          bitterness: 4,
-        },
-        honduras: {
-          sweetness: 7,
-          acidity: 6,
-          body: 7,
-          balance: 7,
-          bitterness: 5,
-        },
-        nicaragua: {
-          sweetness: 7,
-          acidity: 6,
-          body: 7,
-          balance: 7,
-          bitterness: 5,
-        },
-        peru: { sweetness: 6, acidity: 7, body: 6, balance: 7, bitterness: 4 },
-        mexico: {
-          sweetness: 6,
-          acidity: 6,
-          body: 7,
-          balance: 7,
-          bitterness: 5,
-        },
-        jamaica: {
-          sweetness: 8,
-          acidity: 5,
-          body: 8,
-          balance: 9,
-          bitterness: 4,
-        }, // Typically smooth
-        kenya: { sweetness: 5, acidity: 9, body: 7, balance: 6, bitterness: 3 },
-        rwanda: {
-          sweetness: 6,
-          acidity: 8,
-          body: 6,
-          balance: 7,
-          bitterness: 4,
-        },
-        burundi: {
-          sweetness: 6,
-          acidity: 8,
-          body: 6,
-          balance: 7,
-          bitterness: 4,
-        },
-        tanzania: {
-          sweetness: 6,
-          acidity: 8,
-          body: 7,
-          balance: 7,
-          bitterness: 6,
-        },
-        yemen: { sweetness: 7, acidity: 6, body: 9, balance: 8, bitterness: 7 },
-        indonesia: {
-          sweetness: 7,
-          acidity: 4,
-          body: 9,
-          balance: 7,
-          bitterness: 8,
-        },
-        vietnam: {
-          sweetness: 5,
-          acidity: 4,
-          body: 8,
-          balance: 6,
-          bitterness: 9,
-        },
-        india: { sweetness: 6, acidity: 5, body: 8, balance: 7, bitterness: 7 },
-        "papua-new-guinea": {
-          sweetness: 6,
-          acidity: 6,
-          body: 8,
-          balance: 7,
-          bitterness: 5,
-        },
-      };
-
-      const processingEffects = {
-        "": { sweetness: 0, acidity: 1, body: -1, balance: 1, bitterness: 0 },
-        washed: {
-          sweetness: 0,
-          acidity: 1,
-          body: -1,
-          balance: 1,
-          bitterness: 0,
-        },
-        natural: {
-          sweetness: 2,
-          acidity: -1,
-          body: 1,
-          balance: 0,
-          bitterness: 0,
-        },
-        honey: { sweetness: 1, acidity: 0, body: 0, balance: 1, bitterness: 0 },
-        "semi-washed": {
-          sweetness: 1,
-          acidity: 0,
-          body: 0,
-          balance: 0,
-          bitterness: 0,
-        },
-        "wet-hulled": {
-          sweetness: 0,
-          acidity: -1,
-          body: 2,
-          balance: 0,
-          bitterness: 0,
-        },
-      };
-
-      const roastLevelEffects = {
-        "": {
-          // same as medium
-          sweetness: +0.75,
-          acidity: -0.75,
-          body: +0.75,
-          balance: +1.0,
-          bitterness: +0.75,
-        },
-        light: {
-          // Emphasizes origin, bright, clear.
-          sweetness: 0, // Preserves origin sweetness; perceived sweetness might be affected by high acidity.
-          acidity: +1.5, // Significantly boosts perceived acidity and brightness.
-          body: -1.0, // Results in a lighter, often more tea-like body.
-          balance: -0.5, // Can feel less "rounded" if acidity is very dominant, but highlights clarity of origin.
-          // If original balance was low due to muted notes, higher acidity might improve perceived "liveliness"
-          // but for a general "smooth balance" for latte, high acidity might detract.
-          bitterness: -1.0, // Minimizes roast-derived bitterness.
-        },
-        medium: {
-          // Aims for a balance of origin and roast characteristics, often a sweet spot.
-          sweetness: +0.75, // Develops caramelization, often enhancing overall sweetness perception.
-          acidity: -0.75, // Mellows acidity from light, bringing it towards a more balanced state.
-          body: +0.75, // Builds more body and a rounder mouthfeel.
-          balance: +1.0, // Often considered the peak of balance, where origin and roast notes harmonize well.
-          bitterness: +0.75, // Introduces noticeable but generally pleasant roasty bitterness.
-        },
-        dark: {
-          // Roast characteristics become dominant, often muting origin.
-          sweetness: -2.0, // Significantly reduces origin sweetness, leaning towards bittersweet, smoky, or even charry notes.
-          acidity: -3.0, // Drastically reduces acidity, can become flat.
-          body: +0.5, // Body might increase due to solubles, but extreme dark can make it thin/ashy.
-          // Let's keep a modest increase, as other factors (sweetness, balance) will pull score down.
-          balance: -2.0, // Origin balance is largely overshadowed by strong roast flavors; often becomes mono-dimensional.
-          bitterness: +3.0, // Bitterness becomes a primary and often intense characteristic.
-        },
-      };
-
-      function applyFullProcessingEffects(
-        baseProfile,
-        processingName,
-        allProcessingEffects
-      ) {
-        const effect = allProcessingEffects[processingName];
-
-        if (!effect) {
-          // console.warn(`Processing effect "${processingName}" not found. Returning base profile (clamped).`);
-          return {
-            sweetness: Math.max(1, Math.min(10, baseProfile.sweetness)),
-            acidity: Math.max(1, Math.min(10, baseProfile.acidity)),
-            body: Math.max(1, Math.min(10, baseProfile.body)),
-            balance: Math.max(1, Math.min(10, baseProfile.balance)),
-            bitterness: Math.max(1, Math.min(10, baseProfile.bitterness)),
-          };
-        }
-
-        return {
-          sweetness: Math.max(
-            1,
-            Math.min(10, baseProfile.sweetness + (effect.sweetness || 0))
-          ),
-          acidity: Math.max(
-            1,
-            Math.min(10, baseProfile.acidity + (effect.acidity || 0))
-          ),
-          body: Math.max(
-            1,
-            Math.min(10, baseProfile.body + (effect.body || 0))
-          ),
-          balance: Math.max(
-            1,
-            Math.min(10, baseProfile.balance + (effect.balance || 0))
-          ),
-          bitterness: Math.max(
-            1,
-            Math.min(10, baseProfile.bitterness + (effect.bitterness || 0))
-          ),
-        };
-      }
-
-      function applyRoastEffects(processedProfile, roastName, allRoastEffects) {
-        const effect = allRoastEffects[roastName];
-
-        if (!effect) {
-          console.warn(
-            `Roast effect "${roastName}" not found. Returning profile as is (after clamping).`
-          );
-          // Still clamp the input profile to ensure consistency if roastName is invalid
-          return {
-            sweetness: Math.max(1, Math.min(10, processedProfile.sweetness)),
-            acidity: Math.max(1, Math.min(10, processedProfile.acidity)),
-            body: Math.max(1, Math.min(10, processedProfile.body)),
-            balance: Math.max(1, Math.min(10, processedProfile.balance)),
-            bitterness: Math.max(1, Math.min(10, processedProfile.bitterness)),
-          };
-        }
-
-        const roastedProfile = {
-          sweetness: Math.max(
-            1,
-            Math.min(10, processedProfile.sweetness + effect.sweetness)
-          ),
-          acidity: Math.max(
-            1,
-            Math.min(10, processedProfile.acidity + effect.acidity)
-          ),
-          body: Math.max(1, Math.min(10, processedProfile.body + effect.body)),
-          balance: Math.max(
-            1,
-            Math.min(10, processedProfile.balance + effect.balance)
-          ),
-          bitterness: Math.max(
-            1,
-            Math.min(10, processedProfile.bitterness + effect.bitterness)
-          ),
-        };
-
-        return roastedProfile;
-      }
-
-      function toggleBlendInputs() {
-        const coffeeType = document.getElementById("coffeeType").value;
-        const singleGroup = document.getElementById("singleOriginGroup");
-        const blendGroup = document.getElementById("blendGroup");
-
-        if (coffeeType === "single") {
-          singleGroup.style.display = "block";
-          blendGroup.style.display = "none";
-        } else if (coffeeType === "blend") {
-          singleGroup.style.display = "none";
-          blendGroup.style.display = "block";
-        } else {
-          singleGroup.style.display = "none";
-          blendGroup.style.display = "none";
-        }
-      }
-
-      function validateBlend() {
-        const percent1 =
-          parseInt(document.getElementById("blend1Percent").value) || 0;
-        const percent2 =
-          parseInt(document.getElementById("blend2Percent").value) || 0;
-        const total = percent1 + percent2;
-        const validationDiv = document.getElementById("blendValidation");
-
-        if (total === 0) {
-          validationDiv.style.display = "none";
-          return;
-        }
-
-        if (total !== 100) {
-          validationDiv.textContent = `Percentages must add up to 100% (currently ${total}%)`;
-          validationDiv.style.display = "block";
-        } else {
-          validationDiv.style.display = "none";
-        }
-      }
-
-      function openContactModal() {
-        document.getElementById("contactModal").style.display = "block";
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeContactModal() {
-        document.getElementById("contactModal").style.display = "none";
-        document.body.style.overflow = "auto";
-      }
-
-      // Close modal when clicking outside
-      window.addEventListener("click", function (event) {
-        const modal = document.getElementById("contactModal");
-        if (event.target === modal) {
-          closeContactModal();
-        }
-      });
-
-      function toggleTheme() {
-        const body = document.body;
-        const themeIcon = document.getElementById("themeIcon");
-
-        body.classList.toggle("light-theme");
-
-        if (body.classList.contains("light-theme")) {
-          themeIcon.textContent = "🌙";
-          localStorage.setItem("theme", "light");
-        } else {
-          themeIcon.textContent = "☀️";
-          localStorage.setItem("theme", "dark");
-        }
-      }
-
-      // Load saved theme on page load
-      window.addEventListener("load", function () {
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "light") {
-          document.body.classList.add("light-theme");
-          document.getElementById("themeIcon").textContent = "🌙";
-        }
-      });
-
-      function calculateLatteScore(profile) {
-        return (
-          profile.balance * 0.3 +
-          profile.body * 0.3 +
-          profile.sweetness * 0.25 +
-          Math.min(profile.acidity, 6.5) * 0.15 -
-          (profile.acidity > 6.5 ? (profile.acidity - 6.5) * 0.2 : 0) -
-          (profile.bitterness > 5 ? (profile.bitterness - 5) * 0.25 : 0)
-        );
-      }
-
-      function checkCoffee() {
-        const coffeeType = document.getElementById("coffeeType").value;
-        const processing = document.getElementById("processing").value;
-        const roast = document.getElementById("roastLevel")
-          ? document.getElementById("roastLevel").value
-          : ""; // Get roast level
-        const resultDiv = document.getElementById("result");
-
-        // Basic validation
-        if (!coffeeType) {
-          alert("Please select a coffee type");
-          return;
-        }
-
-        let initialProfile; // This will hold the profile before processing & roasting
-
-        if (coffeeType === "single") {
-          const country = document.getElementById("country").value;
-          if (!country) {
-            alert("Please select a country");
-            return;
-          }
-          // Get the full profile including bitterness
-          initialProfile = { ...coffeeProfiles[country] };
-        } else if (coffeeType === "blend") {
-          const country1 = document.getElementById("blend1Country").value;
-          const percent1 =
-            parseInt(document.getElementById("blend1Percent").value) || 0;
-          const country2 = document.getElementById("blend2Country").value;
-          const percent2 =
-            parseInt(document.getElementById("blend2Percent").value) || 0;
-
-          if (
-            !country1 ||
-            !country2 ||
-            percent1 <= 0 ||
-            percent2 <= 0 ||
-            percent1 + percent2 !== 100
-          ) {
-            alert(
-              "Please select both countries and ensure percentages are valid and add up to 100%."
-            );
-            return;
-          }
-
-          const profile1 = coffeeProfiles[country1];
-          const profile2 = coffeeProfiles[country2];
-
-          // Blend all attributes, including bitterness
-          initialProfile = {
-            sweetness:
-              (profile1.sweetness * percent1 + profile2.sweetness * percent2) /
-              100,
-            acidity:
-              (profile1.acidity * percent1 + profile2.acidity * percent2) / 100,
-            body: (profile1.body * percent1 + profile2.body * percent2) / 100,
-            balance:
-              (profile1.balance * percent1 + profile2.balance * percent2) / 100,
-            bitterness:
-              (profile1.bitterness * percent1 +
-                profile2.bitterness * percent2) /
-              100,
-          };
-        } else {
-          alert("Invalid coffee type selected.");
-          return;
-        }
-
-        // 1. Apply processing effects
-        const processedProfile = applyFullProcessingEffects(
-          initialProfile,
-          processing,
-          processingEffects
-        );
-
-        // 2. Apply roast effects
-        const finalProfile = applyRoastEffects(
-          processedProfile,
-          roast,
-          roastLevelEffects
-        );
-
-        // --- Score Calculation & Display (remains largely the same) ---
-        const latteScoreRaw = calculateLatteScore(finalProfile);
-
-        const ACTUAL_MIN_RAW = 3.55; // Use the value you just calculated
-        const ACTUAL_MAX_RAW = 8.913; // Use the value you just calculated
-        const TARGET_DISPLAY_SCALE = 10; // For a 0-10 displayed score
-
-        let normalizedLatteScore;
-
-        if (ACTUAL_MAX_RAW === ACTUAL_MIN_RAW) {
-          // Handles the unlikely case where all scores are identical
-          normalizedLatteScore = TARGET_DISPLAY_SCALE / 2; // Or 0, or TARGET_DISPLAY_SCALE, depending on preference
-        } else {
-          normalizedLatteScore =
-            ((latteScoreRaw - ACTUAL_MIN_RAW) /
-              (ACTUAL_MAX_RAW - ACTUAL_MIN_RAW)) *
-            TARGET_DISPLAY_SCALE;
-        }
-
-        // Ensure the normalized score is strictly within the 0-10 range due to potential floating point inaccuracies
-        normalizedLatteScore = Math.max(
-          0,
-          Math.min(TARGET_DISPLAY_SCALE, normalizedLatteScore)
-        );
-
-        let grade, emoji, description, className;
-
-        // Adjust thresholds based on your normalized score range (0-10)
-        if (normalizedLatteScore >= 8.0) {
-          // e.g. Top 20%
-          grade = "Perfect";
-          emoji = "🤩";
-          className = "perfect";
-          description =
-            "Excellent choice for lattes! This coffee will create a harmonious blend with milk, offering great balance and smooth body.";
-        } else if (normalizedLatteScore >= 6.0) {
-          // e.g. Next 40%
-          grade = "Good";
-          emoji = "😊";
-          className = "good";
-          description =
-            "Good for lattes. This coffee will work well with milk, though you might notice some flavor nuances.";
-        } else {
-          // Bottom tier
-          grade = "Consider Alternatives";
-          emoji = "🤔";
-          className = "bad";
-          description =
-            "May not be ideal for lattes. This coffee might clash with milk or lack the body needed for a satisfying latte experience. Consider it for black coffee or a different blend.";
-        }
-
-        resultDiv.innerHTML = `
-                <span class="result-emoji">${emoji}</span>
-                <div class="result-grade">${grade}</div>
-                <div class="result-description">${description}</div>
-            `;
-
-        resultDiv.className = `result ${className}`;
-        resultDiv.style.display = "block";
-      }
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
