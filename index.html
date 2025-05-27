@@ -115,7 +115,7 @@
         background: linear-gradient(135deg, #3e2723 0%, #5d4037 100%);
         color: white;
         text-align: center;
-        padding: 20px 15px;
+        padding: 15px;
         position: relative;
       }
 
@@ -123,61 +123,90 @@
         background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
       }
 
+      .header-content {
+        max-width: 100%;
+        margin: 0 auto 10px;
+      }
+
+      .header h1 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .header p {
+        font-size: 12px;
+        opacity: 0.9;
+        margin-bottom: 10px;
+      }
+
+      .coffee-emoji {
+        font-size: 16px;
+        margin-right: 4px;
+      }
+
+      .header-buttons {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        gap: 6px;
+        justify-content: center;
+        align-items: center;
+      }
+
       .theme-toggle {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background: rgba(255, 255, 255, 0.2);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
         cursor: pointer;
         transition: all 0.3s ease;
-        font-size: 18px;
+        font-size: 15px;
+        padding: 0;
+        margin: 0;
+        flex-shrink: 0;
+      }
+
+      .theme-toggle span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        line-height: 1;
+        margin: 0;
+        padding: 0;
       }
 
       .theme-toggle:hover {
         background: rgba(255, 255, 255, 0.3);
-        transform: rotate(180deg);
-      }
-
-      .header h1 {
-        font-size: 22px;
-        font-weight: 600;
-        margin-bottom: 6px;
-      }
-
-      .header p {
-        font-size: 13px;
-        opacity: 0.9;
-        margin-bottom: 15px;
-      }
-
-      .header-buttons {
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-        flex-wrap: nowrap; /* Prevent wrapping */
-        padding: 0 5px; /* Add some padding on sides */
+        border-color: rgba(255, 255, 255, 0.4);
       }
 
       .header-btn {
-        padding: 6px 12px;
+        padding: 5px 10px;
         border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 20px;
         color: white;
         text-decoration: none;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 500;
         transition: all 0.3s ease;
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
-        white-space: nowrap; /* Prevent text wrapping */
-        flex-shrink: 0; /* Prevent button shrinking */
+        white-space: nowrap;
+        text-align: center;
+        width: 100%;
+      }
+
+      .header-btn.hidden {
+        opacity: 0;
+        pointer-events: none;
+        user-select: none;
       }
 
       .header-btn:hover {
@@ -403,11 +432,6 @@
         }
       }
 
-      .coffee-emoji {
-        font-size: 20px;
-        margin-right: 8px;
-      }
-
       /* Modal Styles */
       .modal {
         display: none;
@@ -539,11 +563,32 @@
 
         .container {
           margin: 5px auto;
-          max-height: calc(100dvh - 20px); /* Account for body padding */
+          max-height: calc(100dvh - 20px);
         }
 
         .header {
-          padding: 15px 10px;
+          padding: 12px 10px;
+        }
+
+        .header h1 {
+          font-size: 16px;
+        }
+
+        .header p {
+          font-size: 11px;
+          margin-bottom: 8px;
+        }
+
+        .theme-toggle {
+          width: 26px;
+          height: 26px;
+          min-width: 26px;
+          font-size: 13px;
+        }
+
+        .header-btn {
+          padding: 4px 8px;
+          font-size: 10px;
         }
 
         .form-container {
@@ -592,12 +637,7 @@
         }
 
         .header-buttons {
-          gap: 6px; /* Slightly reduce gap on mobile */
-        }
-
-        .header-btn {
-          padding: 6px 10px; /* Slightly reduce padding on mobile */
-          font-size: 11px; /* Slightly smaller font on mobile */
+          gap: 4px;
         }
       }
 
@@ -662,12 +702,14 @@
   <body>
     <div class="container">
       <div class="header">
-        <div class="theme-toggle" title="Toggle theme">
-          <span id="themeIcon">☀️</span>
+        <div class="header-content">
+          <h1><span class="coffee-emoji">☕</span>Coffee Bean Latte Compatibility</h1>
+          <p>Find the perfect coffee beans for your milk-based drinks</p>
         </div>
-        <h1><span class="coffee-emoji">☕</span>Coffee Bean Latte Compatibility</h1>
-        <p>Find the perfect coffee beans for your milk-based drinks</p>
         <div class="header-buttons">
+          <button class="theme-toggle" title="Toggle theme">
+            <span id="themeIcon">☀️</span>
+          </button>
           <a href="#" class="header-btn">📧 Contact</a>
           <a
             href="https://buymeacoffee.com/lonlilokliV"
@@ -675,7 +717,7 @@
             target="_blank"
             >☕ Buy Me a Coffee</a
           >
-          <button id="installPWA" class="header-btn" style="display: none">
+          <button id="installPWA" class="header-btn hidden">
             📱 Save to Phone
           </button>
         </div>
@@ -908,14 +950,14 @@
 
         // Check if the app is already installed
         if (window.matchMedia("(display-mode: standalone)").matches) {
-          installButton.style.display = "none";
+          installButton.classList.add("hidden");
         }
 
         // Show install button for iOS
         const isIOS =
           /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         if (isIOS) {
-          installButton.style.display = "inline-block";
+          installButton.classList.remove("hidden");
           installButton.addEventListener("click", () => {
             alert(
               'To install this app on your device, tap the Share button and then "Add to Home Screen"'
@@ -926,7 +968,7 @@
           window.addEventListener("beforeinstallprompt", (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installButton.style.display = "inline-block";
+            installButton.classList.remove("hidden");
           });
 
           installButton.addEventListener("click", async () => {
@@ -934,7 +976,7 @@
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             deferredPrompt = null;
-            installButton.style.display = "none";
+            installButton.classList.add("hidden");
           });
         }
 
