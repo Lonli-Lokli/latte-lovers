@@ -48,7 +48,13 @@ export const coffeeProfiles = {
     balance: 7,
     bitterness: 5,
   },
-  peru: { sweetness: 6, acidity: 7, body: 6, balance: 7, bitterness: 4 },
+  peru: {
+    sweetness: 6,
+    acidity: 7,
+    body: 6,
+    balance: 7,
+    bitterness: 4,
+  },
   mexico: {
     sweetness: 6,
     acidity: 6,
@@ -63,7 +69,13 @@ export const coffeeProfiles = {
     balance: 9,
     bitterness: 4,
   },
-  kenya: { sweetness: 5, acidity: 9, body: 7, balance: 6, bitterness: 3 },
+  kenya: {
+    sweetness: 5,
+    acidity: 9,
+    body: 7,
+    balance: 6,
+    bitterness: 3,
+  },
   rwanda: {
     sweetness: 6,
     acidity: 8,
@@ -85,7 +97,13 @@ export const coffeeProfiles = {
     balance: 7,
     bitterness: 6,
   },
-  yemen: { sweetness: 7, acidity: 6, body: 9, balance: 8, bitterness: 7 },
+  yemen: {
+    sweetness: 7,
+    acidity: 6,
+    body: 9,
+    balance: 8,
+    bitterness: 7,
+  },
   indonesia: {
     sweetness: 7,
     acidity: 4,
@@ -100,7 +118,13 @@ export const coffeeProfiles = {
     balance: 6,
     bitterness: 9,
   },
-  india: { sweetness: 6, acidity: 5, body: 8, balance: 7, bitterness: 7 },
+  india: {
+    sweetness: 6,
+    acidity: 5,
+    body: 8,
+    balance: 7,
+    bitterness: 7,
+  },
   "papua-new-guinea": {
     sweetness: 6,
     acidity: 6,
@@ -143,12 +167,62 @@ export const coffeeProfiles = {
     balance: 7,
     bitterness: 5,
   },
+  myanmar: {
+    sweetness: 7,
+    acidity: 7,
+    body: 6,
+    balance: 7,
+    bitterness: 4,
+  },
+  china: {
+    sweetness: 7,
+    acidity: 6,
+    body: 6,
+    balance: 7,
+    bitterness: 4,
+  },
+  "central-african-republic": {
+    sweetness: 5,
+    acidity: 4,
+    body: 8,
+    balance: 6,
+    bitterness: 7,
+  },
+  guinea: {
+    sweetness: 5,
+    acidity: 4,
+    body: 8,
+    balance: 6,
+    bitterness: 8,
+  },
+  laos: {
+    sweetness: 6,
+    acidity: 6,
+    body: 8,
+    balance: 7,
+    bitterness: 6,
+  },
+  "ivory-coast": {
+    sweetness: 6,
+    acidity: 4,
+    body: 8,
+    balance: 6,
+    bitterness: 7,
+  },
+  venezuela: {
+    sweetness: 7,
+    acidity: 6,
+    body: 6,
+    balance: 8,
+    bitterness: 4,
+  },
 };
 
 export const processingMethods = {
   washed: {
     displayName: "Washed (Wet Process)",
-    description: "Coffee cherries are pulped and fermented to remove the mucilage before drying",
+    description:
+      "Coffee cherries are pulped and fermented to remove the mucilage before drying",
     effects: {
       sweetness: 0,
       acidity: 1,
@@ -159,7 +233,8 @@ export const processingMethods = {
   },
   natural: {
     displayName: "Natural (Dry Process)",
-    description: "Coffee cherries are dried whole, allowing the fruit to naturally ferment",
+    description:
+      "Coffee cherries are dried whole, allowing the fruit to naturally ferment",
     effects: {
       sweetness: 2,
       acidity: -1,
@@ -170,7 +245,8 @@ export const processingMethods = {
   },
   honey: {
     displayName: "Honey Process",
-    description: "Partial removal of the fruit pulp, leaving some mucilage during drying",
+    description:
+      "Partial removal of the fruit pulp, leaving some mucilage during drying",
     effects: {
       sweetness: 1,
       acidity: 0,
@@ -203,35 +279,38 @@ export const processingMethods = {
   },
   anaerobic: {
     displayName: "Anaerobic Fermentation",
-    description: "Beans are fermented in oxygen-free environments, often with additives, enhancing complex flavors",
+    description:
+      "Beans are fermented in oxygen-free environments, often with additives, enhancing complex flavors",
     effects: {
-      sweetness: 2, 
-      acidity: 1, 
-      body: 0, 
-      balance: 0.5, 
+      sweetness: 2,
+      acidity: 1,
+      body: 0,
+      balance: 0.5,
       bitterness: 0,
     },
   },
   "carbonic-maceration": {
     displayName: "Carbonic Maceration",
-    description: "Whole cherries are fermented in CO2-rich sealed tanks, producing fruit-forward profiles",
+    description:
+      "Whole cherries are fermented in CO2-rich sealed tanks, producing fruit-forward profiles",
     effects: {
-      sweetness: 2, 
-      acidity: 1, 
-      body: 0, 
-      balance: 0.5, 
+      sweetness: 2,
+      acidity: 1,
+      body: 0,
+      balance: 0.5,
       bitterness: 0,
     },
   },
   monsooned: {
     displayName: "Monsooned",
-    description: "Beans are exposed to monsoon winds during drying, creating unique earthy flavors",
+    description:
+      "Beans are exposed to monsoon winds during drying, creating unique earthy flavors",
     effects: {
       sweetness: 0,
-      acidity: -1, 
-      body: 2, 
+      acidity: -1,
+      body: 2,
       balance: 0,
-      bitterness: 1, 
+      bitterness: 1,
     },
   },
 };

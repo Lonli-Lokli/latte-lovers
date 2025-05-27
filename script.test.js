@@ -191,5 +191,5 @@ test("Find minimum score for blends", () => {
   }
 
   console.log("Worst Blend Combination:", worstCombination);
-  expect(minScore.toFixed(3)).toBe('4.320');
+  expect(minScore.toFixed(3)).toBe('4.275');
 });
