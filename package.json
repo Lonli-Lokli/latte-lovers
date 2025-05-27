@@ -3,7 +3,7 @@
     "scripts": {
         "start": "http-server -c-1",
         "test": "vitest run",
-        "deploy": "test"
+        "deploy": "npm run test"
     },
     "dependencies": {
         "http-server": "14.1.1"
