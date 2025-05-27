@@ -294,6 +294,25 @@
         });
       }
 
+      // Service Worker registration
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then(function (registration) {
+              // Registration successful
+              console.log(
+                "ServiceWorker registration successful with scope: ",
+                registration.scope
+              );
+            })
+            .catch(function (error) {
+              // Registration failed
+              console.log("ServiceWorker registration failed: ", error);
+            });
+        });
+      }
+
       // Initialize options when DOM is loaded
       document.addEventListener("DOMContentLoaded", () => {
         initializeCountryOptions();
