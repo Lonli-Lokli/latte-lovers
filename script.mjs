@@ -216,6 +216,13 @@ export const coffeeProfiles = {
     balance: 8,
     bitterness: 4,
   },
+  malawi: {
+    sweetness: 7,
+    acidity: 6,
+    body: 8,
+    balance: 8,
+    bitterness: 4,
+  },
 };
 
 export const processingMethods = {
