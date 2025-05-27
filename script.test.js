@@ -3,7 +3,7 @@ import {
   createFinalProfile,
   mergeProfiles,
   coffeeProfiles,
-  processingEffects,
+  processingMethods,
   roastLevelEffects,
   ACTUAL_MAX_RAW,
   ACTUAL_MIN_RAW
@@ -21,7 +21,7 @@ test("Find maximum score for single origin", () => {
 
   // Test all possible combinations
   Object.keys(coffeeProfiles).forEach((country) => {
-    Object.keys(processingEffects).forEach((processing) => {
+    Object.keys(processingMethods).forEach((processing) => {
       Object.keys(roastLevelEffects).forEach((roastLevel) => {
         const score = calculateLatteScore(
           createFinalProfile(coffeeProfiles[country], processing, roastLevel)
@@ -40,7 +40,7 @@ test("Find maximum score for single origin", () => {
   });
 
   console.log("Best Single Origin Combination:", bestCombination);
-  expect(maxScore.toFixed(3)).toBe('8.913');
+  expect(maxScore.toFixed(3)).toBe('9.213');
 });
 
 test("Find maximum score for blends", () => {
@@ -67,7 +67,7 @@ test("Find maximum score for blends", () => {
       proportions.forEach((percent1) => {
         const percent2 = 100 - percent1;
 
-        Object.keys(processingEffects).forEach((processing) => {
+        Object.keys(processingMethods).forEach((processing) => {
           Object.keys(roastLevelEffects).forEach((roastLevel) => {
             const mergedProfile = mergeProfiles(
               coffeeProfiles[country1],
@@ -113,7 +113,7 @@ test("Find minimum score for single origin", () => {
 
   // Test all possible combinations
   Object.keys(coffeeProfiles).forEach((country) => {
-    Object.keys(processingEffects).forEach((processing) => {
+    Object.keys(processingMethods).forEach((processing) => {
       Object.keys(roastLevelEffects).forEach((roastLevel) => {
         const score = calculateLatteScore(
           createFinalProfile(coffeeProfiles[country], processing, roastLevel)
@@ -132,7 +132,7 @@ test("Find minimum score for single origin", () => {
   });
 
   console.log("Worst Single Origin Combination:", worstCombination);
-  expect(minScore).toBe(ACTUAL_MIN_RAW);
+  expect(minScore.toFixed(3)).toBe(ACTUAL_MIN_RAW.toString());
 });
 
 test("Find minimum score for blends", () => {
@@ -159,7 +159,7 @@ test("Find minimum score for blends", () => {
       proportions.forEach((percent1) => {
         const percent2 = 100 - percent1;
 
-        Object.keys(processingEffects).forEach((processing) => {
+        Object.keys(processingMethods).forEach((processing) => {
           Object.keys(roastLevelEffects).forEach((roastLevel) => {
             const mergedProfile = mergeProfiles(
               coffeeProfiles[country1],
@@ -191,5 +191,5 @@ test("Find minimum score for blends", () => {
   }
 
   console.log("Worst Blend Combination:", worstCombination);
-  expect(minScore.toFixed(3)).toBe('3.560');
+  expect(minScore.toFixed(3)).toBe('4.320');
 });

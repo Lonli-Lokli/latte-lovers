@@ -108,69 +108,107 @@ export const coffeeProfiles = {
     balance: 7,
     bitterness: 5,
   },
+  'panama': {
+    sweetness: 7,
+    acidity: 8,
+    body: 6,
+    balance: 8,
+    bitterness: 4,
+  },
+  'el-salvador': {
+    sweetness: 7,
+    acidity: 7,
+    body: 6,
+    balance: 7,
+    bitterness: 5,
+  },
+  uganda: {
+    sweetness: 6,
+    acidity: 7,
+    body: 7,
+    balance: 7,
+    bitterness: 5,
+  },
+  bolivia: {
+    sweetness: 6,
+    acidity: 7,
+    body: 6,
+    balance: 7,
+    bitterness: 4,
+  },
+  ecuador: {
+    sweetness: 6,
+    acidity: 7,
+    body: 6,
+    balance: 7,
+    bitterness: 5,
+  }
 };
 
 export const processingMethods = {
   washed: {
     displayName: "Washed (Wet Process)",
-    description: "Coffee cherries are pulped and fermented to remove the mucilage before drying",
+    description:
+      "Coffee cherries are pulped and fermented to remove the mucilage before drying",
     effects: {
       sweetness: 0,
-      acidity: 1,
-      body: -1,
-      balance: 1,
+      acidity: +1,
+      body: -0.5,
+      balance: +1,
       bitterness: 0,
-    }
+    },
   },
   natural: {
     displayName: "Natural (Dry Process)",
-    description: "Coffee cherries are dried whole, allowing the fruit to naturally ferment",
+    description:
+      "Coffee cherries are dried whole, allowing the fruit to naturally ferment",
     effects: {
-      sweetness: 2,
+      sweetness: +2,
       acidity: -1,
-      body: 1,
+      body: +1,
       balance: 0,
       bitterness: 0,
-    }
+    },
   },
   honey: {
     displayName: "Honey Process",
-    description: "Partial removal of the fruit pulp, leaving some mucilage during drying",
+    description:
+      "Partial removal of the fruit pulp, leaving some mucilage during drying",
     effects: {
-      sweetness: 1,
+      sweetness: +1,
       acidity: 0,
-      body: 0,
-      balance: 1,
+      body: +0.5,
+      balance: +1,
       bitterness: 0,
-    }
+    },
   },
   "semi-washed": {
     displayName: "Semi-Washed",
     description: "Combines elements of both washed and natural processing",
     effects: {
-      sweetness: 1,
+      sweetness: +1,
       acidity: 0,
       body: 0,
       balance: 0,
       bitterness: 0,
-    }
+    },
   },
   "wet-hulled": {
     displayName: "Wet-Hulled",
     description: "Unique to Indonesia, beans are hulled while still wet",
     effects: {
-      sweetness: 0,
+      sweetness: +0.5,
       acidity: -1,
-      body: 2,
+      body: +2,
       balance: 0,
       bitterness: 0,
-    }
-  }
+    },
+  },
 };
 
 export const roastLevelEffects = {
   light: {
-    sweetness: 0,
+    sweetness: +0.5,
     acidity: +1.5,
     body: -1.0,
     balance: -0.5,
@@ -184,10 +222,10 @@ export const roastLevelEffects = {
     bitterness: +0.75,
   },
   dark: {
-    sweetness: -2.0,
+    sweetness: -1.5,
     acidity: -3.0,
     body: +0.5,
-    balance: -2.0,
+    balance: -1.5,
     bitterness: +3.0,
   },
 };
@@ -353,27 +391,26 @@ export function calculateLatteScore(profile) {
     profile.balance * 0.3 +
     profile.body * 0.3 +
     profile.sweetness * 0.25 +
-    Math.min(profile.acidity, 6.5) * 0.15 -
-    (profile.acidity > 6.5 ? (profile.acidity - 6.5) * 0.2 : 0) -
-    (profile.bitterness > 5 ? (profile.bitterness - 5) * 0.25 : 0)
+    Math.min(profile.acidity, 7) * 0.2 -
+    (profile.acidity > 7 ? (profile.acidity - 7) * 0.15 : 0) -
+    (profile.bitterness > 6 ? (profile.bitterness - 6) * 0.2 : 0) +
+    (profile.sweetness < 6 ? (6 - profile.sweetness) * -0.1 : 0)
   );
 }
 
-export const ACTUAL_MIN_RAW = 3.55;
-export const ACTUAL_MAX_RAW = 8.915;
+export const ACTUAL_MIN_RAW = 4.275;
+export const ACTUAL_MAX_RAW = 9.223;
 
 export function mergeProfiles(profile1, percent1, profile2, percent2) {
   return {
     sweetness:
       (profile1.sweetness * percent1 + profile2.sweetness * percent2) / 100,
-    acidity:
-      (profile1.acidity * percent1 + profile2.acidity * percent2) / 100,
+    acidity: (profile1.acidity * percent1 + profile2.acidity * percent2) / 100,
     body: (profile1.body * percent1 + profile2.body * percent2) / 100,
-    balance:
-      (profile1.balance * percent1 + profile2.balance * percent2) / 100,
+    balance: (profile1.balance * percent1 + profile2.balance * percent2) / 100,
     bitterness:
       (profile1.bitterness * percent1 + profile2.bitterness * percent2) / 100,
-  }
+  };
 }
 export function checkCoffee() {
   const coffeeType = document.getElementById("coffeeType").value;
@@ -427,7 +464,9 @@ export function checkCoffee() {
     return;
   }
 
-  const latteScoreRaw = calculateLatteScore(createFinalProfile(initialProfile, processing, roast));
+  const latteScoreRaw = calculateLatteScore(
+    createFinalProfile(initialProfile, processing, roast)
+  );
 
   const TARGET_DISPLAY_SCALE = 10;
 
