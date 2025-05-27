@@ -40,7 +40,7 @@ test("Find maximum score for single origin", () => {
   });
 
   console.log("Best Single Origin Combination:", bestCombination);
-  expect(maxScore.toFixed(3)).toBe('9.213');
+  expect(maxScore.toFixed(3)).toBe('9.275');
 });
 
 test("Find maximum score for blends", () => {

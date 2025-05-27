@@ -148,45 +148,42 @@ export const coffeeProfiles = {
 export const processingMethods = {
   washed: {
     displayName: "Washed (Wet Process)",
-    description:
-      "Coffee cherries are pulped and fermented to remove the mucilage before drying",
+    description: "Coffee cherries are pulped and fermented to remove the mucilage before drying",
     effects: {
       sweetness: 0,
-      acidity: +1,
-      body: -0.5,
-      balance: +1,
+      acidity: 1,
+      body: -0.5, // Reduced penalty to reflect retained body in some washed coffees
+      balance: 1,
       bitterness: 0,
     },
   },
   natural: {
     displayName: "Natural (Dry Process)",
-    description:
-      "Coffee cherries are dried whole, allowing the fruit to naturally ferment",
+    description: "Coffee cherries are dried whole, allowing the fruit to naturally ferment",
     effects: {
-      sweetness: +2,
+      sweetness: 2,
       acidity: -1,
-      body: +1,
+      body: 1,
       balance: 0,
       bitterness: 0,
     },
   },
   honey: {
     displayName: "Honey Process",
-    description:
-      "Partial removal of the fruit pulp, leaving some mucilage during drying",
+    description: "Partial removal of the fruit pulp, leaving some mucilage during drying",
     effects: {
-      sweetness: +1,
+      sweetness: 1,
       acidity: 0,
-      body: +0.5,
-      balance: +1,
+      body: 0.5, // Added to reflect slight mouthfeel enhancement
+      balance: 1,
       bitterness: 0,
     },
   },
   "semi-washed": {
-    displayName: "Semi-Washed",
+    displayName: "Semi-Washed (Pulped Natural)",
     description: "Combines elements of both washed and natural processing",
     effects: {
-      sweetness: +1,
+      sweetness: 1,
       acidity: 0,
       body: 0,
       balance: 0,
@@ -194,14 +191,47 @@ export const processingMethods = {
     },
   },
   "wet-hulled": {
-    displayName: "Wet-Hulled",
+    displayName: "Wet-Hulled (Giling Basah)",
     description: "Unique to Indonesia, beans are hulled while still wet",
     effects: {
-      sweetness: +0.5,
+      sweetness: 0.5, // Added to account for occasional fruit notes
       acidity: -1,
-      body: +2,
+      body: 2,
       balance: 0,
       bitterness: 0,
+    },
+  },
+  anaerobic: {
+    displayName: "Anaerobic Fermentation",
+    description: "Beans are fermented in oxygen-free environments, often with additives, enhancing complex flavors",
+    effects: {
+      sweetness: 2, 
+      acidity: 1, 
+      body: 0, 
+      balance: 0.5, 
+      bitterness: 0,
+    },
+  },
+  "carbonic-maceration": {
+    displayName: "Carbonic Maceration",
+    description: "Whole cherries are fermented in CO2-rich sealed tanks, producing fruit-forward profiles",
+    effects: {
+      sweetness: 2, 
+      acidity: 1, 
+      body: 0, 
+      balance: 0.5, 
+      bitterness: 0,
+    },
+  },
+  monsooned: {
+    displayName: "Monsooned",
+    description: "Beans are exposed to monsoon winds during drying, creating unique earthy flavors",
+    effects: {
+      sweetness: 0,
+      acidity: -1, 
+      body: 2, 
+      balance: 0,
+      bitterness: 1, 
     },
   },
 };
@@ -399,7 +429,7 @@ export function calculateLatteScore(profile) {
 }
 
 export const ACTUAL_MIN_RAW = 4.275;
-export const ACTUAL_MAX_RAW = 9.223;
+export const ACTUAL_MAX_RAW = 9.395;
 
 export function mergeProfiles(profile1, percent1, profile2, percent2) {
   return {
