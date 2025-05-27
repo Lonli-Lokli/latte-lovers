@@ -4,31 +4,52 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="favicon.svg" type="image/svg" />
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="manifest.json" />
     <title>Latte Coffee Checker</title>
 
     <!-- OpenGraph Meta Tags -->
     <meta property="og:title" content="Latte Coffee Checker ☕" />
-    <meta property="og:description" content="Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes." />
+    <meta
+      property="og:description"
+      content="Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes."
+    />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://latte-lovers.vercel.app" />
-    <meta property="og:image" content="https://latte-lovers.vercel.app/og-image.png" />
-    <meta property="og:image:alt" content="Latte Coffee Checker - Find your perfect coffee" />
-    
+    <meta
+      property="og:image"
+      content="https://latte-lovers.vercel.app/og-image.png"
+    />
+    <meta
+      property="og:image:alt"
+      content="Latte Coffee Checker - Find your perfect coffee"
+    />
+
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:title" content="Latte Coffee Checker ☕" />
-    <meta name="twitter:description" content="Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes." />
-    <meta name="twitter:image" content="https://latte-lovers.vercel.app/og-image.png" />
-    
+    <meta
+      name="twitter:description"
+      content="Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes."
+    />
+    <meta
+      name="twitter:image"
+      content="https://latte-lovers.vercel.app/og-image.png"
+    />
+
     <!-- Additional Meta Tags -->
-    <meta name="description" content="Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes." />
-    <meta name="keywords" content="coffee, latte, coffee checker, coffee compatibility, milk drinks, coffee origins, processing methods, roast levels" />
+    <meta
+      name="description"
+      content="Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes."
+    />
+    <meta
+      name="keywords"
+      content="coffee, latte, coffee checker, coffee compatibility, milk drinks, coffee origins, processing methods, roast levels"
+    />
     <meta name="author" content="Lonli-Lokli" />
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Latte Lovers">
-    <link rel="apple-touch-icon" href="192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Latte Lovers" />
+    <link rel="apple-touch-icon" href="192x192.png" />
 
     <style>
       * {
@@ -289,45 +310,75 @@
       }
 
       .result {
-        margin-top: 20px;
-        padding: 20px;
+        margin-top: 15px;
         border-radius: 12px;
-        text-align: center;
-        display: none;
-        animation: fadeIn 0.5s ease;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        animation: slideUp 0.4s ease;
       }
 
       .result.perfect {
         background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
-        color: white;
       }
 
       .result.good {
         background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
-        color: white;
       }
 
       .result.bad {
         background: linear-gradient(135deg, #f44336 0%, #ef5350 100%);
-        color: white;
       }
 
-      .result-grade {
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 8px;
+      .result-header {
+        padding: 16px;
+        color: white;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .result-main {
+        display: flex;
+        align-items: center;
+        gap: 12px;
       }
 
       .result-emoji {
-        font-size: 28px;
-        margin-bottom: 12px;
-        display: block;
+        font-size: 24px;
+      }
+
+      .result-grade {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .result-score {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        backdrop-filter: blur(4px);
       }
 
       .result-description {
+        padding: 12px 16px;
         font-size: 13px;
         line-height: 1.4;
-        opacity: 0.95;
+        color: white;
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       @keyframes fadeIn {
@@ -606,15 +657,14 @@
         <h1><span class="coffee-emoji">☕</span>Latte Coffee Checker</h1>
         <p>Find the perfect coffee for your milk drinks</p>
         <div class="header-buttons">
-          <a href="#" class="header-btn"       >📧 Contact</a
-          >
+          <a href="#" class="header-btn">📧 Contact</a>
           <a
             href="https://buymeacoffee.com/lonlilokliV"
             class="header-btn"
             target="_blank"
             >☕ Buy Me a Coffee</a
           >
-          <button id="installPWA" class="header-btn" style="display: none;">
+          <button id="installPWA" class="header-btn" style="display: none">
             📱 Save to Phone
           </button>
         </div>
@@ -714,9 +764,7 @@
           </div>
         </div>
 
-        <button class="check-btn">
-          Check Latte Compatibility
-        </button>
+        <button class="check-btn">Check Latte Compatibility</button>
 
         <div id="result" class="result"></div>
       </div>
@@ -769,30 +817,31 @@
     </div>
 
     <script type="module">
-      import { 
-        toggleBlendInputs, 
-        validateBlend, 
-        checkCoffee, 
-        toggleTheme, 
-        openContactModal, 
+      import {
+        toggleBlendInputs,
+        validateBlend,
+        checkCoffee,
+        toggleTheme,
+        openContactModal,
         closeContactModal,
         coffeeProfiles,
-        processingMethods
-      } from './script.mjs';
+        processingMethods,
+      } from "./script.mjs";
 
       // Initialize country options
       function initializeCountryOptions() {
-        const countrySelects = ['country', 'blend1Country', 'blend2Country'];
+        const countrySelects = ["country", "blend1Country", "blend2Country"];
         const countries = Object.keys(coffeeProfiles).sort();
-        
-        countrySelects.forEach(selectId => {
+
+        countrySelects.forEach((selectId) => {
           const select = document.getElementById(selectId);
-          countries.forEach(country => {
-            const option = document.createElement('option');
+          countries.forEach((country) => {
+            const option = document.createElement("option");
             option.value = country;
-            option.textContent = country.split('-').map(word => 
-              word.charAt(0).toUpperCase() + word.slice(1)
-            ).join(' ');
+            option.textContent = country
+              .split("-")
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ");
             select.appendChild(option);
           });
         });
@@ -800,14 +849,14 @@
 
       // Initialize processing options
       function initializeProcessingOptions() {
-        const processingSelect = document.getElementById('processing');
+        const processingSelect = document.getElementById("processing");
         const methods = Object.entries(processingMethods);
-        
+
         methods.forEach(([value, { displayName }]) => {
-          const option = document.createElement('option');
+          const option = document.createElement("option");
           option.value = value;
           option.textContent = displayName;
-          if (value === 'washed') {
+          if (value === "washed") {
             option.selected = true;
           }
           processingSelect.appendChild(option);
@@ -815,55 +864,72 @@
       }
 
       // Initialize options when DOM is loaded
-      document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener("DOMContentLoaded", () => {
         initializeCountryOptions();
         initializeProcessingOptions();
-        
+
         // Add event listeners
-        document.getElementById('coffeeType').addEventListener('change', toggleBlendInputs);
-        document.getElementById('blend1Percent').addEventListener('input', validateBlend);
-        document.getElementById('blend2Percent').addEventListener('input', validateBlend);
-        document.querySelector('.check-btn').addEventListener('click', checkCoffee);
-        document.querySelector('.theme-toggle').addEventListener('click', toggleTheme);
-        document.querySelector('.header-btn').addEventListener('click', openContactModal);
-        document.querySelector('.close').addEventListener('click', closeContactModal);
-        
+        document
+          .getElementById("coffeeType")
+          .addEventListener("change", toggleBlendInputs);
+        document
+          .getElementById("blend1Percent")
+          .addEventListener("input", validateBlend);
+        document
+          .getElementById("blend2Percent")
+          .addEventListener("input", validateBlend);
+        document
+          .querySelector(".check-btn")
+          .addEventListener("click", checkCoffee);
+        document
+          .querySelector(".theme-toggle")
+          .addEventListener("click", toggleTheme);
+        document
+          .querySelector(".header-btn")
+          .addEventListener("click", openContactModal);
+        document
+          .querySelector(".close")
+          .addEventListener("click", closeContactModal);
+
         // PWA Installation
         let deferredPrompt;
-        const installButton = document.getElementById('installPWA');
+        const installButton = document.getElementById("installPWA");
 
         // Check if the app is already installed
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-          installButton.style.display = 'none';
+        if (window.matchMedia("(display-mode: standalone)").matches) {
+          installButton.style.display = "none";
         }
 
         // Show install button for iOS
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isIOS =
+          /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         if (isIOS) {
-          installButton.style.display = 'inline-block';
-          installButton.addEventListener('click', () => {
-            alert('To install this app on your device, tap the Share button and then "Add to Home Screen"');
+          installButton.style.display = "inline-block";
+          installButton.addEventListener("click", () => {
+            alert(
+              'To install this app on your device, tap the Share button and then "Add to Home Screen"'
+            );
           });
         } else {
           // Handle standard PWA installation for other devices
-          window.addEventListener('beforeinstallprompt', (e) => {
+          window.addEventListener("beforeinstallprompt", (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installButton.style.display = 'inline-block';
+            installButton.style.display = "inline-block";
           });
 
-          installButton.addEventListener('click', async () => {
+          installButton.addEventListener("click", async () => {
             if (!deferredPrompt) return;
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             deferredPrompt = null;
-            installButton.style.display = 'none';
+            installButton.style.display = "none";
           });
         }
 
         // Close modal when clicking outside
-        window.addEventListener('click', (event) => {
-          const modal = document.getElementById('contactModal');
+        window.addEventListener("click", (event) => {
+          const modal = document.getElementById("contactModal");
           if (event.target === modal) {
             closeContactModal();
           }

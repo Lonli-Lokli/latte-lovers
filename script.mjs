@@ -108,14 +108,14 @@ export const coffeeProfiles = {
     balance: 7,
     bitterness: 5,
   },
-  'panama': {
+  panama: {
     sweetness: 7,
     acidity: 8,
     body: 6,
     balance: 8,
     bitterness: 4,
   },
-  'el-salvador': {
+  "el-salvador": {
     sweetness: 7,
     acidity: 7,
     body: 6,
@@ -142,7 +142,7 @@ export const coffeeProfiles = {
     body: 6,
     balance: 7,
     bitterness: 5,
-  }
+  },
 };
 
 export const processingMethods = {
@@ -481,28 +481,33 @@ export function checkCoffee() {
   let grade, emoji, description, className;
 
   if (normalizedLatteScore >= 8.0) {
-    grade = "Perfect";
-    emoji = "🤩";
+    grade = "Excellent Match";
+    emoji = "🎯";
     className = "perfect";
     description =
       "Excellent choice for lattes! This coffee will create a harmonious blend with milk, offering great balance and smooth body.";
   } else if (normalizedLatteScore >= 6.0) {
-    grade = "Good";
-    emoji = "😊";
+    grade = "Good Match";
+    emoji = "👍";
     className = "good";
     description =
       "Good for lattes. This coffee will work well with milk, though you might notice some flavor nuances.";
   } else {
-    grade = "Consider Alternatives";
-    emoji = "🤔";
+    grade = "Poor Match";
+    emoji = "⚠️";
     className = "bad";
     description =
       "May not be ideal for lattes. This coffee might clash with milk or lack the body needed for a satisfying latte experience. Consider it for black coffee or a different blend.";
   }
 
   resultDiv.innerHTML = `
-    <span class="result-emoji">${emoji}</span>
-    <div class="result-grade">${grade}</div>
+    <div class="result-header">
+      <div class="result-main">
+        <span class="result-emoji">${emoji}</span>
+        <div class="result-grade">${grade}</div>
+      </div>
+      <div class="result-score">${normalizedLatteScore.toFixed(1)}/10</div>
+    </div>
     <div class="result-description">${description}</div>
   `;
 
