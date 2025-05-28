@@ -770,13 +770,25 @@ export function initializeTooltips() {
     let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
     let top = rect.bottom + 8;
 
-    // Adjust if tooltip would go off screen
-    if (left < 8) left = 8;
-    if (left + tooltipRect.width > window.innerWidth - 8) {
-      left = window.innerWidth - tooltipRect.width - 8;
+    // Adjust position for mobile touch events
+    if (event.type === 'touchstart') {
+        top = rect.top - tooltipRect.height - 8; // Position above the element
+        // Ensure tooltip is not off-screen to the left or right on mobile
+        if (left < 8) left = 8;
+        if (left + tooltipRect.width > window.innerWidth - 8) {
+            left = window.innerWidth - tooltipRect.width - 8;
+        }
     }
-    if (top + tooltipRect.height > window.innerHeight - 8) {
-      top = rect.top - tooltipRect.height - 8;
+
+    // Adjust if tooltip would go off screen (for desktop hover)
+    if (event.type === 'mouseenter') {
+        if (left < 8) left = 8;
+        if (left + tooltipRect.width > window.innerWidth - 8) {
+          left = window.innerWidth - tooltipRect.width - 8;
+        }
+        if (top + tooltipRect.height > window.innerHeight - 8) {
+          top = rect.top - tooltipRect.height - 8;
+        }
     }
 
     tooltip.style.left = `${left}px`;
