@@ -228,6 +228,7 @@ export const coffeeProfiles = {
 export const processingMethods = {
   washed: {
     displayName: "Washed (Wet Process)",
+    abbreviation: "W",
     description:
       "Coffee cherries are pulped and fermented to remove the mucilage before drying",
     effects: {
@@ -240,6 +241,7 @@ export const processingMethods = {
   },
   natural: {
     displayName: "Natural (Dry Process)",
+    abbreviation: "N",
     description:
       "Coffee cherries are dried whole, allowing the fruit to naturally ferment",
     effects: {
@@ -252,6 +254,7 @@ export const processingMethods = {
   },
   honey: {
     displayName: "Honey Process",
+    abbreviation: "HP",
     description:
       "Partial removal of the fruit pulp, leaving some mucilage during drying",
     effects: {
@@ -264,6 +267,7 @@ export const processingMethods = {
   },
   "semi-washed": {
     displayName: "Semi-Washed (Pulped Natural)",
+    abbreviation: "SW",
     description: "Combines elements of both washed and natural processing",
     effects: {
       sweetness: 1,
@@ -275,6 +279,7 @@ export const processingMethods = {
   },
   "wet-hulled": {
     displayName: "Wet-Hulled (Giling Basah)",
+    abbreviation: "WH",
     description: "Unique to Indonesia, beans are hulled while still wet",
     effects: {
       sweetness: 0.5, // Added to account for occasional fruit notes
@@ -286,6 +291,7 @@ export const processingMethods = {
   },
   anaerobic: {
     displayName: "Anaerobic Fermentation",
+    abbreviation: "A",
     description:
       "Beans are fermented in oxygen-free environments, often with additives, enhancing complex flavors",
     effects: {
@@ -298,6 +304,7 @@ export const processingMethods = {
   },
   "carbonic-maceration": {
     displayName: "Carbonic Maceration",
+    abbreviation: "CM",
     description:
       "Whole cherries are fermented in CO2-rich sealed tanks, producing fruit-forward profiles",
     effects: {
@@ -310,6 +317,7 @@ export const processingMethods = {
   },
   monsooned: {
     displayName: "Monsooned",
+    abbreviation: "M",
     description:
       "Beans are exposed to monsoon winds during drying, creating unique earthy flavors",
     effects: {
@@ -502,6 +510,7 @@ export function createFinalProfile(initialProfile, processing, roast) {
 
   return finalProfile;
 }
+
 export function calculateLatteScore(profile) {
   return (
     profile.balance * 0.3 +
@@ -517,6 +526,30 @@ export function calculateLatteScore(profile) {
 export const ACTUAL_MIN_RAW = 4.275;
 export const ACTUAL_MAX_RAW = 9.395;
 
+// Reusable function to normalize the raw latte score
+export function normalizeScore(rawScore) {
+  const TARGET_DISPLAY_SCALE = 10;
+  let normalizedLatteScore =
+    ((rawScore - ACTUAL_MIN_RAW) / (ACTUAL_MAX_RAW - ACTUAL_MIN_RAW)) *
+    TARGET_DISPLAY_SCALE;
+  normalizedLatteScore = Math.max(
+    0,
+    Math.min(TARGET_DISPLAY_SCALE, normalizedLatteScore)
+  );
+  return normalizedLatteScore;
+}
+
+// Reusable function to get the compatibility grade based on normalized score
+export function getCompatibilityGrade(normalizedScore) {
+  if (normalizedScore >= 8.0) {
+    return 'perfect';
+  } else if (normalizedScore >= 6.0) {
+    return 'good';
+  } else {
+    return 'bad';
+  }
+}
+
 export function mergeProfiles(profile1, percent1, profile2, percent2) {
   return {
     sweetness:
@@ -528,6 +561,7 @@ export function mergeProfiles(profile1, percent1, profile2, percent2) {
       (profile1.bitterness * percent1 + profile2.bitterness * percent2) / 100,
   };
 }
+
 export function checkCoffee() {
   const coffeeType = document.getElementById("coffeeType").value;
   const processing = document.getElementById("processing").value;
@@ -584,34 +618,25 @@ export function checkCoffee() {
     createFinalProfile(initialProfile, processing, roast)
   );
 
-  const TARGET_DISPLAY_SCALE = 10;
-
-  let normalizedLatteScore =
-    ((latteScoreRaw - ACTUAL_MIN_RAW) / (ACTUAL_MAX_RAW - ACTUAL_MIN_RAW)) *
-    TARGET_DISPLAY_SCALE;
-  normalizedLatteScore = Math.max(
-    0,
-    Math.min(TARGET_DISPLAY_SCALE, normalizedLatteScore)
-  );
+  const normalizedLatteScore = normalizeScore(latteScoreRaw); // Use reusable function
 
   let grade, emoji, description, className;
 
-  if (normalizedLatteScore >= 8.0) {
+  className = getCompatibilityGrade(normalizedLatteScore); // Use reusable function
+
+  if (className === "perfect") {
     grade = "Excellent Match";
     emoji = "🎯";
-    className = "perfect";
     description =
       "Excellent choice for lattes! This coffee will create a harmonious blend with milk, offering great balance and smooth body.";
-  } else if (normalizedLatteScore >= 6.0) {
+  } else if (className === "good") {
     grade = "Good Match";
     emoji = "👍";
-    className = "good";
     description =
       "Good for lattes. This coffee will work well with milk, though you might notice some flavor nuances.";
   } else {
     grade = "Poor Match";
     emoji = "⚠️";
-    className = "bad";
     description =
       "May not be ideal for lattes. This coffee might clash with milk or lack the body needed for a satisfying latte experience. Consider it for black coffee or a different blend.";
   }
@@ -650,10 +675,6 @@ window.addEventListener("click", function (event) {
 document.addEventListener("DOMContentLoaded", () => {
   // Add event listeners
   document
-    .getElementById("coffeeType")
-    .addEventListener("change", toggleBlendInputs);
-  document.querySelector(".check-btn").addEventListener("click", checkCoffee);
-  document
     .querySelector(".theme-toggle")
     .addEventListener("click", toggleTheme);
 
@@ -665,3 +686,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+// Function to generate and rank all possible coffee combinations
+export function generateAndRankLeaders(coffeeProfiles, processingMethods, roastLevelEffects) {
+  const leaders = [];
+
+  for (const [country, profile] of Object.entries(coffeeProfiles)) {
+    for (const [processingName, processing] of Object.entries(processingMethods)) {
+      for (const [roastName, roast] of Object.entries(roastLevelEffects)) {
+        // For single origin, roast level 'dark' is not recommended by the app's logic
+        // We should respect that when generating leaders too.
+        if (roastName === 'dark') {
+             continue;
+        }
+        const processedProfile = applyFullProcessingEffects(profile, processingName, processingMethods);
+        const finalProfile = applyRoastEffects(processedProfile, roastName, roastLevelEffects);
+        const latteScoreRaw = calculateLatteScore(finalProfile);
+
+        const normalizedLatteScore = normalizeScore(latteScoreRaw);
+
+        leaders.push({
+          country: country.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+          processingAbbreviation: processing.abbreviation, // Use abbreviation
+          processingDisplayName: processing.displayName, // Include full name
+          roast: roastName.charAt(0).toUpperCase() + roastName.slice(1),
+          score: parseFloat(normalizedLatteScore.toFixed(1)),
+          grade: getCompatibilityGrade(normalizedLatteScore),
+        });
+      }
+    }
+  }
+
+  // Sort leaders by score in descending order (using normalized score)
+  leaders.sort((a, b) => b.score - a.score);
+
+  return leaders;
+}

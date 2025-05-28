@@ -82,7 +82,7 @@
           <button class="theme-toggle" title="Toggle theme">
             <span id="themeIcon">☀️</span>
           </button>
-          <a href="#" class="header-btn">📧 Contact</a>
+          <a href="#" class="header-btn" id="contactBtn">📧 Contact</a>
           <a
             href="https://buymeacoffee.com/lonlilokliV"
             class="header-btn"
@@ -95,109 +95,21 @@
         </div>
       </div>
 
-      <div class="form-container">
-        <div class="form-group">
-          <div class="floating-label">
-            <select id="coffeeType">
-              <option value="" disabled selected></option>
-              <option value="single">Single Origin</option>
-              <option value="blend">Blend</option>
-            </select>
-            <label for="coffeeType">Coffee Type</label>
-          </div>
-        </div>
+      <!-- Tab Navigation -->
+      <nav class="tab-navigation">
+        <button class="tab-btn active" data-tab="checker">
+          <span class="tab-icon">🔍</span>
+          <span class="tab-label">Coffee Checker</span>
+        </button>
+        <button class="tab-btn" data-tab="top">
+          <span class="tab-icon">🔝</span>
+          <span class="tab-label">Leaders</span>
+        </button>
+      </nav>
 
-        <div class="form-group" id="singleOriginGroup" style="display: none">
-          <div class="floating-label">
-            <select id="country">
-              <option value="" disabled selected></option>
-            </select>
-            <label for="country">Country of Origin</label>
-          </div>
-        </div>
-
-        <div class="form-group" id="blendGroup" style="display: none">
-          <div class="floating-label blend-panel">
-            <div class="blend-group" id="blendInputs">
-              <div class="blend-item">
-                <div class="floating-label">
-                  <select id="blend1Country">
-                    <option value="" disabled selected></option>
-                  </select>
-                  <label for="blend1Country">Country 1</label>
-                </div>
-                <div class="floating-label">
-                  <input
-                    type="number"
-                    id="blend1Percent"
-                    placeholder=" "
-                    min="0"
-                    step="10"
-                    max="100"
-                    inputmode="numeric"
-                    oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                  />
-                  <label for="blend1Percent">Percentage</label>
-                </div>
-              </div>
-              <div class="blend-item">
-                <div class="floating-label">
-                  <select id="blend2Country">
-                    <option value="" disabled selected></option>
-                  </select>
-                  <label for="blend2Country">Country 2</label>
-                </div>
-                <div class="floating-label">
-                  <input
-                    type="number"
-                    id="blend2Percent"
-                    placeholder=" "
-                    min="0"
-                    step="10"
-                    max="100"
-                    inputmode="numeric"
-                    oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                  />
-                  <label for="blend2Percent">Percentage</label>
-                </div>
-              </div>
-            </div>
-            <label>Blend Composition</label>
-          </div>
-          <div
-            id="blendValidation"
-            style="
-              display: none;
-              color: #f44336;
-              font-size: 12px;
-              margin-top: 8px;
-            "
-          ></div>
-        </div>
-
-        <div class="form-group">
-          <div class="floating-label">
-            <select id="processing">
-              <option value="" disabled selected></option>
-            </select>
-            <label for="processing">Processing Method</label>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="floating-label">
-            <select id="roastLevel">
-              <option value="light">Light</option>
-              <option value="medium" selected>Medium</option>
-              <option value="dark">Dark</option>
-            </select>
-            <label for="roastLevel">Roast Level</label>
-          </div>
-        </div>
-
-        <button class="check-btn">Check Latte Compatibility</button>
-
-        <div id="result" class="result"></div>
+      <!-- Content Container -->
+      <div id="content-container" class="content-container">
+        <div class="loading-spinner"></div>
       </div>
     </div>
 
@@ -209,15 +121,8 @@
           <span class="close">&times;</span>
         </div>
         <div class="modal-body">
-          <form
-            action="https://formsubmit.co/lonli.lokli@gmail.com"
-            method="POST"
-          >
-            <input
-              type="hidden"
-              name="_subject"
-              value="New message from Latte Coffee Checker"
-            />
+          <form action="https://formsubmit.co/lonli.lokli@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="New message from Latte Coffee Checker" />
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_next" value="#contact-success" />
 
@@ -257,7 +162,13 @@
         closeContactModal,
         coffeeProfiles,
         processingMethods,
+        generateAndRankLeaders,
+        roastLevelEffects,
       } from "./script.mjs";
+
+      // Content cache
+      const contentCache = new Map();
+      let currentTab = 'checker';
 
       // Initialize country options
       function initializeCountryOptions() {
@@ -266,32 +177,206 @@
 
         countrySelects.forEach((selectId) => {
           const select = document.getElementById(selectId);
-          countries.forEach((country) => {
-            const option = document.createElement("option");
-            option.value = country;
-            option.textContent = country
-              .split("-")
-              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(" ");
-            select.appendChild(option);
-          });
+          if (select) {
+            countries.forEach((country) => {
+              const option = document.createElement("option");
+              option.value = country;
+              option.textContent = country
+                .split("-")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
+              select.appendChild(option);
+            });
+          }
         });
       }
 
       // Initialize processing options
       function initializeProcessingOptions() {
         const processingSelect = document.getElementById("processing");
-        const methods = Object.entries(processingMethods);
+        if (processingSelect) {
+          const methods = Object.entries(processingMethods);
 
-        methods.forEach(([value, { displayName }]) => {
-          const option = document.createElement("option");
-          option.value = value;
-          option.textContent = displayName;
-          if (value === "washed") {
-            option.selected = true;
+          methods.forEach(([value, { displayName }]) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = displayName;
+            if (value === "washed") {
+              option.selected = true;
+            }
+            processingSelect.appendChild(option);
+          });
+        }
+      }
+
+      // Load tab content
+      async function loadTabContent(tabName) {
+        const contentContainer = document.getElementById('content-container');
+        if (!contentContainer) {
+          console.error('Content container not found');
+          return;
+        }
+
+        // Create loading spinner if it doesn't exist
+        let spinner = contentContainer.querySelector('.loading-spinner');
+        if (!spinner) {
+          spinner = document.createElement('div');
+          spinner.className = 'loading-spinner';
+          contentContainer.appendChild(spinner);
+        }
+        
+        // Show loading spinner
+        spinner.classList.remove('hidden');
+        
+        try {
+          // Check cache first
+          if (contentCache.has(tabName)) {
+            contentContainer.innerHTML = contentCache.get(tabName);
+            // Re-add spinner after setting innerHTML
+            spinner = document.createElement('div');
+            spinner.className = 'loading-spinner';
+            contentContainer.appendChild(spinner);
+          } else {
+            const response = await fetch(`${tabName}.html`);
+            if (!response.ok) throw new Error('Failed to load content');
+            const content = await response.text();
+            contentContainer.innerHTML = content;
+            contentCache.set(tabName, content);
+            // Re-add spinner after setting innerHTML
+            spinner = document.createElement('div');
+            spinner.className = 'loading-spinner';
+            contentContainer.appendChild(spinner);
           }
-          processingSelect.appendChild(option);
+
+          // Initialize form elements after content is loaded (only for checker tab)
+          if (tabName === 'checker') {
+            initializeCountryOptions();
+            initializeProcessingOptions();
+
+            // Add event listeners for the loaded content
+            const coffeeTypeSelect = document.getElementById('coffeeType');
+            if (coffeeTypeSelect) {
+              coffeeTypeSelect.addEventListener('change', toggleBlendInputs);
+            }
+
+            const blend1Percent = document.getElementById('blend1Percent');
+            const blend2Percent = document.getElementById('blend2Percent');
+            if (blend1Percent && blend2Percent) {
+              blend1Percent.addEventListener('input', validateBlend);
+              blend2Percent.addEventListener('input', validateBlend);
+            }
+
+            const checkBtn = document.querySelector('.check-btn');
+            if (checkBtn) {
+              checkBtn.addEventListener('click', checkCoffee);
+            }
+          } else if (tabName === 'top') {
+              // Populate leaders table
+              const leaders = generateAndRankLeaders(coffeeProfiles, processingMethods, roastLevelEffects);
+              const tableBody = contentContainer.querySelector('.leaders-table .table-body');
+
+              if (tableBody) {
+                  tableBody.innerHTML = ''; // Clear existing content
+                  const topLeaders = leaders.slice(0, 10); // Display top 10
+
+                  topLeaders.forEach((leader, index) => {
+                      const tableRow = document.createElement('tr');
+                      tableRow.classList.add('table-row');
+                      tableRow.innerHTML = `
+                          <td class="table-cell table-rank">${index + 1}</td>
+                          <td class="table-cell">${leader.country}</td>
+                          <td class="table-cell" title="${leader.processingDisplayName}"><span class="processing-abbreviation">${leader.processingAbbreviation}</span></td>
+                          <td class="table-cell">${leader.roast}</td>
+                          <td class="table-cell table-score ${leader.grade}">${leader.score}/10</td>
+                      `;
+                      tableBody.appendChild(tableRow);
+                  });
+              }
+
+              // Add click listener for processing tooltips on mobile
+              const tableBodyMobile = contentContainer.querySelector('.leaders-table .table-body');
+              if (tableBodyMobile) {
+                tableBodyMobile.addEventListener('click', (event) => {
+                  const clickedCell = event.target.closest('td');
+                  if (clickedCell && clickedCell.classList.contains('table-cell') && clickedCell.textContent !== 'Rank' && clickedCell.textContent !== 'Country' && clickedCell.textContent !== 'Roast' && clickedCell.textContent !== 'Score') { // Check if it's a data cell (not a header) and not Rank, Country, Roast, or Score
+                      // Check if it's the processing cell (using index or content check)
+                      const row = clickedCell.parentElement;
+                      const cells = Array.from(row.children);
+                      const processingCellIndex = 2; // Processing is the 3rd column (index 2)
+
+                      if (clickedCell === cells[processingCellIndex]) {
+
+                          const tooltipText = clickedCell.title;
+                          if (tooltipText) {
+                              // Remove any existing tooltips
+                              document.querySelectorAll('.processing-tooltip').forEach(tooltip => tooltip.remove());
+
+                              const tooltip = document.createElement('div');
+                              tooltip.classList.add('processing-tooltip');
+                              tooltip.textContent = tooltipText;
+
+                              // Basic tooltip styling (you can add more in CSS)
+                              tooltip.style.position = 'absolute';
+                              tooltip.style.background = 'var(--surface-color)';
+                              tooltip.style.color = 'var(--text-color)';
+                              tooltip.style.border = '1px solid var(--border-color)';
+                              tooltip.style.padding = '5px';
+                              tooltip.style.borderRadius = '5px';
+                              tooltip.style.zIndex = '1000';
+                              tooltip.style.top = `${clickedCell.getBoundingClientRect().bottom + window.scrollY + 5}px`;
+                              tooltip.style.left = `${clickedCell.getBoundingClientRect().left + window.scrollX}px`;
+                              tooltip.style.maxWidth = '200px';
+                              tooltip.style.whiteSpace = 'normal';
+                              tooltip.style.wordWrap = 'break-word';
+
+                              document.body.appendChild(tooltip);
+
+                              // Hide tooltip on click outside
+                              const dismissTooltip = (e) => {
+                                if (!tooltip.contains(e.target) && e.target !== clickedCell) {
+                                  tooltip.remove();
+                                  document.removeEventListener('click', dismissTooltip);
+                                }
+                              };
+                              document.addEventListener('click', dismissTooltip);
+
+                               // Optional: Hide tooltip after a few seconds
+                              // setTimeout(() => {
+                              //     if(tooltip.parentElement) tooltip.remove();
+                              //     document.removeEventListener('click', dismissTooltip);
+                              // }, 5000);
+                          }
+                      }
+                  }
+                });
+              }
+          }
+
+        } catch (error) {
+          console.error('Error loading tab content:', error);
+          contentContainer.innerHTML = '<div class="error">Failed to load content. Please try again.</div>';
+        } finally {
+          // Hide loading spinner
+          spinner = contentContainer.querySelector('.loading-spinner');
+          if (spinner) {
+            spinner.classList.add('hidden');
+          }
+        }
+      }
+
+      // Handle tab switching
+      function switchTab(tabName) {
+        // Update active tab button
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.tab === tabName);
         });
+
+        // Update URL hash
+        window.location.hash = tabName;
+        currentTab = tabName;
+
+        // Load tab content
+        loadTabContent(tabName);
       }
 
       // Service Worker registration
@@ -300,59 +385,56 @@
           navigator.serviceWorker
             .register("/sw.js")
             .then(function (registration) {
-              // Registration successful
               console.log(
                 "ServiceWorker registration successful with scope: ",
                 registration.scope
               );
             })
             .catch(function (error) {
-              // Registration failed
               console.log("ServiceWorker registration failed: ", error);
             });
         });
       }
 
-      // Initialize options when DOM is loaded
+      // Initialize when DOM is loaded
       document.addEventListener("DOMContentLoaded", () => {
-        initializeCountryOptions();
-        initializeProcessingOptions();
+        // Add tab click handlers
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
 
-        // Add event listeners
-        document
-          .getElementById("coffeeType")
-          .addEventListener("change", toggleBlendInputs);
-        document
-          .getElementById("blend1Percent")
-          .addEventListener("input", validateBlend);
-        document
-          .getElementById("blend2Percent")
-          .addEventListener("input", validateBlend);
-        document
-          .querySelector(".check-btn")
-          .addEventListener("click", checkCoffee);
-        document
-          .querySelector(".theme-toggle")
-          .addEventListener("click", toggleTheme);
-        document
-          .querySelector(".header-btn")
-          .addEventListener("click", openContactModal);
-        document
-          .querySelector(".close")
-          .addEventListener("click", closeContactModal);
+        // Handle hash changes
+        window.addEventListener('hashchange', () => {
+          const tabName = window.location.hash.slice(1) || 'checker';
+          switchTab(tabName);
+        });
+
+        // Handle initial load
+        const initialTab = window.location.hash.slice(1) || 'checker';
+        switchTab(initialTab);
+
+        // Theme toggle
+        document.querySelector(".theme-toggle").addEventListener("click", toggleTheme);
+
+        // Contact modal handlers
+        document.getElementById("contactBtn").addEventListener("click", openContactModal);
+        document.querySelector(".close").addEventListener("click", closeContactModal);
+        window.addEventListener("click", (event) => {
+          const modal = document.getElementById("contactModal");
+          if (event.target === modal) {
+            closeContactModal();
+          }
+        });
 
         // PWA Installation
         let deferredPrompt;
         const installButton = document.getElementById("installPWA");
 
-        // Check if the app is already installed
         if (window.matchMedia("(display-mode: standalone)").matches) {
           installButton.classList.add("hidden");
         }
 
-        // Show install button for iOS
-        const isIOS =
-          /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         if (isIOS) {
           installButton.classList.remove("hidden");
           installButton.addEventListener("click", () => {
@@ -361,7 +443,6 @@
             );
           });
         } else {
-          // Handle standard PWA installation for other devices
           window.addEventListener("beforeinstallprompt", (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -376,14 +457,6 @@
             installButton.classList.add("hidden");
           });
         }
-
-        // Close modal when clicking outside
-        window.addEventListener("click", (event) => {
-          const modal = document.getElementById("contactModal");
-          if (event.target === modal) {
-            closeContactModal();
-          }
-        });
       });
     </script>
   </body>
