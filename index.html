@@ -290,6 +290,18 @@
 
       // Handle tab switching
       function switchTab(tabName) {
+        // Don't do anything if switching to the same tab
+        if (tabName === currentTab) {
+          return;
+        }
+
+        // Validate tab name
+        const validTabs = ['top', 'checker'];
+        if (!validTabs.includes(tabName)) {
+          console.warn(`Invalid tab name: ${tabName}. Defaulting to 'checker'`);
+          tabName = 'checker';
+        }
+
         // Update active tab button
         document.querySelectorAll('.tab-btn').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.tab === tabName);
