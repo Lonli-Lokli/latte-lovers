@@ -488,12 +488,26 @@ export function toggleTheme() {
 
   body.classList.toggle("light-theme");
 
-  if (body.classList.contains("light-theme")) {
+  const isLightTheme = body.classList.contains("light-theme");
+  const isDarkMode = !isLightTheme;
+
+  if (isLightTheme) {
     themeIcon.textContent = "🌙";
     localStorage.setItem("theme", "light");
   } else {
     themeIcon.textContent = "☀️";
     localStorage.setItem("theme", "dark");
+  }
+
+  // Dynamically update multi-select theme
+  if (msCountryInstance) {
+    msCountryInstance.refreshOptions({ darkMode: isDarkMode });
+  }
+  if (msProcessingInstance) {
+    msProcessingInstance.refreshOptions({ darkMode: isDarkMode });
+  }
+  if (msRoastInstance) {
+    msRoastInstance.refreshOptions({ darkMode: isDarkMode });
   }
 }
 
@@ -837,6 +851,11 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeTooltips();
 });
 
+// Variables to store multiple select instances
+let msCountryInstance = null;
+let msProcessingInstance = null;
+let msRoastInstance = null;
+
 // Function to initialize leaders table and filters using multiple-select-vanilla
 export function initializeLeadersFilters(
   coffeeProfiles,
@@ -889,11 +908,12 @@ export function initializeLeadersFilters(
     autoAdjustDropHeight: true,
     autoAdjustDropWidthByTextSize: true,
     allSelectedText: name, 
-    countSelectedText: name
+    countSelectedText: name,
+    darkMode: !document.body.classList.contains('light-theme')
   });
-  multipleSelect(".multiple-select.country",options('Country'));
-  multipleSelect(".multiple-select.process", options('Process'));
-  multipleSelect(".multiple-select.roast", options('Roast'));
+  msCountryInstance = multipleSelect(".multiple-select.country",options('Country'));
+  msProcessingInstance = multipleSelect(".multiple-select.process", options('Process'));
+  msRoastInstance = multipleSelect(".multiple-select.roast", options('Roast'));
   // Function to apply filters and update the table
   function applyFilters() {
     // Get selected values directly from native selects
