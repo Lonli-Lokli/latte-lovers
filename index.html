@@ -67,7 +67,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Latte Lovers" />
     <link rel="apple-touch-icon" href="192x192.png" />
-    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="src/styles.scss" />
   </head>
   <body>
     <div class="container">
@@ -165,7 +165,8 @@
         generateAndRankLeaders,
         roastLevelEffects,
         initializeTooltips,
-      } from "./assets/script.mjs";
+        initializeLeadersFilters,
+      } from "./src/script.mjs";
 
       // Content cache
       const contentCache = new Map();
@@ -225,31 +226,30 @@
           spinner.className = 'loading-spinner';
           contentContainer.appendChild(spinner);
         }
-        
+
         // Show loading spinner
         spinner.classList.remove('hidden');
-        
+
         try {
+          let content;
           // Check cache first
           if (contentCache.has(tabName)) {
-            contentContainer.innerHTML = contentCache.get(tabName);
-            // Re-add spinner after setting innerHTML
-            spinner = document.createElement('div');
-            spinner.className = 'loading-spinner';
-            contentContainer.appendChild(spinner);
+            content = contentCache.get(tabName);
           } else {
-            const response = await fetch(`${tabName}.html`);
-            if (!response.ok) throw new Error('Failed to load content');
-            const content = await response.text();
-            contentContainer.innerHTML = content;
+            // Dynamically import the HTML file using Vite
+            const module = await import(`./src/${tabName}.html?raw`); // Use ?raw to import as a string
+            content = module.default; // The HTML content will be the default export when using ?raw
             contentCache.set(tabName, content);
-            // Re-add spinner after setting innerHTML
-            spinner = document.createElement('div');
-            spinner.className = 'loading-spinner';
-            contentContainer.appendChild(spinner);
           }
 
-          // Initialize form elements after content is loaded (only for checker tab)
+          contentContainer.innerHTML = content;
+
+          // Re-add spinner after setting innerHTML
+          spinner = document.createElement('div');
+          spinner.className = 'loading-spinner';
+          contentContainer.appendChild(spinner);
+
+          // Initialize elements and functionality based on tab content
           if (tabName === 'checker') {
             initializeCountryOptions();
             initializeProcessingOptions();
@@ -272,33 +272,8 @@
               checkBtn.addEventListener('click', checkCoffee);
             }
           } else if (tabName === 'top') {
-              // Populate leaders table
-              const leaders = generateAndRankLeaders(coffeeProfiles, processingMethods, roastLevelEffects);
-              const tableBody = contentContainer.querySelector('.leaders-table .table-body');
-
-              if (tableBody) {
-                  tableBody.innerHTML = ''; // Clear existing content
-                  const topLeaders = leaders.slice(0, 10); // Display top 10
-
-                  topLeaders.forEach((leader, index) => {
-                      const tableRow = document.createElement('tr');
-                      tableRow.classList.add('table-row');
-                      tableRow.innerHTML = `
-                          <td class="table-cell table-rank">${index + 1}</td>
-                          <td class="table-cell">${leader.country}</td>
-                          <td class="table-cell" data-processing="${Object.entries(processingMethods).find(([_, method]) => method.abbreviation === leader.processingAbbreviation)?.[0]}">
-                            <span class="processing-abbreviation-mobile">${leader.processingAbbreviation}</span>
-                            <span class="processing-fullname-desktop">${leader.processingDisplayName}</span>
-                          </td>
-                          <td class="table-cell">${leader.roast}</td>
-                          <td class="table-cell table-score ${leader.grade}">${leader.score}/10</td>
-                      `;
-                      tableBody.appendChild(tableRow);
-                  });
-              }
-
-              // Initialize tooltips after table is populated
-              initializeTooltips();
+              // Initialize filters and populate table via filters
+              initializeLeadersFilters(coffeeProfiles, processingMethods, roastLevelEffects);
           }
 
         } catch (error) {
@@ -326,23 +301,6 @@
 
         // Load tab content
         loadTabContent(tabName);
-      }
-
-      // Service Worker registration
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function () {
-          navigator.serviceWorker
-            .register("/sw.js")
-            .then(function (registration) {
-              console.log(
-                "ServiceWorker registration successful with scope: ",
-                registration.scope
-              );
-            })
-            .catch(function (error) {
-              console.log("ServiceWorker registration failed: ", error);
-            });
-        });
       }
 
       // Initialize when DOM is loaded

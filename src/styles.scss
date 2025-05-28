@@ -12,8 +12,9 @@
   --button-gradient-start: #8b6f47;
   --button-gradient-end: #a88c6c;
   --button-shadow: rgba(139, 111, 71, 0.3);
-  
 }
+
+
 
 body.light-theme {
   /* Light theme (default) */
@@ -32,6 +33,8 @@ body.light-theme {
   --button-shadow: rgba(107, 78, 61, 0.3);
 }
 
+@import 'multiple-select-vanilla/dist/styles/sass/multiple-select.scss';
+
 * {
   margin: 0;
   padding: 0;
@@ -40,7 +43,11 @@ body.light-theme {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: linear-gradient(135deg, var(--header-gradient-start) 0%, var(--header-gradient-end) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--header-gradient-start) 0%,
+    var(--header-gradient-end) 100%
+  );
   min-height: 100dvh;
   padding: 20px;
   color: var(--text-color);
@@ -69,7 +76,11 @@ body.light-theme .container {
 }
 
 .header {
-  background: linear-gradient(135deg, var(--header-gradient-start) 0%, var(--header-gradient-end) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--header-gradient-start) 0%,
+    var(--header-gradient-end) 100%
+  );
   color: white;
   text-align: center;
   padding: 15px;
@@ -282,7 +293,11 @@ body.light-theme .header {
 
 .check-btn {
   width: 100%;
-  background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--button-gradient-start) 0%,
+    var(--button-gradient-end) 100%
+  );
   color: white;
   border: none;
   padding: 14px;
@@ -427,7 +442,11 @@ body.light-theme .check-btn:hover {
 }
 
 .modal-header {
-  background: linear-gradient(135deg, var(--modal-header-gradient-start) 0%, var(--modal-header-gradient-end) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--modal-header-gradient-start) 0%,
+    var(--modal-header-gradient-end) 100%
+  );
   color: white;
   padding: 20px;
   border-radius: 20px 20px 0 0;
@@ -714,7 +733,7 @@ body.light-theme .check-btn:hover {
 /* Content Container */
 .content-container {
   position: relative;
-  min-height: 300px;
+  min-height: 400px;
   padding: 1rem;
 }
 
@@ -733,8 +752,12 @@ body.light-theme .check-btn:hover {
 }
 
 @keyframes spin {
-  0% { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 .hidden {
@@ -766,6 +789,42 @@ body.light-theme .check-btn:hover {
 
   .tab-icon {
     font-size: 0.9375rem;
+  }
+
+  .filter-controls {
+    flex-direction: column; /* Stack items vertically on mobile */
+    gap: 0.75rem; /* Adjust gap for vertical stacking */
+    margin-bottom: 1rem;
+  }
+
+  .filter-controls .custom-select.floating-label {
+    width: 100%; /* Full width on mobile */
+    margin-bottom: 0; /* Remove individual margin since gap is on flex container */
+  }
+
+  .custom-select .select-selected {
+    /* These should already be set but double-check */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 12px; /* Ensure consistent padding */
+  }
+
+  /* Adjust floating label on mobile if needed - simplify selector */
+  .custom-select.floating-label label {
+    top: 10px; /* Slightly less from top on mobile */
+    left: 10px; /* Slightly less from left on mobile */
+    font-size: 13px; /* Slightly smaller font size */
+  }
+
+  .custom-select.floating-label .select-selected.has-selection + label,
+  .custom-select.floating-label .select-selected:focus + label,
+  .custom-select.floating-label .select-arrow-active + label {
+    top: -10px; /* Position label above */
+    font-size: 12px; /* Smaller font size when floating */
+    background: var(--surface-color); /* Match background */
+    padding: 0 5px; /* Add padding */
+    color: var(--primary-color); /* Primary color when active */
   }
 }
 
@@ -826,20 +885,40 @@ body.light-theme .check-btn:hover {
 }
 
 /* Column widths - adjust as needed */
-.leaders-table th:nth-child(1), .leaders-table td:nth-child(1) { width: 40px; text-align: center; } /* Rank */
-.leaders-table th:nth-child(5), .leaders-table td:nth-child(5) { width: 60px; text-align: center; } /* Score */
+.leaders-table th:nth-child(1),
+.leaders-table td:nth-child(1) {
+  width: 40px;
+  text-align: center;
+} /* Rank */
+.leaders-table th:nth-child(5),
+.leaders-table td:nth-child(5) {
+  width: 60px;
+  text-align: center;
+} /* Score */
 
 /* Ensure flexible columns can grow */
-.leaders-table th:nth-child(2), .leaders-table td:nth-child(2) { width: auto; } /* Country - set width to auto */
-.leaders-table th:nth-child(3), .leaders-table td:nth-child(3) { width: auto; text-align: center; } /* Processing - set width to auto and center */
-.leaders-table th:nth-child(4), .leaders-table td:nth-child(4) { width: auto; } /* Roast - set width to auto */
+.leaders-table th:nth-child(2),
+.leaders-table td:nth-child(2) {
+  width: auto;
+} /* Country - set width to auto */
+.leaders-table th:nth-child(3),
+.leaders-table td:nth-child(3) {
+  width: auto;
+  text-align: center;
+} /* Processing - set width to auto and center */
+.leaders-table th:nth-child(4),
+.leaders-table td:nth-child(4) {
+  width: auto;
+} /* Roast - set width to auto */
 
-.table-rank { /* Specific rank styling */
+.table-rank {
+  /* Specific rank styling */
   font-weight: 600;
   color: var(--primary-color);
 }
 
-.table-score { /* Specific score styling */
+.table-score {
+  /* Specific score styling */
   font-weight: 600;
   padding: 4px 8px;
   border-radius: 4px;
@@ -847,9 +926,18 @@ body.light-theme .check-btn:hover {
 }
 
 /* Grade-specific styling for score */
-.table-score.perfect { background: rgba(76, 175, 80, 0.1); color: #4caf50; }
-.table-score.good { background: rgba(255, 152, 0, 0.1); color: #ff9800; }
-.table-score.bad { background: rgba(244, 67, 54, 0.1); color: #f44336; }
+.table-score.perfect {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+}
+.table-score.good {
+  background: rgba(255, 152, 0, 0.1);
+  color: #ff9800;
+}
+.table-score.bad {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
 
 /* Chart Legend - Keep styles */
 .chart-legend {
@@ -892,17 +980,30 @@ body.light-theme .check-btn:hover {
   }
 
   /* Mobile column widths */
-  .leaders-table th:nth-child(1), .leaders-table td:nth-child(1) { text-align: center; } /* Rank */
-  .leaders-table th:nth-child(5), .leaders-table td:nth-child(5) { text-align: center; } /* Score */
+  .leaders-table th:nth-child(1),
+  .leaders-table td:nth-child(1) {
+    text-align: center;
+  } /* Rank */
+  .leaders-table th:nth-child(5),
+  .leaders-table td:nth-child(5) {
+    text-align: center;
+  } /* Score */
 
   /* Mobile flexible columns - adjust min-width if needed */
-  .leaders-table th:nth-child(2), .leaders-table td:nth-child(2) { } /* Country */
-  .leaders-table th:nth-child(3), .leaders-table td:nth-child(3) { } /* Processing */
-  .leaders-table th:nth-child(4), .leaders-table td:nth-child(4) { } /* Roast */
+  .leaders-table th:nth-child(2),
+  .leaders-table td:nth-child(2) {
+  } /* Country */
+  .leaders-table th:nth-child(3),
+  .leaders-table td:nth-child(3) {
+  } /* Processing */
+  .leaders-table th:nth-child(4),
+  .leaders-table td:nth-child(4) {
+  } /* Roast */
 
-  .table-score { /* Mobile score styling */
-     padding: 2px 4px;
-     font-size: 0.75rem;
+  .table-score {
+    /* Mobile score styling */
+    padding: 2px 4px;
+    font-size: 0.75rem;
   }
 
   .chart-legend {
@@ -984,7 +1085,7 @@ body.dark-theme select option:checked {
 /* Desktop adjustments */
 @media (min-width: 769px) {
   .container {
-    max-width: 700px; /* Increased max-width for desktop */
+    max-width: 700px;
   }
 }
 
@@ -995,88 +1096,59 @@ body.dark-theme select option:checked {
 }
 
 .processing-abbreviation-mobile {
-    display: inline-flex; /* Use inline-flex to center content if needed */
-    align-items: center;
-    justify-content: center;
-    width: 30px; /* Base size for mobile */
-    height: 30px; /* Base size for mobile */
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    background-color: var(--surface-color); /* Use surface color for box background */
-    color: var(--primary-color); /* Use primary color for text */
-    margin: 0 auto; /* Center the box if the cell is wider */
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    transition: background-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: var(--surface-color);
+  color: var(--primary-color);
+  margin: 0 auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background-color 0.2s ease;
 }
 
 .processing-abbreviation-mobile:hover,
 .processing-abbreviation-mobile:active {
-  background-color: var(--surface-hover-color); /* Hover/active state */
+  background-color: var(--surface-hover-color);
 }
 
 .processing-fullname-desktop {
-    display: none;
+  display: none;
 }
 
 /* Mobile Optimization for Leaders Table */
 @media (max-width: 768px) {
   .processing-abbreviation-mobile {
-    width: 26px; /* Smaller size on mobile */
-    height: 26px; /* Smaller size on mobile */
+    width: 26px;
+    height: 26px;
     font-size: 0.7rem;
   }
 
-  /* Ensure desktop full name is hidden on mobile */
   .processing-fullname-desktop {
-    display: none !important; /* Use !important to override if needed */
+    display: none !important;
   }
 }
 
 /* Desktop styles (min-width: 768px) */
 @media (min-width: 768px) {
-    .processing-abbreviation-mobile {
-        display: none !important; /* Use !important to override if needed */
-    }
+  .processing-abbreviation-mobile {
+    display: none !important;
+  }
 
-    .processing-fullname-desktop {
-        display: inline;
-    }
-}
-
-/* Explicit column widths - adjust as needed */
-
-.table-body { /* Renamed from chart-body */
-  /* Removed max-height: 400px; */
-  /* Removed overflow-y: auto; */
-}
-
-.table-row { /* Renamed from chart-item */
-}
-
-.processing-abbreviation-mobile {
+  .processing-fullname-desktop {
     display: inline;
-    /* Existing mobile styles for abbreviation can go here if needed */
+  }
 }
 
-.processing-fullname-desktop {
-    display: none;
+.table-body {
 }
 
-/* Desktop styles (min-width: 768px) */
-@media (min-width: 768px) {
-    // ... existing code ...
-
-    .processing-abbreviation-mobile {
-        display: none;
-    }
-
-    .processing-fullname-desktop {
-        display: inline;
-    }
-
-    // ... existing code ...
+.table-row {
 }
