@@ -7,7 +7,7 @@ import {
   roastLevelEffects,
   ACTUAL_MAX_RAW,
   ACTUAL_MIN_RAW
-} from "./script.mjs";
+} from "../assets/script.mjs";
 import { expect, test } from "vitest";
 
 test("Find maximum score for single origin", () => {

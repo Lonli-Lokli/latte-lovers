@@ -780,18 +780,21 @@ body.light-theme .check-btn:hover {
   color: var(--text-color);
 }
 
-.leaders-table { /* Contains the native table */
-  background: var(--surface-color); /* Use theme variable */
+.leaders-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  overflow-x: auto; /* Allow horizontal scrolling */
+  background: var(--surface-color);
+  box-shadow: var(--box-shadow);
 }
 
 .leaders-table table {
-  width: 100%; /* Keep width 100% for fluid layout */
+  width: 100%;
   border-collapse: collapse;
-  /* table-layout: fixed; removed */
-  min-width: 550px; /* Added a minimum width to ensure content can overflow */
+  table-layout: auto;
 }
 
 .leaders-table thead th {
@@ -820,7 +823,6 @@ body.light-theme .check-btn:hover {
   padding: 0.75rem 1rem;
   color: var(--text-color);
   font-size: 0.875rem;
-  /* Removed overflow, text-overflow, white-space nowrap */
 }
 
 /* Column widths - adjust as needed */
@@ -828,9 +830,9 @@ body.light-theme .check-btn:hover {
 .leaders-table th:nth-child(5), .leaders-table td:nth-child(5) { width: 60px; text-align: center; } /* Score */
 
 /* Ensure flexible columns can grow */
-.leaders-table th:nth-child(2), .leaders-table td:nth-child(2) { } /* Country */
-.leaders-table th:nth-child(3), .leaders-table td:nth-child(3) { } /* Processing */
-.leaders-table th:nth-child(4), .leaders-table td:nth-child(4) { } /* Roast */
+.leaders-table th:nth-child(2), .leaders-table td:nth-child(2) { width: auto; } /* Country - set width to auto */
+.leaders-table th:nth-child(3), .leaders-table td:nth-child(3) { width: auto; text-align: center; } /* Processing - set width to auto and center */
+.leaders-table th:nth-child(4), .leaders-table td:nth-child(4) { width: auto; } /* Roast - set width to auto */
 
 .table-rank { /* Specific rank styling */
   font-weight: 600;
@@ -878,20 +880,20 @@ body.light-theme .check-btn:hover {
 /* Mobile Optimization for Leaders Table */
 @media (max-width: 768px) {
   .leaders-container {
-    padding: 0.75rem;
+    padding: 0.5rem;
   }
   .leaders-container h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
   .leaders-table thead th,
   .leaders-table tbody td {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8125rem;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
   }
 
   /* Mobile column widths */
-  .leaders-table th:nth-child(1), .leaders-table td:nth-child(1) { width: 30px; } /* Rank */
-  .leaders-table th:nth-child(5), .leaders-table td:nth-child(5) { width: 50px; } /* Score */
+  .leaders-table th:nth-child(1), .leaders-table td:nth-child(1) { text-align: center; } /* Rank */
+  .leaders-table th:nth-child(5), .leaders-table td:nth-child(5) { text-align: center; } /* Score */
 
   /* Mobile flexible columns - adjust min-width if needed */
   .leaders-table th:nth-child(2), .leaders-table td:nth-child(2) { } /* Country */
@@ -899,26 +901,38 @@ body.light-theme .check-btn:hover {
   .leaders-table th:nth-child(4), .leaders-table td:nth-child(4) { } /* Roast */
 
   .table-score { /* Mobile score styling */
-     padding: 3px 6px;
-     font-size: 0.8125rem;
+     padding: 2px 4px;
+     font-size: 0.75rem;
   }
 
   .chart-legend {
-    flex-direction: row; /* Keep legend horizontal on mobile if space allows */
-    flex-wrap: wrap; /* Allow wrapping if needed */
-    justify-content: flex-start; /* Align items to start */
-    gap: 0.75rem; /* Adjust gap */
-    margin-top: 0.75rem; /* Adjust margin */
-    padding: 0.75rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
   }
 
   .legend-item {
-    font-size: 0.75rem; /* Further reduced font size for legend on mobile */
+    font-size: 0.75rem;
   }
 
   .legend-color {
-    width: 10px; /* Reduced size */
-    height: 10px; /* Reduced size */
+    width: 8px;
+    height: 8px;
+  }
+
+  .processing-abbreviation-mobile {
+    width: 30px; /* Increased size on mobile */
+    height: 30px; /* Increased size on mobile */
+    font-size: 0.75rem; /* Adjusted font size */
+    padding: 2px; /* Add some padding */
+  }
+
+  /* Ensure desktop full name is hidden on mobile */
+  .processing-fullname-desktop {
+    display: none !important; /* Use !important to override if needed */
   }
 }
 
@@ -980,19 +994,89 @@ body.dark-theme select option:checked {
   font-size: 0.875rem;
 }
 
-.processing-abbreviation {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  background-color: var(--surface-color);
-  color: var(--primary-color);
-  margin: 0 auto;
+.processing-abbreviation-mobile {
+    display: inline-flex; /* Use inline-flex to center content if needed */
+    align-items: center;
+    justify-content: center;
+    width: 30px; /* Base size for mobile */
+    height: 30px; /* Base size for mobile */
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background-color: var(--surface-color); /* Use surface color for box background */
+    color: var(--primary-color); /* Use primary color for text */
+    margin: 0 auto; /* Center the box if the cell is wider */
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: background-color 0.2s ease;
+}
+
+.processing-abbreviation-mobile:hover,
+.processing-abbreviation-mobile:active {
+  background-color: var(--surface-hover-color); /* Hover/active state */
+}
+
+.processing-fullname-desktop {
+    display: none;
+}
+
+/* Mobile Optimization for Leaders Table */
+@media (max-width: 768px) {
+  .processing-abbreviation-mobile {
+    width: 26px; /* Smaller size on mobile */
+    height: 26px; /* Smaller size on mobile */
+    font-size: 0.7rem;
+  }
+
+  /* Ensure desktop full name is hidden on mobile */
+  .processing-fullname-desktop {
+    display: none !important; /* Use !important to override if needed */
+  }
+}
+
+/* Desktop styles (min-width: 768px) */
+@media (min-width: 768px) {
+    .processing-abbreviation-mobile {
+        display: none !important; /* Use !important to override if needed */
+    }
+
+    .processing-fullname-desktop {
+        display: inline;
+    }
 }
 
 /* Explicit column widths - adjust as needed */
+
+.table-body { /* Renamed from chart-body */
+  /* Removed max-height: 400px; */
+  /* Removed overflow-y: auto; */
+}
+
+.table-row { /* Renamed from chart-item */
+}
+
+.processing-abbreviation-mobile {
+    display: inline;
+    /* Existing mobile styles for abbreviation can go here if needed */
+}
+
+.processing-fullname-desktop {
+    display: none;
+}
+
+/* Desktop styles (min-width: 768px) */
+@media (min-width: 768px) {
+    // ... existing code ...
+
+    .processing-abbreviation-mobile {
+        display: none;
+    }
+
+    .processing-fullname-desktop {
+        display: inline;
+    }
+
+    // ... existing code ...
+}

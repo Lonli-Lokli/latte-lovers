@@ -67,7 +67,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Latte Lovers" />
     <link rel="apple-touch-icon" href="192x192.png" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="assets/styles.css" />
   </head>
   <body>
     <div class="container">
@@ -164,7 +164,8 @@
         processingMethods,
         generateAndRankLeaders,
         roastLevelEffects,
-      } from "./script.mjs";
+        initializeTooltips,
+      } from "./assets/script.mjs";
 
       // Content cache
       const contentCache = new Map();
@@ -285,7 +286,10 @@
                       tableRow.innerHTML = `
                           <td class="table-cell table-rank">${index + 1}</td>
                           <td class="table-cell">${leader.country}</td>
-                          <td class="table-cell" title="${leader.processingDisplayName}"><span class="processing-abbreviation">${leader.processingAbbreviation}</span></td>
+                          <td class="table-cell" data-processing="${Object.entries(processingMethods).find(([_, method]) => method.abbreviation === leader.processingAbbreviation)?.[0]}">
+                            <span class="processing-abbreviation-mobile">${leader.processingAbbreviation}</span>
+                            <span class="processing-fullname-desktop">${leader.processingDisplayName}</span>
+                          </td>
                           <td class="table-cell">${leader.roast}</td>
                           <td class="table-cell table-score ${leader.grade}">${leader.score}/10</td>
                       `;
@@ -293,63 +297,8 @@
                   });
               }
 
-              // Add click listener for processing tooltips on mobile
-              const tableBodyMobile = contentContainer.querySelector('.leaders-table .table-body');
-              if (tableBodyMobile) {
-                tableBodyMobile.addEventListener('click', (event) => {
-                  const clickedCell = event.target.closest('td');
-                  if (clickedCell && clickedCell.classList.contains('table-cell') && clickedCell.textContent !== 'Rank' && clickedCell.textContent !== 'Country' && clickedCell.textContent !== 'Roast' && clickedCell.textContent !== 'Score') { // Check if it's a data cell (not a header) and not Rank, Country, Roast, or Score
-                      // Check if it's the processing cell (using index or content check)
-                      const row = clickedCell.parentElement;
-                      const cells = Array.from(row.children);
-                      const processingCellIndex = 2; // Processing is the 3rd column (index 2)
-
-                      if (clickedCell === cells[processingCellIndex]) {
-
-                          const tooltipText = clickedCell.title;
-                          if (tooltipText) {
-                              // Remove any existing tooltips
-                              document.querySelectorAll('.processing-tooltip').forEach(tooltip => tooltip.remove());
-
-                              const tooltip = document.createElement('div');
-                              tooltip.classList.add('processing-tooltip');
-                              tooltip.textContent = tooltipText;
-
-                              // Basic tooltip styling (you can add more in CSS)
-                              tooltip.style.position = 'absolute';
-                              tooltip.style.background = 'var(--surface-color)';
-                              tooltip.style.color = 'var(--text-color)';
-                              tooltip.style.border = '1px solid var(--border-color)';
-                              tooltip.style.padding = '5px';
-                              tooltip.style.borderRadius = '5px';
-                              tooltip.style.zIndex = '1000';
-                              tooltip.style.top = `${clickedCell.getBoundingClientRect().bottom + window.scrollY + 5}px`;
-                              tooltip.style.left = `${clickedCell.getBoundingClientRect().left + window.scrollX}px`;
-                              tooltip.style.maxWidth = '200px';
-                              tooltip.style.whiteSpace = 'normal';
-                              tooltip.style.wordWrap = 'break-word';
-
-                              document.body.appendChild(tooltip);
-
-                              // Hide tooltip on click outside
-                              const dismissTooltip = (e) => {
-                                if (!tooltip.contains(e.target) && e.target !== clickedCell) {
-                                  tooltip.remove();
-                                  document.removeEventListener('click', dismissTooltip);
-                                }
-                              };
-                              document.addEventListener('click', dismissTooltip);
-
-                               // Optional: Hide tooltip after a few seconds
-                              // setTimeout(() => {
-                              //     if(tooltip.parentElement) tooltip.remove();
-                              //     document.removeEventListener('click', dismissTooltip);
-                              // }, 5000);
-                          }
-                      }
-                  }
-                });
-              }
+              // Initialize tooltips after table is populated
+              initializeTooltips();
           }
 
         } catch (error) {

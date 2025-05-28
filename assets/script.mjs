@@ -694,11 +694,7 @@ export function generateAndRankLeaders(coffeeProfiles, processingMethods, roastL
   for (const [country, profile] of Object.entries(coffeeProfiles)) {
     for (const [processingName, processing] of Object.entries(processingMethods)) {
       for (const [roastName, roast] of Object.entries(roastLevelEffects)) {
-        // For single origin, roast level 'dark' is not recommended by the app's logic
-        // We should respect that when generating leaders too.
-        if (roastName === 'dark') {
-             continue;
-        }
+      
         const processedProfile = applyFullProcessingEffects(profile, processingName, processingMethods);
         const finalProfile = applyRoastEffects(processedProfile, roastName, roastLevelEffects);
         const latteScoreRaw = calculateLatteScore(finalProfile);
@@ -707,8 +703,9 @@ export function generateAndRankLeaders(coffeeProfiles, processingMethods, roastL
 
         leaders.push({
           country: country.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-          processingAbbreviation: processing.abbreviation, // Use abbreviation
-          processingDisplayName: processing.displayName, // Include full name
+          processingAbbreviation: processing.abbreviation,
+          processingDisplayName: processing.displayName,
+          processingDescription: processing.description,
           roast: roastName.charAt(0).toUpperCase() + roastName.slice(1),
           score: parseFloat(normalizedLatteScore.toFixed(1)),
           grade: getCompatibilityGrade(normalizedLatteScore),
@@ -717,8 +714,87 @@ export function generateAndRankLeaders(coffeeProfiles, processingMethods, roastL
     }
   }
 
-  // Sort leaders by score in descending order (using normalized score)
+  // Sort leaders by score in descending order
   leaders.sort((a, b) => b.score - a.score);
 
   return leaders;
 }
+
+// Add tooltip functionality
+export function initializeTooltips() {
+  // Create tooltip element
+  const tooltip = document.createElement('div');
+  tooltip.className = 'tooltip';
+  tooltip.style.cssText = `
+    position: fixed;
+    background: var(--surface-color);
+    color: var(--text-color);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    max-width: 250px;
+    border: 1px solid var(--border-color);
+  `;
+  document.body.appendChild(tooltip);
+
+  // Handle tooltip display
+  function showTooltip(event, text) {
+    const rect = event.target.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    
+    // Position tooltip
+    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    let top = rect.bottom + 8;
+
+    // Adjust if tooltip would go off screen
+    if (left < 8) left = 8;
+    if (left + tooltipRect.width > window.innerWidth - 8) {
+      left = window.innerWidth - tooltipRect.width - 8;
+    }
+    if (top + tooltipRect.height > window.innerHeight - 8) {
+      top = rect.top - tooltipRect.height - 8;
+    }
+
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${top}px`;
+    tooltip.textContent = text;
+    tooltip.style.opacity = '1';
+  }
+
+  function hideTooltip() {
+    tooltip.style.opacity = '0';
+  }
+
+  // Add event listeners to all processing abbreviations and full names
+  document.querySelectorAll('.processing-abbreviation-mobile, .processing-fullname-desktop').forEach(element => {
+    const processingName = element.parentElement.getAttribute('data-processing');
+    const processing = processingMethods[processingName];
+    if (processing) {
+      const tooltipText = `${processing.displayName}: ${processing.description}`;
+      
+      // Desktop hover
+      element.addEventListener('mouseenter', (e) => showTooltip(e, tooltipText));
+      element.addEventListener('mouseleave', hideTooltip);
+      
+      // Mobile touch
+      element.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        showTooltip(e, tooltipText);
+      });
+      element.addEventListener('touchend', hideTooltip);
+    }
+  });
+}
+
+// Initialize tooltips when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // ... existing DOMContentLoaded code ...
+  
+  // Initialize tooltips
+  initializeTooltips();
+});
