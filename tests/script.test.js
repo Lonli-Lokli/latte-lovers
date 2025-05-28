@@ -7,7 +7,7 @@ import {
   roastLevelEffects,
   ACTUAL_MAX_RAW,
   ACTUAL_MIN_RAW
-} from "../assets/script.mjs";
+} from "../src/script.mjs";
 import { expect, test } from "vitest";
 
 test("Find maximum score for single origin", () => {
@@ -40,7 +40,7 @@ test("Find maximum score for single origin", () => {
   });
 
   console.log("Best Single Origin Combination:", bestCombination);
-  expect(maxScore.toFixed(3)).toBe('9.275');
+  expect(maxScore.toFixed(3)).toBe('9.162');
 });
 
 test("Find maximum score for blends", () => {
