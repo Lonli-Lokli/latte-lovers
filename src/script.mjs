@@ -785,24 +785,24 @@ export function initializeTooltips() {
     let top = rect.bottom + 8;
 
     // Adjust position for mobile touch events
-    if (event.type === 'touchstart') {
-        top = rect.top - tooltipRect.height - 8; // Position above the element
-        // Ensure tooltip is not off-screen to the left or right on mobile
-        if (left < 8) left = 8;
-        if (left + tooltipRect.width > window.innerWidth - 8) {
-            left = window.innerWidth - tooltipRect.width - 8;
-        }
+    if (event.type === "touchstart") {
+      top = rect.top - tooltipRect.height - 8; // Position above the element
+      // Ensure tooltip is not off-screen to the left or right on mobile
+      if (left < 8) left = 8;
+      if (left + tooltipRect.width > window.innerWidth - 8) {
+        left = window.innerWidth - tooltipRect.width - 8;
+      }
     }
 
     // Adjust if tooltip would go off screen (for desktop hover)
-    if (event.type === 'mouseenter') {
-        if (left < 8) left = 8;
-        if (left + tooltipRect.width > window.innerWidth - 8) {
-          left = window.innerWidth - tooltipRect.width - 8;
-        }
-        if (top + tooltipRect.height > window.innerHeight - 8) {
-          top = rect.top - tooltipRect.height - 8;
-        }
+    if (event.type === "mouseenter") {
+      if (left < 8) left = 8;
+      if (left + tooltipRect.width > window.innerWidth - 8) {
+        left = window.innerWidth - tooltipRect.width - 8;
+      }
+      if (top + tooltipRect.height > window.innerHeight - 8) {
+        top = rect.top - tooltipRect.height - 8;
+      }
     }
 
     tooltip.style.left = `${left}px`;
@@ -873,18 +873,26 @@ export function initializeLeadersFilters(
   ); // Generate all leaders once
 
   // Populate select options
-  function populateSelectOptions(selectElement, data, valueKey, textKey) {
+  function populateSelectOptions(selectElement, data, sort, textKey) {
     if (!selectElement) return;
 
     // Clear existing options
     selectElement.innerHTML = "";
 
-    for (const [key, itemData] of Object.entries(data)) {
+    // Convert to array and sort if needed
+    const entries = Object.entries(data);
+    if (sort) {
+      entries.sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
+    }
+
+    for (const [key, itemData] of entries) {
       const option = document.createElement("option");
-      const optionValue = valueKey ? itemData[valueKey] : key; // Use key for value if no valueKey
       const optionText = textKey
         ? itemData[textKey]
-        : key.charAt(0).toUpperCase() + key.slice(1); // Capitalize key if no textKey
+        : key
+            .split("-")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" "); // Capitalize key if no textKey
 
       option.value = key; // Use the key (e.g., 'brazil', 'washed') as the option value
       option.textContent = optionText;
@@ -894,26 +902,32 @@ export function initializeLeadersFilters(
   }
 
   // Populate options for each filter
-  populateSelectOptions(countryFilter, coffeeProfiles, null, null);
+  populateSelectOptions(countryFilter, coffeeProfiles, true, null);
   populateSelectOptions(
     processingFilter,
     processingMethods,
-    null,
+    false,
     "displayName"
   );
-  populateSelectOptions(roastFilter, roastLevelEffects, null, null);
+  populateSelectOptions(roastFilter, roastLevelEffects, false, null);
 
-  const options = (name) =>  ({
+  const options = (name) => ({
     minimumCountSelected: 0,
     autoAdjustDropHeight: true,
     autoAdjustDropWidthByTextSize: true,
-    allSelectedText: name, 
+    allSelectedText: name,
     countSelectedText: name,
-    darkMode: !document.body.classList.contains('light-theme')
+    darkMode: !document.body.classList.contains("light-theme"),
   });
-  msCountryInstance = multipleSelect(".multiple-select.country",options('Country'));
-  msProcessingInstance = multipleSelect(".multiple-select.process", options('Process'));
-  msRoastInstance = multipleSelect(".multiple-select.roast", options('Roast'));
+  msCountryInstance = multipleSelect(
+    ".multiple-select.country",
+    options("Country")
+  );
+  msProcessingInstance = multipleSelect(
+    ".multiple-select.process",
+    options("Process")
+  );
+  msRoastInstance = multipleSelect(".multiple-select.roast", options("Roast"));
   // Function to apply filters and update the table
   function applyFilters() {
     // Get selected values directly from native selects
