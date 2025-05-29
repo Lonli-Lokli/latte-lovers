@@ -199,8 +199,7 @@ body.light-theme .header {
 }
 
 .floating-label {
-  position: relative;
-  margin-bottom: 12px;
+  position: relative;  
 }
 
 .floating-label label {
@@ -686,7 +685,10 @@ body.light-theme .check-btn:hover {
 
   .form-container {
     padding: 15px 10px;
-    max-height: calc(100dvh - 100px); /* Slightly reduced for mobile */
+    max-height: calc(100dvh - 100px); /* Slightly reduced for mobile */    
+  }
+  .floating-label {
+    margin-bottom: 12px;
   }
 
   .floating-label label {
@@ -1427,11 +1429,13 @@ body.dark-theme select option:hover {
   border-radius: 10px;
   margin-bottom: 15px; /* Reduced margin */
   gap: 0.1rem;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: none;
 
   .profile-stage {
     flex: 1;
     min-width: 0;
+    display: flex; /* Make profile-stage a flex container */
+    align-items: center; /* Vertically center items within profile-stage */
 
     .floating-label {
        width: 100%;
@@ -1480,6 +1484,7 @@ body.dark-theme select option:hover {
     opacity: 0.5;
     font-size: 1.1rem;
     padding: 0 0.5rem;
+    margin: auto 0; /* Vertically center arrows within the flex container for both themes */
   }
 }
 
@@ -1871,4 +1876,151 @@ body.dark-theme select option:hover {
     color: #dc3545; /* Red text */
     border: none;
   }
+}
+
+/* Light theme specific styles for Formula tab elements */
+body.light-theme {
+  /* Result Section */
+  .result {
+    border-color: #e0e0e0; /* Lighter border */
+    background-color: #ffffff; /* White background */
+
+    &.perfect {
+      border-left-color: #28a745; /* Green border */
+      color: #333; /* Dark text */
+    }
+    &.good {
+      border-left-color: #ffc107; /* Yellow border */
+      color: #333; /* Dark text */
+    }
+    &.bad {
+      border-left-color: #dc3545; /* Red border */
+      color: #333; /* Dark text */
+    }
+  }
+
+  .result-grade {
+     /* Color inherited from parent .result class */
+  }
+
+  .result-score {
+    /* Use lighter, less opaque backgrounds for light theme */
+    &.perfect {
+      background-color: rgba(40, 167, 69, 0.1); /* Subtle green */
+      color: #28a745; /* Green text */
+    }
+    &.good {
+      background-color: rgba(255, 193, 7, 0.1); /* Subtle yellow */
+      color: #ffc107; /* Yellow text */
+    }
+    &.bad {
+      background-color: rgba(220, 53, 69, 0.1); /* Subtle red */
+      color: #dc3545; /* Red text */
+    }
+  }
+
+  .result-description {
+    background: #f8f8f8; /* Light grey background */
+    color: #555; /* Darker text */
+  }
+
+  /* Characteristic Values */
+  .char-value {
+    background-color: #f8f8f8; /* Light grey background */
+    border-color: #e0e0e0; /* Lighter border */
+    color: #333; /* Dark text */
+
+    &.original {
+       color: #666; /* Slightly lighter text than processed/final */
+    }
+
+    &.perfect {
+      background-color: rgba(40, 167, 69, 0.1); /* Subtle green */
+      border-color: #28a745; /* Green border */
+      color: #28a745; /* Green text */
+    }
+    &.good {
+      background-color: rgba(255, 193, 7, 0.1); /* Subtle yellow */
+      border-color: #ffc107; /* Yellow border */
+      color: #ffc107; /* Yellow text */
+    }
+    &.bad {
+      background-color: rgba(220, 53, 69, 0.1); /* Subtle red */
+      border-color: #dc3545; /* Red border */
+      color: #dc3545; /* Red text */
+    }
+     &.neutral {
+       background-color: #f8f8f8;
+       border-color: #e0e0e0;
+       color: #333;
+    }
+  }
+
+  /* Arrows */
+  .char-arrow {
+    color: #666; /* Darker grey for better visibility */
+
+    &.arrow-improve {
+       color: #28a745; /* Green */
+    }
+    &.arrow-worsen {
+      color: #dc3545; /* Red */
+    }
+    &.arrow-neutral {
+       color: #666; /* Darker grey */
+    }
+  }
+
+  /* Toggle Sections */
+  .toggle-section {
+    background: #f8f8f8; /* Light grey background */
+    border-color: #e0e0e0; /* Light border */
+  }
+
+  .toggle-header h3 {
+    color: #3e2723; /* Dark brown, matches light theme primary color */
+  }
+
+  .toggle-icon {
+    color: #555; /* Darker grey icon */
+  }
+
+  .toggle-content {
+     background-color: #ffffff; /* White background for content */
+  }
+
+  .content-inner {
+     background-color: #ffffff; /* White background for inner content */
+  }
+
+  /* Impact Items */
+  .impact-item {
+    background-color: #ffffff; /* White background */
+    border-color: #e0e0e0; /* Light border */
+  }
+
+  .impact-char {
+    color: #3e2723; /* Dark brown */
+  }
+
+  .impact-desc {
+    color: #555; /* Darker grey text */
+  }
+
+  /* Explanation Sections */
+  .explanation {
+    background: #f8f8f8; /* Light grey background */
+    border-color: #e0e0e0; /* Light border */
+  }
+
+  .explanation h3 {
+    color: #3e2723; /* Dark brown */
+  }
+
+  .explanation p {
+    color: #555; /* Darker grey text */
+  }
+
+  /* Profile Transition Selects */
+  /* Removing light theme specific profile-transition block */
 }
