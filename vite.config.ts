@@ -2,6 +2,9 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+  build: {
+    sourcemap: true,
+  },
   plugins: [
     VitePWA({
       includeAssets: [
@@ -33,9 +36,14 @@ export default defineConfig({
           },
         ],
       },
+      workbox: {
+        runtimeCaching: [
+          {
+            handler: 'NetworkFirst',
+            urlPattern: /.*/,
+          }
+        ]
+      }
     }),
   ],
-  build: {
-    sourceMap: true
-  }
 });
