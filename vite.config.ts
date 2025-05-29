@@ -43,7 +43,8 @@ export default defineConfig({
             urlPattern: /.*/,
           }
         ]
-      }
+      },
+      injectRegister: null
     }),
   ],
 });
