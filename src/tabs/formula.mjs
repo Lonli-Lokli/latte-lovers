@@ -22,10 +22,10 @@ function clamp(value, min, max) {
 
 // Define ideal ranges for latte characteristics
 const idealLatteRanges = {
-  acidity: { min: 4, max: 6 },
+  acidity: { min: 4, max: 7 },
   body: { min: 6, max: Infinity }, // Higher body is always better for raw score
   sweetness: { min: 5, max: Infinity }, // Higher sweetness is always better for raw score (no upper penalty)
-  bitterness: { min: 3, max: 5 },
+  bitterness: { min: 3, max: 6 },
   balance: { min: 7, max: Infinity }, // Higher balance is always better for raw score
 };
 
@@ -272,9 +272,9 @@ function updateDisplay() {
     const procElement = document.getElementById(`${char}-proc`);
     const finalElement = document.getElementById(`${char}-final`);
 
-    origElement.textContent = origValue;
-    procElement.textContent = procValue;
-    finalElement.textContent = finalValue;
+    origElement.textContent = origValue.toFixed(1);
+    procElement.textContent = procValue.toFixed(1);
+    finalElement.textContent = finalValue.toFixed(1);
 
     // Apply color classes to characteristic values
     // Original value uses neutral style, processed and final get color based on range
