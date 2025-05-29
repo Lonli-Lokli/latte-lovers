@@ -1,0 +1,147 @@
+<div class="formula-container">
+
+  <div class="profile-transition">
+    <div class="profile-stage">
+      <div class="floating-label">
+        <select id="country" value="">
+          <option value="" disabled selected></option> <!-- Placeholder -->
+        </select>
+        <label for="country">Origin</label>
+      </div>
+    </div>
+    <span class="arrow">→</span>
+    <div class="profile-stage">
+      <div class="floating-label">
+        <select id="processing" value="">
+          <option value="" disabled selected></option> <!-- Placeholder -->
+        </select>
+        <label for="processing">Process</label>
+      </div>
+    </div>
+    <span class="arrow">→</span>
+    <div class="profile-stage">
+      <div class="floating-label">
+        <select id="roasting" value="">
+          <option value="" disabled selected></option> <!-- Placeholder -->
+        </select>
+        <label for="roasting">Roast</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="result" id="formula-result">
+    <div class="result-header">
+      <div class="result-main">
+        <span class="result-emoji" id="formula-emoji"></span>
+        <div class="result-grade" id="formula-grade"></div>
+      </div>
+      <div class="result-score" id="formula-score"></div>
+    </div>
+    <div class="result-description" id="formula-description"></div>
+  </div>
+
+  <div class="characteristics">
+    <div class="char-item">
+      <div class="char-name">Acidity</div>
+      <div class="char-values">
+        <span class="char-value original" id="acidity-orig">7</span>
+        <span class="char-arrow">→</span>
+        <span class="char-value processed" id="acidity-proc">6</span>
+        <span class="char-arrow">→</span>
+        <span class="char-value final" id="acidity-final">5</span>
+      </div>
+    </div>
+    <div class="char-item">
+      <div class="char-name">Body</div>
+      <div class="char-values">
+        <span class="char-value original" id="body-orig">6</span>
+        <span class="char-arrow">→</span>
+        <span class="char-value processed" id="body-proc">6</span>
+        <span class="char-arrow">→</span>
+        <span class="char-value final" id="body-final">7</span>
+      </div>
+    </div>
+    <div class="char-item">
+      <div class="char-name">Sweetness</div>
+      <div class="char-values">
+        <span class="char-value original" id="sweetness-orig">5</span>
+        <span class="char-arrow">→</span>
+        <span class="char-value processed" id="sweetness-proc">5</span>
+        <span class="char-arrow">→</span>
+        <span class="char-value final" id="sweetness-final">6</span>
+      </div>
+    </div>
+    <div class="char-item">
+      <div class="char-name">Bitterness</div>
+      <div class="char-values">
+        <span class="char-value original" id="bitterness-orig">4</span>
+        <span class="char-arrow">→</span>
+        <span class="char-value processed" id="bitterness-proc">4</span>
+        <span class="char-arrow">→</span>
+        <span class="char-value final" id="bitterness-final">5</span>
+      </div>
+    </div>
+    <div class="char-item">
+      <div class="char-name">Balance</div>
+      <div class="char-values">
+        <span class="char-value original" id="balance-orig">8</span>
+        <span class="char-arrow">→</span>
+        <span class="char-value processed" id="balance-proc">8</span>
+        <span class="char-arrow">→</span>
+        <span class="char-value final" id="balance-final">7</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="toggle-section">
+    <div class="toggle-header" onclick="toggleSection('scoring')">
+      <h3>Scoring Breakdown</h3>
+      <span class="toggle-icon" id="scoring-icon">▼</span>
+    </div>
+    <div class="toggle-content" id="scoring-content">
+      <div class="content-inner">
+        <div class="explanation">
+          <h3>Formula Components</h3>
+          <p><strong>Base Score:</strong> Balance×0.3 + Body×0.3 + Sweetness×0.25 + Acidity×0.2</p>
+          <p><strong>Penalties:</strong> -0.15×(Acidity-7) if Acidity > 7, -0.2×(Bitterness-6) if Bitterness > 6, -0.1×(6-Sweetness) if Sweetness < 6</p>
+          <p><strong>Current:</strong> <span id="score-breakdown">7×0.3 + 6×0.3 + 5×0.25 + 5×0.2 = 85</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toggle-section">
+    <div class="toggle-header" onclick="toggleSection('processing')">
+      <h3>Processing Impact</h3>
+      <span class="toggle-icon" id="processing-icon">▼</span>
+    </div>
+    <div class="toggle-content" id="processing-content">
+      <div class="content-inner" id="processing-details">
+        <div class="impact-item">
+          <div class="impact-char">Acidity Impact</div>
+          <div class="impact-desc">Washed process reduces acidity by 1 point, creating cleaner cup profile</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toggle-section">
+    <div class="toggle-header" onclick="toggleSection('roasting')">
+      <h3>Roasting Impact</h3>
+      <span class="toggle-icon" id="roasting-icon">▼</span>
+    </div>
+    <div class="toggle-content" id="roasting-content">
+      <div class="content-inner" id="roasting-details">
+        <div class="impact-item">
+          <div class="impact-char">Body Enhancement</div>
+          <div class="impact-desc">Light roast increases body by 1 point while preserving origin characteristics</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="explanation">
+    <h3>For Perfect Latte</h3>
+    <p><strong>Body (6-8):</strong> Provides mouthfeel and texture that balances with milk. <strong>Sweetness (5-7):</strong> Complements milk's natural sweetness without overpowering. <strong>Low Bitterness (3-5):</strong> Prevents harsh aftertaste when mixed with milk. <strong>Moderate Acidity (4-6):</strong> Adds brightness without cutting through milk harshly.</p>
+  </div>
+</div> 

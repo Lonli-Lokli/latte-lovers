@@ -49,7 +49,7 @@ body {
     var(--header-gradient-end) 100%
   );
   min-height: 100dvh;
-  padding: 20px;
+  padding: 0;
   color: var(--text-color);
   transition: all 0.3s ease;
 }
@@ -67,7 +67,9 @@ body.light-theme {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: all 0.3s ease;
-  max-height: 100dvh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
 body.light-theme .container {
@@ -85,6 +87,8 @@ body.light-theme .container {
   text-align: center;
   padding: 15px;
   position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 body.light-theme .header {
@@ -185,8 +189,9 @@ body.light-theme .header {
 
 .form-container {
   padding: 20px 15px;
-  overflow-y: auto; /* Allow scrolling within form if needed */
+  overflow-y: auto; /* Keep parent scroll for overall form if needed */
   max-height: calc(100dvh - 120px); /* Account for header height */
+  position: relative; /* Add relative positioning */
 }
 
 .form-group {
@@ -200,13 +205,14 @@ body.light-theme .header {
 
 .floating-label label {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 0.6rem;
+  left: 0.7rem;
   color: var(--text-color);
   transition: all 0.3s ease;
   pointer-events: none;
   background: var(--surface-color);
-  padding: 0 5px;
+  padding: 0 3px;
+  font-size: 0.875rem;
 }
 
 .floating-label select,
@@ -231,14 +237,18 @@ body.light-theme .header {
 .floating-label select:focus + label,
 .floating-label input:focus + label,
 .floating-label select:not([value=""]):not(:focus) + label,
-.floating-label input:not(:placeholder-shown) + label {
-  top: -10px;
-  font-size: 12px;
+.floating-label input:not(:placeholder-shown) + label,
+.floating-label.has-value label {
+  top: -0.4rem;
+  font-size: 0.7rem;
   color: var(--primary-color);
+  background: var(--surface-color);
+  padding: 0 0.2rem;
 }
 
 .floating-label select:not([value=""]):not(:focus) + label,
-.floating-label input:not(:placeholder-shown) + label {
+.floating-label input:not(:placeholder-shown) + label,
+.floating-label.has-value label {
   color: var(--text-color);
 }
 
@@ -323,27 +333,44 @@ body.light-theme .check-btn:hover {
 }
 
 .result {
-  margin-top: 15px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  animation: slideUp 0.4s ease;
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: background-color 0.3s ease; /* Smooth transition for background change */
+  border: 1px solid var(--border-color); /* Add a default border */
+  background-color: var(--surface-color); /* Default subtle background */
+  /* Remove previous colored backgrounds */
 }
 
 .result.perfect {
-  background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+  /* Subtle perfect state using border and text color */
+  background-color: var(--surface-color); /* Keep subtle background */
+  border: 1px solid var(--border-color); /* Default border */
+  border-left: 4px solid #28a745; /* Green left border */
+  color: var(--text-color); /* Keep text readable */
 }
 
 .result.good {
-  background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+  /* Subtle good state using border and text color */
+   background-color: var(--surface-color); /* Keep subtle background */
+  border: 1px solid var(--border-color); /* Default border */
+  border-left: 4px solid #ffc107; /* Yellow left border */
+   color: var(--text-color);
 }
 
 .result.bad {
-  background: linear-gradient(135deg, #f44336 0%, #ef5350 100%);
+  /* Subtle bad state using border and text color */
+   background-color: var(--surface-color); /* Keep subtle background */
+  border: 1px solid var(--border-color); /* Default border */
+  border-left: 4px solid #dc3545; /* Red left border */
+   color: var(--text-color);
 }
 
 .result-header {
-  padding: 16px;
+  padding: 12px 15px; /* Reduced padding */
   color: white;
   position: relative;
   display: flex;
@@ -355,28 +382,56 @@ body.light-theme .check-btn:hover {
   display: flex;
   align-items: center;
   gap: 12px;
+  /* Make grade text color match border for emphasis */
+  .result-grade {
+    font-size: 16px;
+    font-weight: 600;
+    /* Color set by parent .result class */
+  }
 }
 
-.result-emoji {
-  font-size: 24px;
+.result.perfect .result-main .result-grade {
+  color: #28a745;
 }
 
-.result-grade {
-  font-size: 16px;
-  font-weight: 600;
+.result.good .result-main .result-grade {
+  color: #ffc107;
+}
+
+.result.bad .result-main .result-grade {
+  color: #dc3545;
 }
 
 .result-score {
-  background: rgba(255, 255, 255, 0.2);
+  /* Apply specific background based on result class */
   padding: 4px 8px;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
   backdrop-filter: blur(4px);
+  border: 1px solid transparent; /* Default transparent border */
+}
+
+.result.perfect .result-score {
+  background-color: #28a74520; /* Translucent green background */
+  border-color: #28a745; /* Green border */
+  color: #28a745; /* Green text */
+}
+
+.result.good .result-score {
+  background-color: #ffc10720; /* Translucent yellow background */
+  border-color: #ffc107; /* Yellow border */
+  color: #ffc107; /* Yellow text */
+}
+
+.result.bad .result-score {
+  background-color: #dc354520; /* Translucent red background */
+  border-color: #dc3545; /* Red border */
+  color: #dc3545; /* Red text */
 }
 
 .result-description {
-  padding: 12px 16px;
+  padding: 10px 15px; /* Reduced padding */
   font-size: 13px;
   line-height: 1.4;
   color: white;
@@ -630,31 +685,33 @@ body.light-theme .check-btn:hover {
     max-height: calc(100dvh - 100px); /* Slightly reduced for mobile */
   }
 
-  .floating-label select {
-    padding: 12px;
-    font-size: 13px;
-    height: 44px; /* Ensure consistent height */
-    -webkit-appearance: none; /* Remove default iOS styling */
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 12px;
-    padding-right: 30px;
-  }
-
-  .floating-label input {
-    padding: 12px;
-    font-size: 13px;
-    height: 44px; /* Ensure consistent height */
-    -webkit-appearance: none; /* Remove default iOS styling */
-    appearance: none;
-  }
-
   .floating-label label {
-    top: 10px;
-    left: 10px;
-    font-size: 13px;
+    top: 0.75rem;
+    left: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .floating-label select,
+  .floating-label input {
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    height: 40px;
+  }
+
+  .floating-label select:focus + label,
+  .floating-label input:focus + label,
+  .floating-label select:not([value=""]):not(:focus) + label,
+  .floating-label input:not(:placeholder-shown) + label,
+  .floating-label.has-value label {
+    top: -0.5rem;
+    font-size: 0.75rem;
+    padding: 0 0.25rem;
+  }
+
+  .floating-label select:not([value=""]):not(:focus) + label,
+  .floating-label input:not(:placeholder-shown) + label,
+  .floating-label.has-value label {
+    color: var(--text-color);
   }
 
   .blend-group {
@@ -682,15 +739,153 @@ body.light-theme .check-btn:hover {
     left: 16px;
     font-size: 12px;
   }
+
+  /* Mobile styles for profile transition */
+  .profile-transition {
+    flex-direction: column; /* Stack items vertically */
+    gap: 1rem; /* Add vertical gap between stages */
+
+    .profile-stage {
+      width: 100%; /* Stages take full width */
+    }
+
+    .arrow {
+      display: none; /* Hide arrows in mobile view */
+  }
 }
 
 /* Tab Navigation */
 .tab-navigation {
-  display: flex;
-  gap: 0.5rem;
+    margin: 0.5rem 0.75rem;
+    gap: 0.25rem;
+  }
+
+  .tab-btn {
+    padding: 0.375rem 0.5rem;
+    min-height: 32px;
+    font-size: 0.8125rem;
+  }
+
+  .tab-icon {
+    font-size: 0.9375rem;
+  }
+
+  .filter-controls {
+    flex-direction: column; /* Stack items vertically on mobile */
+    gap: 0.75rem; /* Adjust gap for vertical stacking */
+    margin-bottom: 1rem;
+  }
+
+  .filter-controls .custom-select.floating-label {
+    width: 100%; /* Full width on mobile */
+    margin-bottom: 0; /* Remove individual margin since gap is on flex container */
+  }
+
+  .custom-select .select-selected {
+    /* These should already be set but double-check */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 12px; /* Ensure consistent padding */
+  }
+
+  /* Adjust floating label on mobile if needed - simplify selector */
+  .custom-select.floating-label label {
+    top: 10px; /* Slightly less from top on mobile */
+    left: 10px; /* Slightly less from left on mobile */
+    font-size: 13px; /* Slightly smaller font size */
+  }
+
+  .custom-select.floating-label .select-selected.has-selection + label,
+  .custom-select.floating-label .select-selected:focus + label,
+  .custom-select.floating-label .select-arrow-active + label {
+    top: -10px; /* Position label above */
+    font-size: 12px; /* Smaller font size when floating */
+    background: var(--surface-color); /* Match background */
+    padding: 0 5px; /* Add padding */
+    color: var(--primary-color); /* Primary color when active */
+  }
+
+  /* Leaders Table */
+  .leaders-container {
+    padding: 0.5rem;
+  }
+  .leaders-container h2 {
+    margin-bottom: 0.75rem;
+  }
+  .leaders-table thead th,
+  .leaders-table tbody td {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  /* Mobile column widths */
+  .leaders-table th:nth-child(1),
+  .leaders-table td:nth-child(1) {
+    text-align: center;
+  } /* Rank */
+  .leaders-table th:nth-child(5),
+  .leaders-table td:nth-child(5) {
+    text-align: center;
+  } /* Score */
+
+  /* Mobile flexible columns - adjust min-width if needed */
+  .leaders-table th:nth-child(2),
+  .leaders-table td:nth-child(2) {
+  }
+  .leaders-table th:nth-child(3),
+  .leaders-table td:nth-child(3) {
+  }
+  .leaders-table th:nth-child(4),
+  .leaders-table td:nth-child(4) {
+  }
+
+  .table-score {
+    /* Mobile score styling */
+    padding: 2px 4px;
+    font-size: 0.75rem;
+  }
+
+  .chart-legend {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .legend-item {
+    font-size: 0.75rem;
+  }
+
+  .legend-color {
+    width: 8px;
+    height: 8px;
+  }
+
+  .processing-abbreviation-mobile {
+    width: 26px;
+    height: 26px;
+    font-size: 0.7rem;
+  }
+
+  .processing-fullname-desktop {
+    display: none !important;
+  }
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  flex-shrink: 0;
   margin: 0.75rem 1rem;
   padding: 0;
+  height: auto;
+  box-sizing: border-box;
+  display: flex;
+  gap: 0.5rem;
   border-bottom: 1px solid var(--border-color);
+  width: 100%;
 }
 
 .tab-btn {
@@ -733,8 +928,14 @@ body.light-theme .check-btn:hover {
 /* Content Container */
 .content-container {
   position: relative;
-  min-height: 400px;
+  flex-grow: 1;
+  overflow-y: auto;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 0;
+  max-height: none;
 }
 
 /* Loading Spinner */
@@ -1067,25 +1268,79 @@ body.dark-theme select {
 
 body.dark-theme select:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px var(--button-shadow);
+  box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.2);
 }
 
-/* Styling for options within the select - browser dependent */
+/* Styling for options within the select */
 body.dark-theme select option {
   background-color: var(--surface-color);
   color: var(--text-color);
+  padding: 0.75rem;
 }
 
-/* Attempt to style selected option - often browser dependent */
+/* Selected option styling */
 body.dark-theme select option:checked {
   background-color: var(--primary-color);
-  color: white; /* Or a suitable text color for primary background */
+  color: white;
+}
+
+/* Hover state for options */
+body.dark-theme select option:hover {
+  background-color: var(--surface-hover-color);
 }
 
 /* Desktop adjustments */
 @media (min-width: 769px) {
   .container {
-    max-width: 700px;
+    max-width: 900px; /* Keep desktop container max-width */
+  }
+
+  .formula-container {
+     /* max-width: 500px; Remove desktop formula container max-width */
+     padding: 2rem; /* Keep padding on desktop */
+  }
+
+  .profile-transition {
+    gap: 0.7rem; /* Keep reduced gap for desktop */
+    align-items: center; /* Ensure items are vertically centered */
+
+    .profile-stage {
+      flex-basis: 0;
+      flex-grow: 1;
+    }
+
+    select {
+       min-width: 180px; /* Further increased min-width for desktop selects */
+       padding: 0.5rem 2rem 0.5rem 0.6rem; /* Keep slightly reduced left padding */
+       font-size: 0.875rem; /* Keep font size for desktop */
+       height: 40px; /* Keep height for desktop */
+    }
+
+    .arrow {
+        padding: 0 0.6rem; /* Keep reduced padding around arrows on desktop */
+        font-size: 1.25rem; /* Keep arrow size for desktop */
+        /* Ensure perfect vertical alignment */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1; /* Explicitly set line-height to 1 for centering */
+      }
+  }
+
+   .floating-label label {
+    top: 0.75rem; /* Keep initial top for desktop */
+    left: 0.75rem; /* Keep initial left for desktop */
+    font-size: 0.875rem; /* Keep font size for desktop */
+  }
+
+  .floating-label select:focus + label,
+  .floating-label input:focus + label,
+  .floating-label select:not([value=""]):not(:focus) + label,
+  .floating-label input:not(:placeholder-shown) + label,
+  .floating-label.has-value label {
+    top: -0.5rem; /* Keep floated top position for desktop */
+    font-size: 0.75rem; /* Keep floated font size for desktop */
+    padding: 0 0.25rem; /* Keep floated padding for desktop */
   }
 }
 
@@ -1147,8 +1402,465 @@ body.dark-theme select option:checked {
   }
 }
 
-.table-body {
+/* Formula Tab Styles */
+.formula-container {
+  background-color: var(--background-color); /* Ensure background is opaque */
+  border-radius: 8px;
+  padding: 15px; /* Reduced padding */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px; /* Reduced margin */
+  max-height: none; /* Remove fixed max-height */
+  overflow-y: visible; /* Allow content to push container height */
+  display: flex;
+  flex-direction: column;
 }
 
-.table-row {
+.profile-transition {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface-color);
+  border-radius: 10px;
+  margin-bottom: 15px; /* Reduced margin */
+  gap: 0.1rem;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+
+  .profile-stage {
+    flex: 1;
+    min-width: 0;
+
+    .floating-label {
+       width: 100%;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.45rem 1.8rem 0.45rem 0.7rem;
+      font-size: 0.875rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--surface-color);
+      color: var(--text-color);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.7rem center;
+      background-size: 0.8rem;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      height: 38px;
+
+      &:hover {
+        border-color: var(--primary-color);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.1);
+      }
+
+      option {
+        background: var(--surface-color);
+        color: var(--text-color);
+        padding: 0.4rem;
+      }
+    }
+  }
+
+  .arrow {
+    color: var(--text-color);
+    opacity: 0.5;
+    font-size: 1.1rem;
+    padding: 0 0.5rem;
+  }
+}
+
+.score-display {
+  background: linear-gradient(135deg, #d4a574, #8b4513);
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(212, 165, 116, 0.2);
+}
+
+.score-value {
+  font-size: 36px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.score-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.characteristics {
+  margin-bottom: 15px; /* Reduced margin */
+  display: grid;
+  grid-template-columns: 1fr repeat(3, auto); /* Name | Original | Processed | Final */
+  gap: 6px 12px; /* Reduced gap */
+  align-items: center;
+  padding: 0 15px; /* Reduced padding */
+}
+
+.char-item {
+  display: contents; /* Make the grid children direct participants of the parent grid */
+}
+
+.char-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #d4a574;
+  grid-column: 1;
+}
+
+.char-values {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  grid-column: 2 / span 3; /* Span across the value columns */
+}
+
+.char-value {
+  display: inline-block;
+  min-width: 30px; /* Increased min-width for consistent size */
+  text-align: center;
+  padding: 4px 6px; /* Adjusted padding */
+  border-radius: 4px;
+  background-color: var(--surface-color); /* Default background for all values */
+  border: 1px solid var(--border-color); /* Default border for all values */
+  color: var(--text-color); /* Default text color */
+  font-size: 14px; /* Ensure consistent font size */
+}
+
+/* Specific colors for characteristic values based on score range */
+.char-value.perfect {
+  background-color: #28a74520; /* Translucent green */
+  border-color: #28a745;
+  color: #28a745;
+}
+
+.char-value.good {
+  background-color: #ffc10720; /* Translucent yellow */
+  border-color: #ffc107;
+  color: #ffc107;
+}
+
+.char-value.bad {
+  background-color: #dc354520; /* Translucent red */
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.char-value.neutral {
+   background-color: var(--surface-color);
+   border-color: var(--border-color);
+   color: var(--text-color);
+}
+
+.char-value.original {
+  /* Subtle style for original value - keep neutral background */
+  background-color: var(--surface-color);
+  border-color: var(--border-color);
+  color: var(--text-color-lighter); /* Slightly lighter text */
+}
+
+/* Remove specific colors for processed and final from previous step */
+.char-value.processed {
+  font-weight: normal; /* Reset font weight */
+  color: var(--text-color); /* Reset color */
+}
+
+.char-value.final {
+  font-weight: normal; /* Reset font weight */
+  color: var(--text-color); /* Reset color */
+}
+
+.char-arrow {
+  color: var(--text-color-lighter); /* Default less prominent arrows */
+  margin: 0 4px; /* Reduced margin */
+  font-size: 1rem; /* Ensure consistent size */
+  transition: color 0.3s ease; /* Smooth transition for color */
+}
+
+/* Arrow colors based on impact */
+.arrow-improve {
+  color: #28a745; /* Green for improvement */
+}
+
+.arrow-worsen {
+  color: #dc3545; /* Red for worsening */
+}
+
+.arrow-neutral {
+  color: var(--text-color-lighter); /* Gray for neutral/no significant change */
+}
+
+.toggle-section {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  margin-bottom: 12px; /* Reduced margin */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.toggle-header {
+  padding: 12px; /* Reduced padding */
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.toggle-header h3 {
+  font-size: 15px; /* Slightly smaller font size */
+  color: #d4a574;
+  font-weight: 600;
+}
+
+.toggle-icon {
+  transition: transform 0.3s ease;
+  color: #666;
+}
+
+.toggle-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+  padding: 0 10px; /* Add horizontal padding */
+  background-color: var(--surface-color-darker); /* Background for content */
+  border-radius: 0 0 8px 8px;
+}
+
+.toggle-content.active {
+  max-height: 500px; /* Sufficient height, adjust as needed */
+  padding: 10px; /* Add padding when active */
+}
+
+.content-inner {
+  background-color: var(--surface-color-darker); /* Ensure background is consistent */
+}
+
+.impact-item {
+  background-color: var(--surface-color); /* Use a subtle background */
+  border: 1px solid var(--border-color); /* Add a border */
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.impact-char {
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.impact-desc {
+  font-size: 0.9em;
+  color: var(--text-color-lighter);
+}
+
+.explanation {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  padding: 15px; /* Reduced padding */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 15px; /* Reduced margin */
+}
+
+.explanation h3 {
+  font-size: 15px; /* Slightly smaller font size */
+  color: #d4a574;
+  margin-bottom: 10px; /* Reduced margin */
+  font-weight: 600;
+}
+
+.explanation p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #b8b8b8;
+}
+
+@media (max-width: 320px) {
+  .formula-container {
+    padding: 16px;
+  }
+  
+  .profile-transition {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .arrow {
+    transform: rotate(90deg);
+    justify-self: center;
+  }
+}
+
+/* Mobile adjustments for content container height */
+@media (max-width: 768px) {
+  .content-container {
+    /* max-height: calc(100dvh - 100px); */
+  }
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  .formula-container {
+    max-width: 800px; /* Restore a reasonable max-width on desktop */
+    margin: 20px auto; /* Center the container */
+    width: 100%;
+    padding: 20px; /* Keep desktop padding */
+  }
+
+  .profile-transition {
+    margin-bottom: 20px; /* Keep desktop margin */
+    .floating-label select {
+      min-width: 150px; /* Adjust min-width slightly */
+      padding-right: 30px; /* Make space for arrow */
+    }
+  }
+
+  .characteristics {
+     margin-bottom: 20px; /* Keep desktop margin */
+     padding: 0 20px; /* Keep desktop padding */
+     gap: 8px 16px; /* Keep desktop gap */
+  }
+
+  .toggle-section {
+    margin-bottom: 16px; /* Keep desktop margin */
+  }
+
+  .toggle-header {
+    padding: 16px; /* Keep desktop padding */
+  }
+
+  .toggle-header h3 {
+    font-size: 16px; /* Keep desktop font size */
+  }
+
+  .explanation {
+    padding: 16px; /* Keep desktop padding */
+    margin-bottom: 16px; /* Keep desktop margin */
+  }
+
+  .explanation h3 {
+    font-size: 16px; /* Keep desktop font size */
+    margin-bottom: 12px; /* Keep desktop margin */
+  }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] {
+  .floating-label select {
+     background-color: var(--input-background-color-dark);
+     color: var(--input-text-color-dark);
+     border-color: var(--input-border-color-dark);
+  }
+
+  .floating-label label {
+    color: var(--input-label-color-dark);
+  }
+
+  .char-value {
+    background-color: var(--surface-color-darker); /* Darker background */
+    border-color: var(--border-color-dark); /* Darker border */
+    color: var(--text-color-dark);
+  }
+
+   .char-value.original {
+    background-color: var(--surface-color-darker);
+    border-color: var(--border-color-dark);
+    color: var(--text-color-lighter-dark);
+  }
+
+  .char-value.processed {
+    background-color: var(--surface-color-darker);
+    border-color: var(--border-color-dark);
+    color: var(--accent-color-dark); /* Use accent color in dark theme */
+  }
+
+  .char-value.final {
+    background-color: var(--surface-color-darker);
+    border-color: var(--border-color-dark);
+    color: var(--primary-color-dark); /* Use primary color in dark theme */
+  }
+
+  .impact-item {
+    background-color: var(--surface-color-darker); /* Darker background */
+    border-color: var(--border-color-dark); /* Darker border */
+    color: var(--text-color-dark);
+  }
+
+  .impact-char {
+    color: var(--text-color-dark);
+  }
+
+  .impact-desc {
+    color: var(--text-color-lighter-dark);
+  }
+
+  .result.perfect {
+    background-color: var(--surface-color);
+    border-color: var(--border-color-dark);
+    border-left-color: #28a745; /* Green left border for dark theme */
+    color: var(--text-color-dark);
+  }
+
+  .result.good {
+     background-color: var(--surface-color);
+    border-color: var(--border-color-dark);
+    border-left-color: #ffc107; /* Yellow left border for dark theme */
+     color: var(--text-color-dark);
+  }
+
+  .result.bad {
+     background-color: var(--surface-color);
+    border-color: var(--border-color-dark);
+    border-left-color: #dc3545; /* Red left border for dark theme */
+     color: var(--text-color-dark);
+  }
+
+  .result.perfect .result-main .result-grade {
+    color: #28a745;
+  }
+
+  .result.good .result-main .result-grade {
+    color: #ffc107;
+  }
+
+  .result.bad .result-main .result-grade {
+    color: #dc3545;
+  }
+
+  .result-score {
+     /* Apply specific background based on result class for dark theme */
+  }
+
+  .result.perfect .result-score {
+    background-color: #28a74520; /* Translucent green background */
+    border-color: #28a745; /* Green border */
+    color: #28a745; /* Green text */
+  }
+
+  .result.good .result-score {
+    background-color: #ffc10720; /* Translucent yellow background */
+    border-color: #ffc107; /* Yellow border */
+    color: #ffc107; /* Yellow text */
+  }
+
+  .result.bad .result-score {
+    background-color: #dc354520; /* Translucent red background */
+    border-color: #dc3545; /* Red border */
+    color: #dc3545; /* Red text */
+  }
 }

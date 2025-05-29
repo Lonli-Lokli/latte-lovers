@@ -1,0 +1,16 @@
+# robots.txt for Latte Lovers
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /styles/
+Allow: /scripts/
+Allow: /assets/
+
+# Disallow access to sensitive directories
+Disallow: /node_modules/
+Disallow: /src/
+Disallow: /.git/
+Disallow: /.github/
+
+# Sitemap location (uncomment and update when you have a sitemap)
+# Sitemap: https://your-domain.com/sitemap.xml 

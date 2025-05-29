@@ -35,4 +35,7 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    sourceMap: true
+  }
 });

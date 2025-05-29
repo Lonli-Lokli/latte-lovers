@@ -63,7 +63,7 @@
     <meta name="target" content="all" />
     <meta name="HandheldFriendly" content="true" />
     <meta name="MobileOptimized" content="width" />
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Latte Lovers" />
     <link rel="apple-touch-icon" href="192x192.png" />
@@ -96,15 +96,8 @@
       </div>
 
       <!-- Tab Navigation -->
-      <nav class="tab-navigation">
-        <button class="tab-btn active" data-tab="checker">
-          <span class="tab-icon">🔍</span>
-          <span class="tab-label">Coffee Checker</span>
-        </button>
-        <button class="tab-btn" data-tab="top">
-          <span class="tab-icon">🔝</span>
-          <span class="tab-label">Leaders</span>
-        </button>
+      <nav class="tab-navigation" id="tabNavigation">
+        <!-- Tabs will be dynamically inserted here -->
       </nav>
 
       <!-- Content Container -->
@@ -121,8 +114,15 @@
           <span class="close">&times;</span>
         </div>
         <div class="modal-body">
-          <form action="https://formsubmit.co/lonli.lokli@gmail.com" method="POST">
-            <input type="hidden" name="_subject" value="New message from Latte Coffee Checker" />
+          <form
+            action="https://formsubmit.co/lonli.lokli@gmail.com"
+            method="POST"
+          >
+            <input
+              type="hidden"
+              name="_subject"
+              value="New message from Latte Coffee Checker"
+            />
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_next" value="#contact-success" />
 
@@ -154,81 +154,42 @@
 
     <script type="module">
       import {
-        toggleBlendInputs,
-        validateBlend,
-        checkCoffee,
         toggleTheme,
         openContactModal,
         closeContactModal,
-        coffeeProfiles,
-        processingMethods,
-        generateAndRankLeaders,
-        roastLevelEffects,
-        initializeTooltips,
-        initializeLeadersFilters,
       } from "./src/script.mjs";
+      import {
+        tabs,
+        getEnabledTabs,
+        getDefaultTab,
+        isValidTab,
+      } from "./src/config.js";
+      import { initializeCheckerTab } from "./src/tabs/checker.mjs";
+      import { initializeTopTab } from "./src/tabs/top.mjs";
+      import { initializeFormulaTab } from "./src/tabs/formula.mjs";
 
       // Content cache
       const contentCache = new Map();
-      let currentTab = 'checker';
-
-      // Initialize country options
-      function initializeCountryOptions() {
-        const countrySelects = ["country", "blend1Country", "blend2Country"];
-        const countries = Object.keys(coffeeProfiles).sort();
-
-        countrySelects.forEach((selectId) => {
-          const select = document.getElementById(selectId);
-          if (select) {
-            countries.forEach((country) => {
-              const option = document.createElement("option");
-              option.value = country;
-              option.textContent = country
-                .split("-")
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(" ");
-              select.appendChild(option);
-            });
-          }
-        });
-      }
-
-      // Initialize processing options
-      function initializeProcessingOptions() {
-        const processingSelect = document.getElementById("processing");
-        if (processingSelect) {
-          const methods = Object.entries(processingMethods);
-
-          methods.forEach(([value, { displayName }]) => {
-            const option = document.createElement("option");
-            option.value = value;
-            option.textContent = displayName;
-            if (value === "washed") {
-              option.selected = true;
-            }
-            processingSelect.appendChild(option);
-          });
-        }
-      }
+      let currentTab = getDefaultTab();
 
       // Load tab content
       async function loadTabContent(tabName) {
-        const contentContainer = document.getElementById('content-container');
+        const contentContainer = document.getElementById("content-container");
         if (!contentContainer) {
-          console.error('Content container not found');
+          console.error("Content container not found");
           return;
         }
 
         // Create loading spinner if it doesn't exist
-        let spinner = contentContainer.querySelector('.loading-spinner');
+        let spinner = contentContainer.querySelector(".loading-spinner");
         if (!spinner) {
-          spinner = document.createElement('div');
-          spinner.className = 'loading-spinner';
+          spinner = document.createElement("div");
+          spinner.className = "loading-spinner";
           contentContainer.appendChild(spinner);
         }
 
         // Show loading spinner
-        spinner.classList.remove('hidden');
+        spinner.classList.remove("hidden");
 
         try {
           let content;
@@ -245,66 +206,82 @@
           contentContainer.innerHTML = content;
 
           // Re-add spinner after setting innerHTML
-          spinner = document.createElement('div');
-          spinner.className = 'loading-spinner';
+          spinner = document.createElement("div");
+          spinner.className = "loading-spinner";
           contentContainer.appendChild(spinner);
 
           // Initialize elements and functionality based on tab content
-          if (tabName === 'checker') {
-            initializeCountryOptions();
-            initializeProcessingOptions();
+          switch (tabName) {
+            case "checker":
+              initializeCheckerTab();
+              break;
 
-            // Add event listeners for the loaded content
-            const coffeeTypeSelect = document.getElementById('coffeeType');
-            if (coffeeTypeSelect) {
-              coffeeTypeSelect.addEventListener('change', toggleBlendInputs);
-            }
+            case "top":
+              initializeTopTab();
+              break;
 
-            const blend1Percent = document.getElementById('blend1Percent');
-            const blend2Percent = document.getElementById('blend2Percent');
-            if (blend1Percent && blend2Percent) {
-              blend1Percent.addEventListener('input', validateBlend);
-              blend2Percent.addEventListener('input', validateBlend);
-            }
+            case "formula":
+              initializeFormulaTab();
+              break;
 
-            const checkBtn = document.querySelector('.check-btn');
-            if (checkBtn) {
-              checkBtn.addEventListener('click', checkCoffee);
-            }
-          } else if (tabName === 'top') {
-              // Initialize filters and populate table via filters
-              initializeLeadersFilters(coffeeProfiles, processingMethods, roastLevelEffects);
+            default:
+              console.warn(`No initialization found for tab: ${tabName}`);
           }
-
         } catch (error) {
-          console.error('Error loading tab content:', error);
-          contentContainer.innerHTML = '<div class="error">Failed to load content. Please try again.</div>';
+          console.error("Error loading tab content:", error);
+          contentContainer.innerHTML =
+            '<div class="error">Failed to load content. Please try again.</div>';
         } finally {
           // Hide loading spinner
-          spinner = contentContainer.querySelector('.loading-spinner');
+          spinner = contentContainer.querySelector(".loading-spinner");
           if (spinner) {
-            spinner.classList.add('hidden');
+            spinner.classList.add("hidden");
           }
         }
       }
 
+      // Initialize tab navigation
+      function initializeTabNavigation() {
+        const tabNavigation = document.getElementById("tabNavigation");
+        const enabledTabs = getEnabledTabs();
+
+        tabNavigation.innerHTML = enabledTabs
+          .map(
+            (tab) => `
+          <button class="tab-btn ${
+            tab.id === currentTab ? "active" : ""
+          }" data-tab="${tab.id}">
+            <span class="tab-icon">${tab.icon}</span>
+            <span class="tab-label">${tab.label}</span>
+          </button>
+        `
+          )
+          .join("");
+
+        // Add click handlers
+        tabNavigation.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+        });
+      }
+
       // Handle tab switching
-      function switchTab(tabName) {
+      function switchTab(tabName, initial) {
         // Don't do anything if switching to the same tab
-        if (tabName === currentTab) {
+        if (tabName === currentTab && !initial) {
           return;
         }
 
         // Validate tab name
-        const validTabs = ['top', 'checker'];
-        if (!validTabs.includes(tabName)) {
-          console.warn(`Invalid tab name: ${tabName}. Defaulting to 'checker'`);
-          tabName = 'checker';
+        if (!isValidTab(tabName)) {
+          console.warn(
+            `Invalid tab name: ${tabName}. Defaulting to default tab`
+          );
+          tabName = getDefaultTab();
         }
 
         // Update active tab button
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.tab === tabName);
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.tab === tabName);
         });
 
         // Update URL hash
@@ -317,27 +294,31 @@
 
       // Initialize when DOM is loaded
       document.addEventListener("DOMContentLoaded", () => {
-        // Add tab click handlers
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-          btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-        });
+        // Initialize tab navigation
+        initializeTabNavigation();
 
         // Handle hash changes
-        window.addEventListener('hashchange', () => {
-          const tabName = window.location.hash.slice(1) || 'checker';
+        window.addEventListener("hashchange", () => {
+          const tabName = window.location.hash.slice(1) || getDefaultTab();
           switchTab(tabName);
         });
 
         // Handle initial load
-        const initialTab = window.location.hash.slice(1) || 'checker';
-        switchTab(initialTab);
+        const initialTab = window.location.hash.slice(1) || getDefaultTab();
+        switchTab(initialTab, true);
 
         // Theme toggle
-        document.querySelector(".theme-toggle").addEventListener("click", toggleTheme);
+        document
+          .querySelector(".theme-toggle")
+          .addEventListener("click", toggleTheme);
 
         // Contact modal handlers
-        document.getElementById("contactBtn").addEventListener("click", openContactModal);
-        document.querySelector(".close").addEventListener("click", closeContactModal);
+        document
+          .getElementById("contactBtn")
+          .addEventListener("click", openContactModal);
+        document
+          .querySelector(".close")
+          .addEventListener("click", closeContactModal);
         window.addEventListener("click", (event) => {
           const modal = document.getElementById("contactModal");
           if (event.target === modal) {
@@ -353,7 +334,8 @@
           installButton.classList.add("hidden");
         }
 
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isIOS =
+          /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         if (isIOS) {
           installButton.classList.remove("hidden");
           installButton.addEventListener("click", () => {
