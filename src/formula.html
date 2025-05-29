@@ -94,7 +94,7 @@
   </div>
 
   <div class="toggle-section">
-    <div class="toggle-header" onclick="toggleSection('scoring')">
+    <div class="toggle-header" >
       <h3>Scoring Breakdown</h3>
       <span class="toggle-icon" id="scoring-icon">▼</span>
     </div>
@@ -111,7 +111,7 @@
   </div>
 
   <div class="toggle-section">
-    <div class="toggle-header" onclick="toggleSection('processing')">
+    <div class="toggle-header" >
       <h3>Processing Impact</h3>
       <span class="toggle-icon" id="processing-icon">▼</span>
     </div>
@@ -126,7 +126,7 @@
   </div>
 
   <div class="toggle-section">
-    <div class="toggle-header" onclick="toggleSection('roasting')">
+    <div class="toggle-header" >
       <h3>Roasting Impact</h3>
       <span class="toggle-icon" id="roasting-icon">▼</span>
     </div>
@@ -142,6 +142,11 @@
 
   <div class="explanation">
     <h3>For Perfect Latte</h3>
-    <p><strong>Body (6-8):</strong> Provides mouthfeel and texture that balances with milk. <strong>Sweetness (5-7):</strong> Complements milk's natural sweetness without overpowering. <strong>Low Bitterness (3-5):</strong> Prevents harsh aftertaste when mixed with milk. <strong>Moderate Acidity (4-6):</strong> Adds brightness without cutting through milk harshly.</p>
+    <p>To achieve a high latte score, consider the following based on the formula:</p>
+    <p><strong>Bitterness (Ideally 6 or less):</strong> The formula penalizes bitterness above 6. Keeping bitterness low is crucial to avoid score reduction.</p>
+    <p><strong>Acidity (Ideally 7 or less):</strong> The formula penalizes acidity above 7. Acidity also only contributes positively up to a value of 7. Aim for moderate acidity to avoid penalties and get a positive contribution.</p>
+    <p><strong>Sweetness (Ideally 6 or more):</strong> The formula penalizes sweetness below 6. Higher sweetness values (up to 10) contribute positively to the score without an upper penalty.</p>
+    <p><strong>Body (Ideally 6 or more):</strong> Higher body values (up to 10) contribute positively to the score. A body of 6 or more ensures a good positive contribution.</p>
+    <p><strong>Balance (Ideally 7 or more):</strong> Higher balance values (up to 10) contribute strongly to the score. A balance of 7 or more ensures a significant positive contribution.</p>
   </div>
 </div> 

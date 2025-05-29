@@ -409,25 +409,29 @@ body.light-theme .check-btn:hover {
   font-size: 14px;
   font-weight: 500;
   backdrop-filter: blur(4px);
-  border: 1px solid transparent; /* Default transparent border */
+  /* Remove explicit border here, it's handled by the parent .result border-left */
+  border: none;
 }
 
 .result.perfect .result-score {
-  background-color: #28a74520; /* Translucent green background */
-  border-color: #28a745; /* Green border */
+  /* Use similar styling to .table-score.perfect */
+  background-color: #28a7451a; /* Slightly less opaque green background */
   color: #28a745; /* Green text */
+  border: none; /* Ensure no border on the score itself */
 }
 
 .result.good .result-score {
-  background-color: #ffc10720; /* Translucent yellow background */
-  border-color: #ffc107; /* Yellow border */
+  /* Use similar styling to .table-score.good */
+  background-color: #ffc1071a; /* Slightly less opaque yellow background */
   color: #ffc107; /* Yellow text */
+   border: none;
 }
 
 .result.bad .result-score {
-  background-color: #dc354520; /* Translucent red background */
-  border-color: #dc3545; /* Red border */
+  /* Use similar styling to .table-score.bad */
+  background-color: #dc35451a; /* Slightly less opaque red background */
   color: #dc3545; /* Red text */
+   border: none;
 }
 
 .result-description {
@@ -1844,23 +1848,27 @@ body.dark-theme select option:hover {
 
   .result-score {
      /* Apply specific background based on result class for dark theme */
+     border: none; /* Ensure no border on the score itself */
   }
 
   .result.perfect .result-score {
     background-color: #28a74520; /* Translucent green background */
     border-color: #28a745; /* Green border */
     color: #28a745; /* Green text */
+    border: none;
   }
 
   .result.good .result-score {
     background-color: #ffc10720; /* Translucent yellow background */
     border-color: #ffc107; /* Yellow border */
     color: #ffc107; /* Yellow text */
+    border: none;
   }
 
   .result.bad .result-score {
     background-color: #dc354520; /* Translucent red background */
     border-color: #dc3545; /* Red border */
     color: #dc3545; /* Red text */
+    border: none;
   }
 }
