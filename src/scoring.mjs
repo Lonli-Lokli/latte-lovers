@@ -332,7 +332,7 @@ export const processingMethods = {
 
 export const roastLevelEffects = {
   light: {
-    displayName: "Light Roast",
+    displayName: "Light",
     abbreviation: "L",
     description: "Preserves origin character, bright and acidic",
     effects: {
@@ -344,7 +344,7 @@ export const roastLevelEffects = {
     },
   },
   "light-medium": {
-    displayName: "Light-Medium Roast",
+    displayName: "Light-Medium",
     abbreviation: "LM",
     description:
       "A balanced roast level, between light and medium, offering a blend of origin acidity and developing body and sweetness.",
@@ -357,7 +357,7 @@ export const roastLevelEffects = {
     },
   },
   medium: {
-    displayName: "Medium Roast",
+    displayName: "Medium",
     abbreviation: "M",
     description: "Balanced between origin and roast character",
     effects: {
@@ -369,7 +369,7 @@ export const roastLevelEffects = {
     },
   },
   "medium-dark": {
-    displayName: "Medium-Dark Roast",
+    displayName: "Medium-Dark",
     abbreviation: "MD",
     description:
       "Roasted further to develop richer body and bittersweet notes, with less acidity.",
@@ -382,7 +382,7 @@ export const roastLevelEffects = {
     },
   },
   dark: {
-    displayName: "Dark Roast",
+    displayName: "Dark",
     abbreviation: "D",
     description: "Roast flavors completely dominate, smoky and bitter",
     effects: {

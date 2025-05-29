@@ -2,6 +2,7 @@ import {
   coffeeProfiles,
   processingMethods,
   calculateLatteScore,
+  roastLevelEffects,
   createFinalProfile,
   normalizeScore,
   getCompatibilityGrade
@@ -10,6 +11,7 @@ import {
 export function initializeCheckerTab() {
   initializeCountryOptions();
   initializeProcessingOptions();
+  initializeRoastingOptions();
 
   // Add event listeners for the loaded content
   const coffeeTypeSelect = document.getElementById("coffeeType");
@@ -80,6 +82,23 @@ function initializeProcessingOptions() {
         option.selected = true;
       }
       processingSelect.appendChild(option);
+    });
+  }
+}
+
+function initializeRoastingOptions() {
+  const roastLevelSelect = document.getElementById("roastLevel");
+  if (roastLevelSelect) {
+    const methods = Object.entries(roastLevelEffects);
+
+    methods.forEach(([value, { displayName }]) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = displayName;
+      if (value === "medium") {
+        option.selected = true;
+      }
+      roastLevelSelect.appendChild(option);
     });
   }
 }
