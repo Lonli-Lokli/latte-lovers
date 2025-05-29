@@ -5,6 +5,7 @@ import {
   calculateLatteScore,
   normalizeScore,
   getCompatibilityGrade,
+  characteristicDescriptions
 } from "../scoring.mjs";
 
 // Use effects directly from scoring.mjs
@@ -326,33 +327,42 @@ function updateProcessingDetails() {
   const processing = document.getElementById("processing").value;
   const method = processingMethods[processing];
   const effects = method ? method.effects : {}; // Use empty object if method is null/undefined
+  const description = method ? method.description : 'No description available.'; // Get the description
 
-  let html = "";
+  let html = '';
+
+  // Create a container for the description sub-section
+  html += '<div class="explanation">'; // Use the same class for consistent styling
+  html += `<h3>${method.displayName}</h3>`; // Sub-header
+  if (description) {
+    html += `<p>${description}</p>`; // Description in p tags
+  }
+  html += '</div>'; // Close explanation div
+
   // Get original values to compare with processed values
   const country = document.getElementById("country").value;
   const baseProfile = coffeeProfiles[country] || {}; // Use empty object if profile is null/undefined
 
   for (let char in effects) {
-    const originalValue =
-      baseProfile[char] !== undefined ? baseProfile[char] : null; // Get original value, handle undefined
+    const originalValue = baseProfile[char] !== undefined ? baseProfile[char] : null; // Get original value, handle undefined
     const effectValue = effects[char];
-    const processedValue =
-      originalValue !== null ? clamp(originalValue + effectValue, 0, 10) : null; // Calculate processed value if original is available
+    const processedValue = originalValue !== null ? clamp(originalValue + effectValue, 0, 10) : null; // Calculate processed value if original is available
 
     // Determine arrow class for impact description
-    let impactArrowClass = "";
+    let impactArrowClass = '';
     if (originalValue !== null && processedValue !== null) {
-      impactArrowClass = getArrowClass(char, originalValue, processedValue);
+        impactArrowClass = getArrowClass(char, originalValue, processedValue);
     }
 
     if (effectValue !== 0) {
-      const sign = effectValue > 0 ? "+" : "";
+      const sign = effectValue > 0 ? '+' : '';
+      // Get the characteristic-specific taste impact description
+      const charImpactDescription = characteristicDescriptions[char] ? characteristicDescriptions[char].impact(effectValue) : '';
+
       html += `
         <div class="impact-item">
-          <div class="impact-char ${impactArrowClass}">${
-        char.charAt(0).toUpperCase() + char.slice(1)
-      } (${sign}${effectValue})</div>
-          <div class="impact-desc">${method.description}</div>
+          <div class="impact-char ${impactArrowClass}">${char.charAt(0).toUpperCase() + char.slice(1)} (${sign}${effectValue})</div>
+          <div class="impact-desc">${charImpactDescription}</div> <!-- Use characteristic-specific impact description -->
         </div>
       `;
     }
@@ -365,49 +375,54 @@ function updateRoastingDetails() {
   const roasting = document.getElementById("roasting").value;
   const level = roastLevelEffects[roasting];
   const effects = level ? level.effects : {}; // Use empty object if level is null/undefined
+  const description = level ? level.description : 'No description available.'; // Get the description
 
-  let html = "";
-  // Get processed values to compare with final values
+  let html = '';
+
+   // Create a container for the description sub-section
+   html += '<div class="explanation">'; // Use the same class for consistent styling
+   html += `<h3>${level.displayName}</h3>`; // Sub-header
+   if (description) {
+    html += `<p>${description}</p>`; // Description in p tags
+  }
+  html += '</div>'; // Close explanation div
+
+   // Get processed values to compare with final values
   const country = document.getElementById("country").value;
   const processing = document.getElementById("processing").value;
 
   const baseProfile = coffeeProfiles[country] || {}; // Use empty object if profile is null/undefined
-  const processingEffects = processingMethods[processing]
-    ? processingMethods[processing].effects
-    : {}; // Use empty object if effects are null/undefined
+  const processingEffects = processingMethods[processing] ? processingMethods[processing].effects : {}; // Use empty object if effects are null/undefined
 
   const processedProfile = {};
   for (let char in baseProfile) {
-    processedProfile[char] = clamp(
-      baseProfile[char] + (processingEffects[char] || 0),
-      0,
-      10
-    );
-  }
+     processedProfile[char] = clamp(
+       baseProfile[char] + (processingEffects[char] || 0),
+       0, 10
+     );
+   }
+
 
   for (let char in effects) {
-    const processedValue =
-      processedProfile[char] !== undefined ? processedProfile[char] : null; // Get processed value, handle undefined
-    const effectValue = effects[char];
-    const finalValue =
-      processedValue !== null
-        ? clamp(processedValue + effectValue, 0, 10)
-        : null; // Calculate final value if processed is available
+     const processedValue = processedProfile[char] !== undefined ? processedProfile[char] : null; // Get processed value, handle undefined
+     const effectValue = effects[char];
+     const finalValue = processedValue !== null ? clamp(processedValue + effectValue, 0, 10) : null; // Calculate final value if processed is available
 
-    // Determine arrow class for impact description
-    let impactArrowClass = "";
-    if (processedValue !== null && finalValue !== null) {
-      impactArrowClass = getArrowClass(char, processedValue, finalValue);
-    }
+     // Determine arrow class for impact description
+     let impactArrowClass = '';
+      if (processedValue !== null && finalValue !== null) {
+        impactArrowClass = getArrowClass(char, processedValue, finalValue);
+     }
 
     if (effectValue !== 0) {
-      const sign = effectValue > 0 ? "+" : "";
+      const sign = effectValue > 0 ? '+' : '';
+       // Get the characteristic-specific taste impact description
+       const charImpactDescription = characteristicDescriptions[char] ? characteristicDescriptions[char].impact(effectValue) : '';
+
       html += `
         <div class="impact-item">
-          <div class="impact-char ${impactArrowClass}">${
-        char.charAt(0).toUpperCase() + char.slice(1)
-      } (${sign}${effectValue})</div>
-          <div class="impact-desc">${level.description}</div>
+          <div class="impact-char ${impactArrowClass}">${char.charAt(0).toUpperCase() + char.slice(1)} (${sign}${effectValue})</div>
+          <div class="impact-desc">${charImpactDescription}</div> <!-- Use characteristic-specific impact description -->
         </div>
       `;
     }
