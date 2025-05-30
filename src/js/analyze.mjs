@@ -701,13 +701,12 @@ function drawConnections({ baseProfile, processedProfile, finalProfile }) {
                     connectionId,
                     characteristicElementSelector,
                     scoreElementSelector,
-                    contributionText, // Text showing contribution
+                    contributionText, // First line: Text showing contribution
+                    '', // Second line: Empty string
                     '#b8b8b8', // Color before label (neutral)
                     connectionColor, // Color after label (based on final value/penalty)
                     // Determine xOffsetPercentage based on character index, with a smaller range
-                    0.2 + (chars.indexOf(char) / (chars.length - 1)) * 0.6, // Distribute points between 20% and 80% of the width
-                    // Calculate a consistent horizontal segment Y position
-                    (roastingElement.getBoundingClientRect().bottom - containerRect.top + scoreElement.getBoundingClientRect().top - containerRect.top) / 2 // Midpoint between roasting stage bottom and score block top
+                    0.2 + (chars.indexOf(char) / (chars.length - 1)) * 0.6 // Distribute points between 20% and 80% of the width
                 );
             }
         });

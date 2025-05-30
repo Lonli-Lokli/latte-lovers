@@ -251,10 +251,11 @@ export class ConnectionManager {
     id,
     selector1,
     selector2,
-    labelText,
+    labelTextLine1,
+    labelTextLine2,
     colorBefore,
     colorAfter,
-    xOffsetPercentage = 0.5 // Default to center (0.5)
+    xOffsetPercentage = 0.5
   ) {
     // Remove existing connection if it exists
     this.removeConnection(id);
@@ -275,16 +276,21 @@ export class ConnectionManager {
     const x1 = rect1.left + rect1.width / 2 - containerRect.left;
     const y1 = rect1.bottom - containerRect.top;
 
-    // Calculate the horizontal position based on the xOffsetPercentage of the target element
-    const targetX = rect2.left + (rect2.width * xOffsetPercentage) - containerRect.left;
-    const targetY = rect2.top - containerRect.top; // Top of the score element
+    // Target Y is the top of the score element
+    const targetY = rect2.top - containerRect.top;
 
-    const boxWidth = Math.max(30, labelText.length * 8 + 16);
-    const boxHeight = 24;
+    // Extend the vertical line downwards by a fixed amount (e.g., 50 pixels)
+    const extendedTargetY = targetY + 80; // Increased length of the vertical line
+
+    // Calculate the midpoint of the vertical line for label placement
+    const midY = (y1 + extendedTargetY) / 2;
+
+    const boxWidth = Math.max(30, Math.max(labelTextLine1.length, labelTextLine2.length) * 7 + 16); // Adjust box width based on the longer line
+    const boxHeight = 36; // Increased height for two lines
 
     // Position the label box centered on the vertical line
-    const labelBoxX = x1 - boxWidth / 2; // Center horizontally at x1
-    const labelBoxY = (y1 + targetY) / 2 - boxHeight / 2; // Center vertically between y1 and targetY
+    const labelBoxX = x1 - boxWidth / 2;
+    const labelBoxY = midY - boxHeight / 2;
 
     // Single vertical line segment
     const line = document.createElementNS(
@@ -294,7 +300,7 @@ export class ConnectionManager {
     line.setAttribute("x1", x1);
     line.setAttribute("y1", y1);
     line.setAttribute("x2", x1); // Keep x-coordinate same for vertical line
-    line.setAttribute("y2", targetY); // Go down to the target element's top
+    line.setAttribute("y2", extendedTargetY); // Go down to the extended target Y
     line.setAttribute("stroke", colorAfter); // Use colorAfter for the single line
     line.setAttribute("stroke-width", "2");
     line.setAttribute("fill", "none");
@@ -302,14 +308,13 @@ export class ConnectionManager {
 
     console.log(`Drawing vertical connection from (${x1}, ${y1}) to (${line.getAttribute('x2')}, ${line.getAttribute('y2')})`);
     console.log(`Label box at (${labelBoxX}, ${labelBoxY})`);
-    console.log(`Label text at (${x1}, ${(y1 + targetY) / 2 + 4})`);
 
     const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
     group.setAttribute("data-connection-id", id);
 
     group.appendChild(line);
 
-    // Label box (centered on the horizontal segment)
+    // Label box (centered on the vertical line)
     const labelBox = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "rect"
@@ -325,19 +330,33 @@ export class ConnectionManager {
     labelBox.setAttribute("stroke-width", 1);
     labelBox.setAttribute("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.1))");
 
-    // Label text (centered on the horizontal segment)
+    // Label text with two lines
     const labelTextEl = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "text"
     );
     labelTextEl.setAttribute("x", x1); // Center text horizontally at x1
-    labelTextEl.setAttribute("y", (y1 + targetY) / 2 + 4); // Center text vertically between y1 and targetY
+    labelTextEl.setAttribute("y", midY); // Center text vertically at midY
     labelTextEl.setAttribute("text-anchor", "middle");
     labelTextEl.setAttribute("fill", "#5D4037");
     labelTextEl.setAttribute("font-family", "Arial, sans-serif");
     labelTextEl.setAttribute("font-size", "11");
     labelTextEl.setAttribute("font-weight", "600");
-    labelTextEl.textContent = labelText;
+
+    // First text line (offset upwards)
+    const tspan1 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+    tspan1.setAttribute("x", x1); // Keep horizontal position
+    tspan1.setAttribute("dy", "-0.5em"); // Move up half a line height
+    tspan1.textContent = labelTextLine1;
+
+    // Second text line (offset downwards from the first line's position)
+    const tspan2 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+    tspan2.setAttribute("x", x1); // Keep horizontal position
+    tspan2.setAttribute("dy", "1em"); // Move down one line height from the previous line's position
+    tspan2.textContent = labelTextLine2;
+
+    labelTextEl.appendChild(tspan1);
+    labelTextEl.appendChild(tspan2);
 
     group.appendChild(labelBox);
     group.appendChild(labelTextEl);
@@ -348,7 +367,7 @@ export class ConnectionManager {
     this.connections.set(id, {
       selector1,
       selector2,
-      labelText,
+      labelText: `${labelTextLine1}\n${labelTextLine2}`,
       colorBefore,
       colorAfter,
       group,

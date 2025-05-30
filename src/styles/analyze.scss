@@ -127,6 +127,9 @@
   grid-column: 2 / span 3;
 }
 
+.result {
+  margin-top: 100px; /* Adjust this value as needed */
+}
 .char-value {
   display: inline-block;
   min-width: 30px;
@@ -1022,6 +1025,23 @@ body.light-theme {
   .characteristic-label-container.final {
     border-color: var(--border-color); /* Default border color */
   }
+
+  .result {
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 24px; /* Existing margin-bottom */
+    box-shadow: 0 8px 32px rgba(212, 165, 116, 0.2);
+    /* Add top margin for mobile */
+    
+  }
+
+  .score-value {
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 4px;
+  }
 }
 
 /* Light Theme Adjustments */
@@ -1120,4 +1140,8 @@ body.light-theme {
   height: 100%;
   pointer-events: none; /* Allows clicking through the SVG */
   z-index: 10; /* Ensure it's above other content */
+}
+
+.svg-wrapper {
+  position: relative;
 }
