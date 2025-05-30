@@ -523,7 +523,7 @@ function initializeOptions() {
   updateDisplay();
 }
 
-export function initializeFormulaTab() {
+export function initializeAnalyzeTab() {
   // Initialize options from existing data
   initializeOptions();
 

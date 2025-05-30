@@ -1,0 +1,152 @@
+/* Shared Result Styles */
+.result {
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: background-color 0.3s ease;
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-color);
+}
+
+.result.perfect {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid #28a745;
+  color: var(--text-color);
+}
+
+.result.good {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid #ffc107;
+  color: var(--text-color);
+}
+
+.result.bad {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid #dc3545;
+  color: var(--text-color);
+}
+
+.result-header {
+  padding: 12px 15px;
+  color: white;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.result-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.result-grade {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.result.perfect .result-main .result-grade {
+  color: #28a745;
+}
+
+.result.good .result-main .result-grade {
+  color: #ffc107;
+}
+
+.result.bad .result-main .result-grade {
+  color: #dc3545;
+}
+
+.result-score {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  border: none;
+}
+
+.result.perfect .result-score {
+  background-color: #28a7451a;
+  color: #28a745;
+  border: none;
+}
+
+.result.good .result-score {
+  background-color: #ffc1071a;
+  color: #ffc107;
+  border: none;
+}
+
+.result.bad .result-score {
+  background-color: #dc35451a;
+  color: #dc3545;
+  border: none;
+}
+
+.result-description {
+  padding: 10px 15px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: white;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .result {
+    padding: 12px 15px;
+    margin-bottom: 15px;
+  }
+
+  .result-header {
+    padding: 10px 12px;
+  }
+
+  .result-main {
+    gap: 8px;
+  }
+
+  .result-grade {
+    font-size: 14px;
+  }
+
+  .result-score {
+    padding: 3px 6px;
+    font-size: 12px;
+  }
+
+  .result-description {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+} 

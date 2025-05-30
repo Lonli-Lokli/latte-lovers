@@ -1,0 +1,97 @@
+/* Checker Tab Styles */
+.form-container {
+  padding: 20px 15px;
+  overflow-y: auto;
+  max-height: calc(100dvh - 120px);
+  position: relative;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.blend-group {
+  display: block;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.blend-group.active {
+  display: flex;
+}
+
+.blend-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.blend-item:last-child {
+  margin-bottom: 0;
+}
+
+.blend-item .floating-label {
+  flex: 2;
+  margin-bottom: 0;
+}
+
+.blend-item .floating-label:last-child {
+  flex: 1;
+  min-width: 100px;
+  max-width: 110px;
+}
+
+.blend-item input {
+  width: 100%;
+  text-align: center;
+}
+
+.blend-item .floating-label label {
+  white-space: nowrap;
+}
+
+.check-btn {
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--button-gradient-start) 0%,
+    var(--button-gradient-end) 100%
+  );
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.check-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px var(--button-shadow);
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 15px 10px;
+    max-height: calc(100dvh - 100px);
+  }
+
+  .blend-group {
+    gap: 8px;
+  }
+
+  .blend-item {
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+  }
+} 

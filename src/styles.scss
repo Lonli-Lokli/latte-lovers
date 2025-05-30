@@ -1,3 +1,4 @@
+/* Global Variables */
 :root {
   --primary-color: #8b6f47;
   --primary-hover: #a88c6c;
@@ -14,10 +15,8 @@
   --button-shadow: rgba(139, 111, 71, 0.3);
 }
 
-
-
+/* Light Theme Variables */
 body.light-theme {
-  /* Light theme (default) */
   --primary-color: #6b4e3d;
   --primary-hover: #8b6f47;
   --surface-color: #ffffff;
@@ -33,14 +32,25 @@ body.light-theme {
   --button-shadow: rgba(107, 78, 61, 0.3);
 }
 
+/* Import Dependencies */
 @import 'multiple-select-vanilla/dist/styles/sass/multiple-select.scss';
 
+/* Import Shared Styles */
+@import 'styles/result.scss';
+
+/* Import Tab-specific Styles */
+@import 'styles/checker.scss';
+@import 'styles/leaders.scss';
+@import 'styles/analyze.scss';
+
+/* Global Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Global Body Styles */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: linear-gradient(
@@ -59,6 +69,7 @@ body.light-theme {
   color: #333;
 }
 
+/* Container */
 .container {
   max-width: 400px;
   margin: 0 auto;
@@ -77,6 +88,7 @@ body.light-theme .container {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
+/* Header */
 .header {
   background: linear-gradient(
     135deg,
@@ -117,6 +129,7 @@ body.light-theme .header {
   margin-right: 4px;
 }
 
+/* Header Buttons */
 .header-buttons {
   display: grid;
   grid-template-columns: auto auto auto auto;
@@ -187,19 +200,9 @@ body.light-theme .header {
   transform: translateY(-1px);
 }
 
-.form-container {
-  padding: 20px 15px;
-  overflow-y: auto; /* Keep parent scroll for overall form if needed */
-  max-height: calc(100dvh - 120px); /* Account for header height */
-  position: relative; /* Add relative positioning */
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
+/* Global Form Elements */
 .floating-label {
-  position: relative;  
+  position: relative;
 }
 
 .floating-label label {
@@ -251,217 +254,104 @@ body.light-theme .header {
   color: var(--text-color);
 }
 
-.section-label {
-  display: block;
-  font-weight: 600;
-  color: #3e2723;
-  margin-bottom: 6px;
-  font-size: 13px;
-}
-
-.blend-group {
-  display: block;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.blend-group.active {
+/* Tab Navigation */
+.tab-navigation {
+  flex-shrink: 0;
+  margin: 0.75rem 1rem;
+  padding: 0;
+  height: auto;
+  box-sizing: border-box;
   display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  width: 100%;
 }
 
-.blend-item {
+.tab-btn {
   display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  margin-bottom: 10px;
-}
-
-.blend-item:last-child {
-  margin-bottom: 0;
-}
-
-.blend-item .floating-label {
-  flex: 2;
-  margin-bottom: 0;
-}
-
-.blend-item .floating-label:last-child {
-  flex: 1;
-  min-width: 100px;
-  max-width: 110px;
-}
-
-.blend-item input {
-  width: 100%;
-  text-align: center;
-}
-
-.blend-item .floating-label label {
-  white-space: nowrap;
-}
-
-.check-btn {
-  width: 100%;
-  background: linear-gradient(
-    135deg,
-    var(--button-gradient-start) 0%,
-    var(--button-gradient-end) 100%
-  );
-  color: white;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  min-height: 36px;
   border: none;
-  padding: 14px;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 600;
+  border-radius: 6px 6px 0 0;
+  background: var(--surface-color);
+  color: var(--text-color);
+  font-size: 0.875rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 5px;
-  margin-bottom: 20px;
+  transition: all 0.2s ease;
+  flex: 1;
+  justify-content: center;
+  position: relative;
+  margin-bottom: -1px;
+  opacity: 0.7;
 }
 
-.check-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px var(--button-shadow);
+.tab-btn:hover {
+  background: var(--surface-hover-color);
+  opacity: 0.9;
 }
 
-body.light-theme .check-btn {
-  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+.tab-btn.active {
+  background: var(--surface-color);
+  color: var(--primary-color);
+  font-weight: 500;
+  opacity: 1;
+  border-bottom: 2px solid var(--primary-color);
 }
 
-body.light-theme .check-btn:hover {
-  box-shadow: 0 10px 20px rgba(44, 62, 80, 0.3);
+.tab-icon {
+  font-size: 1rem;
 }
 
-.result {
-  border-radius: 8px;
-  padding: 15px 20px;
-  margin-bottom: 20px;
+/* Content Container */
+.content-container {
+  position: relative;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  transition: background-color 0.3s ease; /* Smooth transition for background change */
-  border: 1px solid var(--border-color); /* Add a default border */
-  background-color: var(--surface-color); /* Default subtle background */
-  /* Remove previous colored backgrounds */
+  min-height: 0;
+  height: 0;
+  max-height: none;
 }
 
-.result.perfect {
-  /* Subtle perfect state using border and text color */
-  background-color: var(--surface-color); /* Keep subtle background */
-  border: 1px solid var(--border-color); /* Default border */
-  border-left: 4px solid #28a745; /* Green left border */
-  color: var(--text-color); /* Keep text readable */
+/* Loading Spinner */
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--surface-color);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-.result.good {
-  /* Subtle good state using border and text color */
-   background-color: var(--surface-color); /* Keep subtle background */
-  border: 1px solid var(--border-color); /* Default border */
-  border-left: 4px solid #ffc107; /* Yellow left border */
-   color: var(--text-color);
-}
-
-.result.bad {
-  /* Subtle bad state using border and text color */
-   background-color: var(--surface-color); /* Keep subtle background */
-  border: 1px solid var(--border-color); /* Default border */
-  border-left: 4px solid #dc3545; /* Red left border */
-   color: var(--text-color);
-}
-
-.result-header {
-  padding: 12px 15px; /* Reduced padding */
-  color: white;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.result-main {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  /* Make grade text color match border for emphasis */
-  .result-grade {
-    font-size: 16px;
-    font-weight: 600;
-    /* Color set by parent .result class */
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
-.result.perfect .result-main .result-grade {
-  color: #28a745;
+/* Utility Classes */
+.hidden {
+  display: none !important;
 }
 
-.result.good .result-main .result-grade {
-  color: #ffc107;
-}
-
-.result.bad .result-main .result-grade {
-  color: #dc3545;
-}
-
-.result-score {
-  /* Apply specific background based on result class */
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  backdrop-filter: blur(4px);
-  /* Remove explicit border here, it's handled by the parent .result border-left */
-  border: none;
-}
-
-.result.perfect .result-score {
-  /* Use similar styling to .table-score.perfect */
-  background-color: #28a7451a; /* Slightly less opaque green background */
-  color: #28a745; /* Green text */
-  border: none; /* Ensure no border on the score itself */
-}
-
-.result.good .result-score {
-  /* Use similar styling to .table-score.good */
-  background-color: #ffc1071a; /* Slightly less opaque yellow background */
-  color: #ffc107; /* Yellow text */
-   border: none;
-}
-
-.result.bad .result-score {
-  /* Use similar styling to .table-score.bad */
-  background-color: #dc35451a; /* Slightly less opaque red background */
-  color: #dc3545; /* Red text */
-   border: none;
-}
-
-.result-description {
-  padding: 10px 15px; /* Reduced padding */
-  font-size: 13px;
-  line-height: 1.4;
-  color: white;
-  background: rgba(0, 0, 0, 0.1);
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.error {
+  color: #f44336;
+  text-align: center;
+  padding: 1rem;
+  background: rgba(244, 67, 54, 0.1);
+  border-radius: 8px;
+  margin: 1rem 0;
 }
 
 /* Modal Styles */
@@ -591,64 +481,8 @@ body.light-theme .check-btn:hover {
   box-shadow: 0 10px 20px rgba(107, 78, 61, 0.3);
 }
 
-.blend-panel {
-  border: 2px solid var(--border-color);
-  border-radius: 10px;
-  padding: 15px;
-  position: relative;
-  background: var(--surface-color);
-  transition: all 0.3s ease;
-}
-
-.blend-panel:focus-within {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px var(--button-shadow);
-}
-
-.blend-panel > label {
-  position: absolute;
-  top: -10px;
-  left: 12px;
-  background: var(--surface-color);
-  padding: 0 5px;
-  color: var(--text-color);
-  font-size: 12px;
-  transition: all 0.3s ease;
-}
-
-.blend-panel:focus-within > label {
-  color: var(--primary-color);
-}
-
-.blend-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.blend-item {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-
-.blend-item .floating-label {
-  flex: 2;
-  margin-bottom: 0;
-}
-
-.blend-item .floating-label:last-child {
-  flex: 1;
-  min-width: 100px;
-  max-width: 110px;
-}
-
-.blend-item input {
-  width: 100%;
-  text-align: center;
-}
-
-@media screen and (max-width: 768px) {
+/* Mobile Optimization */
+@media (max-width: 768px) {
   body {
     min-height: 100dvh;
     padding: 10px;
@@ -656,7 +490,7 @@ body.light-theme .check-btn:hover {
   }
 
   .container {
-    margin: 10px auto; /* Reduce top/bottom margin on mobile */
+    margin: 10px auto;
     max-height: calc(100dvh - 20px);
   }
 
@@ -684,12 +518,23 @@ body.light-theme .check-btn:hover {
     font-size: 11px;
   }
 
-  .form-container {
-    padding: 15px 10px;
-    max-height: calc(100dvh - 100px); /* Slightly reduced for mobile */    
+  .header-buttons {
+    gap: 4px;
   }
-  .floating-label {
-    margin-bottom: 12px;
+
+  .tab-navigation {
+    margin: 0.5rem 0.75rem;
+    gap: 0.25rem;
+  }
+
+  .tab-btn {
+    padding: 0.375rem 0.5rem;
+    min-height: 32px;
+    font-size: 0.8125rem;
+  }
+
+  .tab-icon {
+    font-size: 0.9375rem;
   }
 
   .floating-label label {
@@ -714,1314 +559,11 @@ body.light-theme .check-btn:hover {
     font-size: 0.75rem;
     padding: 0 0.25rem;
   }
-
-  .floating-label select:not([value=""]):not(:focus) + label,
-  .floating-label input:not(:placeholder-shown) + label,
-  .floating-label.has-value label {
-    color: var(--text-color);
-  }
-
-  .blend-group {
-    gap: 8px; /* Reduce gap between blend items */
-  }
-
-  .blend-item {
-    gap: 8px;
-    margin-bottom: 6px; /* Reduce margin between items */
-  }
-
-  .form-group {
-    margin-bottom: 12px; /* Reduce margin between form groups */
-  }
-
-  .header-buttons {
-    gap: 4px;
-  }
-
-  .blend-panel {
-    padding-top: 28px;
-  }
-  .blend-panel > label {
-    top: -10px;
-    left: 16px;
-    font-size: 12px;
-  }
-
-  /* Mobile styles for profile transition */
-  .profile-transition {
-    flex-direction: column; /* Stack items vertically */
-    gap: 1rem; /* Add vertical gap between stages */
-
-    .profile-stage {
-      width: 100%; /* Stages take full width */
-    }
-
-    .arrow {
-      display: none; /* Hide arrows in mobile view */
-  }
 }
 
-/* Tab Navigation */
-.tab-navigation {
-    margin: 0.5rem 0.75rem;
-    gap: 0.25rem;
-  }
-
-  .tab-btn {
-    padding: 0.375rem 0.5rem;
-    min-height: 32px;
-    font-size: 0.8125rem;
-  }
-
-  .tab-icon {
-    font-size: 0.9375rem;
-  }
-
-  .filter-controls {
-    flex-direction: column; /* Stack items vertically on mobile */
-    gap: 0.75rem; /* Adjust gap for vertical stacking */
-    margin-bottom: 1rem;
-  }
-
-  .filter-controls .custom-select.floating-label {
-    width: 100%; /* Full width on mobile */
-    margin-bottom: 0; /* Remove individual margin since gap is on flex container */
-  }
-
-  .custom-select .select-selected {
-    /* These should already be set but double-check */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 12px; /* Ensure consistent padding */
-  }
-
-  /* Adjust floating label on mobile if needed - simplify selector */
-  .custom-select.floating-label label {
-    top: 10px; /* Slightly less from top on mobile */
-    left: 10px; /* Slightly less from left on mobile */
-    font-size: 13px; /* Slightly smaller font size */
-  }
-
-  .custom-select.floating-label .select-selected.has-selection + label,
-  .custom-select.floating-label .select-selected:focus + label,
-  .custom-select.floating-label .select-arrow-active + label {
-    top: -10px; /* Position label above */
-    font-size: 12px; /* Smaller font size when floating */
-    background: var(--surface-color); /* Match background */
-    padding: 0 5px; /* Add padding */
-    color: var(--primary-color); /* Primary color when active */
-  }
-
-  /* Leaders Table */
-  .leaders-container {
-    padding: 0.5rem;
-  }
-  .leaders-container h2 {
-    margin-bottom: 0.75rem;
-  }
-  .leaders-table thead th,
-  .leaders-table tbody td {
-    padding: 0.375rem 0.5rem;
-    font-size: 0.75rem;
-  }
-
-  /* Mobile column widths */
-  .leaders-table th:nth-child(1),
-  .leaders-table td:nth-child(1) {
-    text-align: center;
-  } /* Rank */
-  .leaders-table th:nth-child(5),
-  .leaders-table td:nth-child(5) {
-    text-align: center;
-  } /* Score */
-
-  /* Mobile flexible columns - adjust min-width if needed */
-  .leaders-table th:nth-child(2),
-  .leaders-table td:nth-child(2) {
-  }
-  .leaders-table th:nth-child(3),
-  .leaders-table td:nth-child(3) {
-  }
-  .leaders-table th:nth-child(4),
-  .leaders-table td:nth-child(4) {
-  }
-
-  .table-score {
-    /* Mobile score styling */
-    padding: 2px 4px;
-    font-size: 0.75rem;
-  }
-
-  .chart-legend {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-  }
-
-  .legend-item {
-    font-size: 0.75rem;
-  }
-
-  .legend-color {
-    width: 8px;
-    height: 8px;
-  }
-
-  .processing-abbreviation-mobile {
-    width: 26px;
-    height: 26px;
-    font-size: 0.7rem;
-  }
-
-  .processing-fullname-desktop {
-    display: none !important;
-  }
-}
-
-/* Tab Navigation */
-.tab-navigation {
-  flex-shrink: 0;
-  margin: 0.75rem 1rem;
-  padding: 0;
-  height: auto;
-  box-sizing: border-box;
-  display: flex;
-  gap: 0.5rem;
-  border-bottom: 1px solid var(--border-color);
-  width: 100%;
-}
-
-.tab-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.5rem 0.75rem;
-  min-height: 36px;
-  border: none;
-  border-radius: 6px 6px 0 0;
-  background: var(--surface-color);
-  color: var(--text-color);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex: 1;
-  justify-content: center;
-  position: relative;
-  margin-bottom: -1px;
-  opacity: 0.7;
-}
-
-.tab-btn:hover {
-  background: var(--surface-hover-color);
-  opacity: 0.9;
-}
-
-.tab-btn.active {
-  background: var(--surface-color);
-  color: var(--primary-color);
-  font-weight: 500;
-  opacity: 1;
-  border-bottom: 2px solid var(--primary-color);
-}
-
-.tab-icon {
-  font-size: 1rem;
-}
-
-/* Content Container */
-.content-container {
-  position: relative;
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  height: 0;
-  max-height: none;
-}
-
-/* Loading Spinner */
-.loading-spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40px;
-  height: 40px;
-  border: 4px solid var(--surface-color);
-  border-top: 4px solid var(--primary-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
-.hidden {
-  display: none !important;
-}
-
-/* Error Message */
-.error {
-  color: #f44336;
-  text-align: center;
-  padding: 1rem;
-  background: rgba(244, 67, 54, 0.1);
-  border-radius: 8px;
-  margin: 1rem 0;
-}
-
-/* Mobile Optimization */
-@media (max-width: 768px) {
-  .tab-navigation {
-    margin: 0.5rem 0.75rem;
-    gap: 0.25rem;
-  }
-
-  .tab-btn {
-    padding: 0.375rem 0.5rem;
-    min-height: 32px;
-    font-size: 0.8125rem;
-  }
-
-  .tab-icon {
-    font-size: 0.9375rem;
-  }
-
-  .filter-controls {
-    flex-direction: column; /* Stack items vertically on mobile */
-    gap: 0.75rem; /* Adjust gap for vertical stacking */
-    margin-bottom: 1rem;
-  }
-
-  .filter-controls .custom-select.floating-label {
-    width: 100%; /* Full width on mobile */
-    margin-bottom: 0; /* Remove individual margin since gap is on flex container */
-  }
-
-  .custom-select .select-selected {
-    /* These should already be set but double-check */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 12px; /* Ensure consistent padding */
-  }
-
-  /* Adjust floating label on mobile if needed - simplify selector */
-  .custom-select.floating-label label {
-    top: 10px; /* Slightly less from top on mobile */
-    left: 10px; /* Slightly less from left on mobile */
-    font-size: 13px; /* Slightly smaller font size */
-  }
-
-  .custom-select.floating-label .select-selected.has-selection + label,
-  .custom-select.floating-label .select-selected:focus + label,
-  .custom-select.floating-label .select-arrow-active + label {
-    top: -10px; /* Position label above */
-    font-size: 12px; /* Smaller font size when floating */
-    background: var(--surface-color); /* Match background */
-    padding: 0 5px; /* Add padding */
-    color: var(--primary-color); /* Primary color when active */
-  }
-}
-
-/* Leaders Table */
-.leaders-container {
-  padding: 1rem;
-}
-
-.leaders-container h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: var(--text-color);
-}
-
-.leaders-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: auto;
-  overflow-x: auto;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background: var(--surface-color);
-  box-shadow: var(--box-shadow);
-}
-
-.leaders-table table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: auto;
-}
-
-.leaders-table thead th {
-  text-align: left;
-  padding: 0.75rem 1rem;
-  background: var(--surface-color);
-  font-weight: 600;
-  color: var(--text-color);
-  border-bottom: 1px solid var(--border-color);
-}
-
-.leaders-table tbody tr {
-  border-bottom: 1px solid var(--border-color);
-  transition: background-color 0.2s ease;
-}
-
-.leaders-table tbody tr:last-child {
-  border-bottom: none;
-}
-
-.leaders-table tbody tr:hover {
-  background-color: var(--surface-hover-color);
-}
-
-.leaders-table tbody td {
-  padding: 0.75rem 1rem;
-  color: var(--text-color);
-  font-size: 0.875rem;
-}
-
-/* Column widths - adjust as needed */
-.leaders-table th:nth-child(1),
-.leaders-table td:nth-child(1) {
-  width: 40px;
-  text-align: center;
-} /* Rank */
-.leaders-table th:nth-child(5),
-.leaders-table td:nth-child(5) {
-  width: 60px;
-  text-align: center;
-} /* Score */
-
-/* Ensure flexible columns can grow */
-.leaders-table th:nth-child(2),
-.leaders-table td:nth-child(2) {
-  width: auto;
-} /* Country - set width to auto */
-.leaders-table th:nth-child(3),
-.leaders-table td:nth-child(3) {
-  width: auto;
-  text-align: center;
-} /* Processing - set width to auto and center */
-.leaders-table th:nth-child(4),
-.leaders-table td:nth-child(4) {
-  width: auto;
-} /* Roast - set width to auto */
-
-.table-rank {
-  /* Specific rank styling */
-  font-weight: 600;
-  color: var(--primary-color);
-}
-
-.table-score {
-  /* Specific score styling */
-  font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 4px;
-  text-align: center;
-}
-
-/* Grade-specific styling for score */
-.table-score.perfect {
-  background: rgba(76, 175, 80, 0.1);
-  color: #4caf50;
-}
-.table-score.good {
-  background: rgba(255, 152, 0, 0.1);
-  color: #ff9800;
-}
-.table-score.bad {
-  background: rgba(244, 67, 54, 0.1);
-  color: #f44336;
-}
-
-/* Chart Legend - Keep styles */
-.chart-legend {
-  display: flex;
-  justify-content: center;
-  gap: 1rem; /* Reduced gap */
-  margin-top: 1rem; /* Reduced margin */
-  padding: 0.75rem 1rem; /* Reduced padding */
-  background: var(--surface-color); /* Use theme variable */
-  border-top: 1px solid var(--border-color); /* Add border top for separation */
-  border-radius: 0 0 12px 12px; /* Round bottom corners */
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem; /* Reduced gap */
-  font-size: 0.875rem; /* Reduced font size */
-  color: var(--text-color); /* Use theme variable */
-}
-
-.legend-color {
-  width: 12px; /* Reduced size */
-  height: 12px; /* Reduced size */
-  border-radius: 3px; /* Slightly smaller border radius */
-}
-
-/* Mobile Optimization for Leaders Table */
-@media (max-width: 768px) {
-  .leaders-container {
-    padding: 0.5rem;
-  }
-  .leaders-container h2 {
-    margin-bottom: 0.75rem;
-  }
-  .leaders-table thead th,
-  .leaders-table tbody td {
-    padding: 0.375rem 0.5rem;
-    font-size: 0.75rem;
-  }
-
-  /* Mobile column widths */
-  .leaders-table th:nth-child(1),
-  .leaders-table td:nth-child(1) {
-    text-align: center;
-  } /* Rank */
-  .leaders-table th:nth-child(5),
-  .leaders-table td:nth-child(5) {
-    text-align: center;
-  } /* Score */
-
-  /* Mobile flexible columns - adjust min-width if needed */
-  .leaders-table th:nth-child(2),
-  .leaders-table td:nth-child(2) {
-  } /* Country */
-  .leaders-table th:nth-child(3),
-  .leaders-table td:nth-child(3) {
-  } /* Processing */
-  .leaders-table th:nth-child(4),
-  .leaders-table td:nth-child(4) {
-  } /* Roast */
-
-  .table-score {
-    /* Mobile score styling */
-    padding: 2px 4px;
-    font-size: 0.75rem;
-  }
-
-  .chart-legend {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-  }
-
-  .legend-item {
-    font-size: 0.75rem;
-  }
-
-  .legend-color {
-    width: 8px;
-    height: 8px;
-  }
-
-  .processing-abbreviation-mobile {
-    width: 30px; /* Increased size on mobile */
-    height: 30px; /* Increased size on mobile */
-    font-size: 0.75rem; /* Adjusted font size */
-    padding: 2px; /* Add some padding */
-  }
-
-  /* Ensure desktop full name is hidden on mobile */
-  .processing-fullname-desktop {
-    display: none !important; /* Use !important to override if needed */
-  }
-}
-
-/* Blend panel specific adjustments for dark theme */
-body.dark-theme .blend-panel {
-  border-color: var(--border-color);
-  background: var(--surface-color);
-  box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.1);
-}
-
-body.dark-theme .blend-panel > label {
-  background: var(--surface-color);
-  color: var(--text-color);
-}
-
-body.dark-theme .blend-panel:focus-within {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px var(--button-shadow);
-}
-
-body.dark-theme .blend-panel:focus-within > label {
-  color: var(--primary-color);
-}
-
-/* Dark theme specific select dropdown styling */
-body.dark-theme select {
-  background-color: var(--surface-color);
-  color: var(--text-color);
-  border-color: var(--border-color);
-}
-
-body.dark-theme select:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.2);
-}
-
-/* Styling for options within the select */
-body.dark-theme select option {
-  background-color: var(--surface-color);
-  color: var(--text-color);
-  padding: 0.75rem;
-}
-
-/* Selected option styling */
-body.dark-theme select option:checked {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-/* Hover state for options */
-body.dark-theme select option:hover {
-  background-color: var(--surface-hover-color);
-}
-
-/* Desktop adjustments */
-@media (min-width: 769px) {
+/* Desktop Optimization */
+@media (min-width: 768px) {
   .container {
-    max-width: 900px; /* Keep desktop container max-width */
+    max-width: 900px;
   }
-
-  .formula-container {
-     /* max-width: 500px; Remove desktop formula container max-width */
-     padding: 2rem; /* Keep padding on desktop */
-  }
-
-  .profile-transition {
-    gap: 0.7rem; /* Keep reduced gap for desktop */
-    align-items: center; /* Ensure items are vertically centered */
-
-    .profile-stage {
-      flex-basis: 0;
-      flex-grow: 1;
-    }
-
-    select {
-       min-width: 180px; /* Further increased min-width for desktop selects */
-       padding: 0.5rem 2rem 0.5rem 0.6rem; /* Keep slightly reduced left padding */
-       font-size: 0.875rem; /* Keep font size for desktop */
-       height: 40px; /* Keep height for desktop */
-    }
-
-    .arrow {
-        padding: 0 0.6rem; /* Keep reduced padding around arrows on desktop */
-        font-size: 1.25rem; /* Keep arrow size for desktop */
-        /* Ensure perfect vertical alignment */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1; /* Explicitly set line-height to 1 for centering */
-      }
-  }
-
-   .floating-label label {
-    top: 0.75rem; /* Keep initial top for desktop */
-    left: 0.75rem; /* Keep initial left for desktop */
-    font-size: 0.875rem; /* Keep font size for desktop */
-  }
-
-  .floating-label select:focus + label,
-  .floating-label input:focus + label,
-  .floating-label select:not([value=""]):not(:focus) + label,
-  .floating-label input:not(:placeholder-shown) + label,
-  .floating-label.has-value label {
-    top: -0.5rem; /* Keep floated top position for desktop */
-    font-size: 0.75rem; /* Keep floated font size for desktop */
-    padding: 0 0.25rem; /* Keep floated padding for desktop */
-  }
-}
-
-.table-cell {
-  align-items: center;
-  color: var(--text-color);
-  font-size: 0.875rem;
-}
-
-.processing-abbreviation-mobile {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  background-color: var(--surface-color);
-  color: var(--primary-color);
-  margin: 0 auto;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  transition: background-color 0.2s ease;
-}
-
-.processing-abbreviation-mobile:hover,
-.processing-abbreviation-mobile:active {
-  background-color: var(--surface-hover-color);
-}
-
-.processing-fullname-desktop {
-  display: none;
-}
-
-/* Mobile Optimization for Leaders Table */
-@media (max-width: 768px) {
-  .processing-abbreviation-mobile {
-    width: 26px;
-    height: 26px;
-    font-size: 0.7rem;
-  }
-
-  .processing-fullname-desktop {
-    display: none !important;
-  }
-}
-
-/* Desktop styles (min-width: 768px) */
-@media (min-width: 768px) {
-  .processing-abbreviation-mobile {
-    display: none !important;
-  }
-
-  .processing-fullname-desktop {
-    display: inline;
-  }
-}
-
-/* Formula Tab Styles */
-.formula-container {
-  background-color: var(--background-color); /* Ensure background is opaque */
-  border-radius: 8px;
-  padding: 15px; /* Reduced padding */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 15px; /* Reduced margin */
-  max-height: none; /* Remove fixed max-height */
-  overflow-y: visible; /* Allow content to push container height */
-  display: flex;
-  flex-direction: column;
-}
-
-.profile-transition {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--surface-color);
-  border-radius: 10px;
-  margin-bottom: 15px; /* Reduced margin */
-  gap: 0.1rem;
-  box-shadow: none;
-
-  .profile-stage {
-    flex: 1;
-    min-width: 0;
-    display: flex; /* Make profile-stage a flex container */
-    align-items: center; /* Vertically center items within profile-stage */
-
-    .floating-label {
-       width: 100%;
-    }
-
-    select {
-      width: 100%;
-      padding: 0.45rem 1.8rem 0.45rem 0.7rem;
-      font-size: 0.875rem;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      background: var(--surface-color);
-      color: var(--text-color);
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 0.7rem center;
-      background-size: 0.8rem;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      height: 38px;
-
-      &:hover {
-        border-color: var(--primary-color);
-      }
-
-      &:focus {
-        outline: none;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.1);
-      }
-
-      option {
-        background: var(--surface-color);
-        color: var(--text-color);
-        padding: 0.4rem;
-      }
-    }
-  }
-
-  .arrow {
-    color: var(--text-color);
-    opacity: 0.5;
-    font-size: 1.1rem;
-    padding: 0 0.5rem;
-    margin: auto 0; /* Vertically center arrows within the flex container for both themes */
-  }
-}
-
-.score-display {
-  background: linear-gradient(135deg, #d4a574, #8b4513);
-  border-radius: 20px;
-  padding: 20px;
-  text-align: center;
-  margin-bottom: 24px;
-  box-shadow: 0 8px 32px rgba(212, 165, 116, 0.2);
-}
-
-.score-value {
-  font-size: 36px;
-  font-weight: 800;
-  color: #fff;
-  margin-bottom: 4px;
-}
-
-.score-label {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 500;
-}
-
-.characteristics {
-  margin-bottom: 15px; /* Reduced margin */
-  display: grid;
-  grid-template-columns: 1fr repeat(3, auto); /* Name | Original | Processed | Final */
-  gap: 6px 12px; /* Reduced gap */
-  align-items: center;
-  padding: 0 15px; /* Reduced padding */
-}
-
-.char-item {
-  display: contents; /* Make the grid children direct participants of the parent grid */
-}
-
-.char-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: #d4a574;
-  grid-column: 1;
-}
-
-.char-values {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  grid-column: 2 / span 3; /* Span across the value columns */
-}
-
-.char-value {
-  display: inline-block;
-  min-width: 30px; /* Increased min-width for consistent size */
-  text-align: center;
-  padding: 4px 6px; /* Adjusted padding */
-  border-radius: 4px;
-  background-color: var(--surface-color); /* Default background for all values */
-  border: 1px solid var(--border-color); /* Default border for all values */
-  color: var(--text-color); /* Default text color */
-  font-size: 14px; /* Ensure consistent font size */
-}
-
-/* Specific colors for characteristic values based on score range */
-.char-value.perfect {
-  background-color: #28a74520; /* Translucent green */
-  border-color: #28a745;
-  color: #28a745;
-}
-
-.char-value.good {
-  background-color: #ffc10720; /* Translucent yellow */
-  border-color: #ffc107;
-  color: #ffc107;
-}
-
-.char-value.bad {
-  background-color: #dc354520; /* Translucent red */
-  border-color: #dc3545;
-  color: #dc3545;
-}
-
-.char-value.neutral {
-   background-color: var(--surface-color);
-   border-color: var(--border-color);
-   color: var(--text-color);
-}
-
-.char-value.original {
-  /* Subtle style for original value - keep neutral background */
-  background-color: var(--surface-color);
-  border-color: var(--border-color);
-  color: var(--text-color-lighter); /* Slightly lighter text */
-}
-
-/* Remove specific colors for processed and final from previous step */
-.char-value.processed {
-  font-weight: normal; /* Reset font weight */
-  color: var(--text-color); /* Reset color */
-}
-
-.char-value.final {
-  font-weight: normal; /* Reset font weight */
-  color: var(--text-color); /* Reset color */
-}
-
-.char-arrow {
-  color: var(--text-color-lighter); /* Default less prominent arrows */
-  margin: 0 4px; /* Reduced margin */
-  font-size: 1rem; /* Ensure consistent size */
-  transition: color 0.3s ease; /* Smooth transition for color */
-}
-
-/* Arrow colors based on impact */
-.arrow-improve {
-  color: #28a745; /* Green for improvement */
-}
-
-.arrow-worsen {
-  color: #dc3545; /* Red for worsening */
-}
-
-.arrow-neutral {
-  color: var(--text-color-lighter); /* Gray for neutral/no significant change */
-}
-
-.toggle-section {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 16px;
-  margin-bottom: 12px; /* Reduced margin */
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.toggle-header {
-  padding: 12px; /* Reduced padding */
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  user-select: none;
-}
-
-.toggle-header h3 {
-  font-size: 15px; /* Slightly smaller font size */
-  color: #d4a574;
-  font-weight: 600;
-}
-
-.toggle-icon {
-  transition: transform 0.3s ease;
-  color: #666;
-}
-
-.toggle-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
-  padding: 0 10px; /* Add horizontal padding */
-  background-color: var(--surface-color-darker); /* Background for content */
-  border-radius: 0 0 8px 8px;
-}
-
-.toggle-content.active {
-  max-height: 500px; /* Sufficient height, adjust as needed */
-  padding: 10px; /* Add padding when active */
-}
-
-.content-inner {
-  background-color: var(--surface-color-darker); /* Ensure background is consistent */
-}
-
-.impact-item {
-  background-color: var(--surface-color); /* Use a subtle background */
-  border: 1px solid var(--border-color); /* Add a border */
-  border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.impact-char {
-  font-weight: bold;
-  color: var(--text-color);
-}
-
-.impact-desc {
-  font-size: 0.9em;
-  color: var(--text-color-lighter);
-}
-
-.explanation {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 16px;
-  padding: 15px; /* Reduced padding */
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  margin-bottom: 15px; /* Reduced margin */
-}
-
-.explanation h3 {
-  font-size: 15px; /* Slightly smaller font size */
-  color: #d4a574;
-  margin-bottom: 10px; /* Reduced margin */
-  font-weight: 600;
-}
-
-.explanation p {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #b8b8b8;
-}
-
-@media (max-width: 320px) {
-  .formula-container {
-    padding: 16px;
-  }
-  
-  .profile-transition {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .arrow {
-    transform: rotate(90deg);
-    justify-self: center;
-  }
-}
-
-/* Mobile adjustments for content container height */
-@media (max-width: 768px) {
-  .content-container {
-    /* max-height: calc(100dvh - 100px); */
-  }
-}
-
-/* Desktop adjustments */
-@media (min-width: 768px) {
-  .formula-container {
-    max-width: 800px; /* Restore a reasonable max-width on desktop */
-    margin: 20px auto; /* Center the container */
-    width: 100%;
-    padding: 20px; /* Keep desktop padding */
-  }
-
-  .profile-transition {
-    margin-bottom: 20px; /* Keep desktop margin */
-    .floating-label select {
-      min-width: 150px; /* Adjust min-width slightly */
-      padding-right: 30px; /* Make space for arrow */
-    }
-  }
-
-  .characteristics {
-     margin-bottom: 20px; /* Keep desktop margin */
-     padding: 0 20px; /* Keep desktop padding */
-     gap: 8px 16px; /* Keep desktop gap */
-  }
-
-  .toggle-section {
-    margin-bottom: 16px; /* Keep desktop margin */
-  }
-
-  .toggle-header {
-    padding: 16px; /* Keep desktop padding */
-  }
-
-  .toggle-header h3 {
-    font-size: 16px; /* Keep desktop font size */
-  }
-
-  .explanation {
-    padding: 16px; /* Keep desktop padding */
-    margin-bottom: 16px; /* Keep desktop margin */
-  }
-
-  .explanation h3 {
-    font-size: 16px; /* Keep desktop font size */
-    margin-bottom: 12px; /* Keep desktop margin */
-  }
-}
-
-/* Dark theme adjustments */
-[data-theme="dark"] {
-  .floating-label select {
-     background-color: var(--input-background-color-dark);
-     color: var(--input-text-color-dark);
-     border-color: var(--input-border-color-dark);
-  }
-
-  .floating-label label {
-    color: var(--input-label-color-dark);
-  }
-
-  .char-value {
-    background-color: var(--surface-color-darker); /* Darker background */
-    border-color: var(--border-color-dark); /* Darker border */
-    color: var(--text-color-dark);
-  }
-
-   .char-value.original {
-    background-color: var(--surface-color-darker);
-    border-color: var(--border-color-dark);
-    color: var(--text-color-lighter-dark);
-  }
-
-  .char-value.processed {
-    background-color: var(--surface-color-darker);
-    border-color: var(--border-color-dark);
-    color: var(--accent-color-dark); /* Use accent color in dark theme */
-  }
-
-  .char-value.final {
-    background-color: var(--surface-color-darker);
-    border-color: var(--border-color-dark);
-    color: var(--primary-color-dark); /* Use primary color in dark theme */
-  }
-
-  .impact-item {
-    background-color: var(--surface-color-darker); /* Darker background */
-    border-color: var(--border-color-dark); /* Darker border */
-    color: var(--text-color-dark);
-  }
-
-  .impact-char {
-    color: var(--text-color-dark);
-  }
-
-  .impact-desc {
-    color: var(--text-color-lighter-dark);
-  }
-
-  .result.perfect {
-    background-color: var(--surface-color);
-    border-color: var(--border-color-dark);
-    border-left-color: #28a745; /* Green left border for dark theme */
-    color: var(--text-color-dark);
-  }
-
-  .result.good {
-     background-color: var(--surface-color);
-    border-color: var(--border-color-dark);
-    border-left-color: #ffc107; /* Yellow left border for dark theme */
-     color: var(--text-color-dark);
-  }
-
-  .result.bad {
-     background-color: var(--surface-color);
-    border-color: var(--border-color-dark);
-    border-left-color: #dc3545; /* Red left border for dark theme */
-     color: var(--text-color-dark);
-  }
-
-  .result.perfect .result-main .result-grade {
-    color: #28a745;
-  }
-
-  .result.good .result-main .result-grade {
-    color: #ffc107;
-  }
-
-  .result.bad .result-main .result-grade {
-    color: #dc3545;
-  }
-
-  .result-score {
-     /* Apply specific background based on result class for dark theme */
-     border: none; /* Ensure no border on the score itself */
-  }
-
-  .result.perfect .result-score {
-    background-color: #28a74520; /* Translucent green background */
-    border-color: #28a745; /* Green border */
-    color: #28a745; /* Green text */
-    border: none;
-  }
-
-  .result.good .result-score {
-    background-color: #ffc10720; /* Translucent yellow background */
-    border-color: #ffc107; /* Yellow border */
-    color: #ffc107; /* Yellow text */
-    border: none;
-  }
-
-  .result.bad .result-score {
-    background-color: #dc354520; /* Translucent red background */
-    border-color: #dc3545; /* Red border */
-    color: #dc3545; /* Red text */
-    border: none;
-  }
-}
-
-/* Light theme specific styles for Formula tab elements */
-body.light-theme {
-  /* Result Section */
-  .result {
-    border-color: #e0e0e0; /* Lighter border */
-    background-color: #ffffff; /* White background */
-
-    &.perfect {
-      border-left-color: #28a745; /* Green border */
-      color: #333; /* Dark text */
-    }
-    &.good {
-      border-left-color: #ffc107; /* Yellow border */
-      color: #333; /* Dark text */
-    }
-    &.bad {
-      border-left-color: #dc3545; /* Red border */
-      color: #333; /* Dark text */
-    }
-  }
-
-  .result-grade {
-     /* Color inherited from parent .result class */
-  }
-
-  .result-score {
-    /* Use lighter, less opaque backgrounds for light theme */
-    &.perfect {
-      background-color: rgba(40, 167, 69, 0.1); /* Subtle green */
-      color: #28a745; /* Green text */
-    }
-    &.good {
-      background-color: rgba(255, 193, 7, 0.1); /* Subtle yellow */
-      color: #ffc107; /* Yellow text */
-    }
-    &.bad {
-      background-color: rgba(220, 53, 69, 0.1); /* Subtle red */
-      color: #dc3545; /* Red text */
-    }
-  }
-
-  .result-description {
-    background: #f8f8f8; /* Light grey background */
-    color: #555; /* Darker text */
-  }
-
-  /* Characteristic Values */
-  .char-value {
-    background-color: #f8f8f8; /* Light grey background */
-    border-color: #e0e0e0; /* Lighter border */
-    color: #333; /* Dark text */
-
-    &.original {
-       color: #666; /* Slightly lighter text than processed/final */
-    }
-
-    &.perfect {
-      background-color: rgba(40, 167, 69, 0.1); /* Subtle green */
-      border-color: #28a745; /* Green border */
-      color: #28a745; /* Green text */
-    }
-    &.good {
-      background-color: rgba(255, 193, 7, 0.1); /* Subtle yellow */
-      border-color: #ffc107; /* Yellow border */
-      color: #ffc107; /* Yellow text */
-    }
-    &.bad {
-      background-color: rgba(220, 53, 69, 0.1); /* Subtle red */
-      border-color: #dc3545; /* Red border */
-      color: #dc3545; /* Red text */
-    }
-     &.neutral {
-       background-color: #f8f8f8;
-       border-color: #e0e0e0;
-       color: #333;
-    }
-  }
-
-  /* Arrows */
-  .char-arrow {
-    color: #666; /* Darker grey for better visibility */
-
-    &.arrow-improve {
-       color: #28a745; /* Green */
-    }
-    &.arrow-worsen {
-      color: #dc3545; /* Red */
-    }
-    &.arrow-neutral {
-       color: #666; /* Darker grey */
-    }
-  }
-
-  /* Toggle Sections */
-  .toggle-section {
-    background: #f8f8f8; /* Light grey background */
-    border-color: #e0e0e0; /* Light border */
-  }
-
-  .toggle-header h3 {
-    color: #3e2723; /* Dark brown, matches light theme primary color */
-  }
-
-  .toggle-icon {
-    color: #555; /* Darker grey icon */
-  }
-
-  .toggle-content {
-     background-color: #ffffff; /* White background for content */
-  }
-
-  .content-inner {
-     background-color: #ffffff; /* White background for inner content */
-  }
-
-  /* Impact Items */
-  .impact-item {
-    background-color: #ffffff; /* White background */
-    border-color: #e0e0e0; /* Light border */
-  }
-
-  .impact-char {
-    color: #3e2723; /* Dark brown */
-  }
-
-  .impact-desc {
-    color: #555; /* Darker grey text */
-  }
-
-  /* Explanation Sections */
-  .explanation {
-    background: #f8f8f8; /* Light grey background */
-    border-color: #e0e0e0; /* Light border */
-  }
-
-  .explanation h3 {
-    color: #3e2723; /* Dark brown */
-  }
-
-  .explanation p {
-    color: #555; /* Darker grey text */
-  }
-
-  /* Profile Transition Selects */
-  /* Removing light theme specific profile-transition block */
 }

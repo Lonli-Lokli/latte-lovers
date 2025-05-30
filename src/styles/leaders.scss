@@ -1,0 +1,178 @@
+/* Leaders Tab Styles */
+.leaders-container {
+  padding: 1rem;
+}
+
+.leaders-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+}
+
+.leaders-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--surface-color);
+  box-shadow: var(--box-shadow);
+}
+
+.leaders-table thead th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: var(--surface-color);
+  font-weight: 600;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.leaders-table tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.2s ease;
+}
+
+.leaders-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.leaders-table tbody tr:hover {
+  background-color: var(--surface-hover-color);
+}
+
+.leaders-table tbody td {
+  padding: 0.75rem 1rem;
+  color: var(--text-color);
+  font-size: 0.875rem;
+}
+
+/* Column widths */
+.leaders-table th:nth-child(1),
+.leaders-table td:nth-child(1) {
+  width: 40px;
+  text-align: center;
+} /* Rank */
+
+.leaders-table th:nth-child(5),
+.leaders-table td:nth-child(5) {
+  width: 60px;
+  text-align: center;
+} /* Score */
+
+.leaders-table th:nth-child(2),
+.leaders-table td:nth-child(2) {
+  width: auto;
+} /* Country */
+
+.leaders-table th:nth-child(3),
+.leaders-table td:nth-child(3) {
+  width: auto;
+  text-align: center;
+} /* Processing */
+
+.leaders-table th:nth-child(4),
+.leaders-table td:nth-child(4) {
+  width: auto;
+} /* Roast */
+
+.table-rank {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.table-score {
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Grade-specific styling for score */
+.table-score.perfect {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+}
+
+.table-score.good {
+  background: rgba(255, 152, 0, 0.1);
+  color: #ff9800;
+}
+
+.table-score.bad {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
+
+/* Processing abbreviation styles */
+.processing-abbreviation-mobile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: var(--surface-color);
+  color: var(--primary-color);
+  margin: 0 auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background-color 0.2s ease;
+}
+
+.processing-abbreviation-mobile:hover,
+.processing-abbreviation-mobile:active {
+  background-color: var(--surface-hover-color);
+}
+
+.processing-fullname-desktop {
+  display: none;
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .leaders-container {
+    padding: 0.5rem;
+  }
+
+  .leaders-container h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  .leaders-table thead th,
+  .leaders-table tbody td {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .table-score {
+    padding: 2px 4px;
+    font-size: 0.75rem;
+  }
+
+  .processing-abbreviation-mobile {
+    width: 26px;
+    height: 26px;
+    font-size: 0.7rem;
+  }
+
+  .processing-fullname-desktop {
+    display: none !important;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+  .processing-abbreviation-mobile {
+    display: none !important;
+  }
+
+  .processing-fullname-desktop {
+    display: inline;
+  }
+} 

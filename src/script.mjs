@@ -1,6 +1,3 @@
-
-
-
 export function openContactModal() {
   document.getElementById("contactModal").style.display = "block";
   document.body.style.overflow = "hidden";
@@ -18,7 +15,6 @@ export function toggleTheme() {
   body.classList.toggle("light-theme");
 
   const isLightTheme = body.classList.contains("light-theme");
-  const isDarkMode = !isLightTheme;
 
   if (isLightTheme) {
     themeIcon.textContent = "🌙";
@@ -26,17 +22,6 @@ export function toggleTheme() {
   } else {
     themeIcon.textContent = "☀️";
     localStorage.setItem("theme", "dark");
-  }
-
-  // Dynamically update multi-select theme
-  if (msCountryInstance) {
-    msCountryInstance.refreshOptions({ darkMode: isDarkMode });
-  }
-  if (msProcessingInstance) {
-    msProcessingInstance.refreshOptions({ darkMode: isDarkMode });
-  }
-  if (msRoastInstance) {
-    msRoastInstance.refreshOptions({ darkMode: isDarkMode });
   }
 }
 

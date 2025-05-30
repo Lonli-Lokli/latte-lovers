@@ -12,7 +12,7 @@ import {
   getCompatibilityGrade
 } from "../scoring.mjs";
 
-export function initializeTopTab() {
+export function initializeLeadersTab() {
   // Initialize filters and populate table via filters
   initializeLeadersFilters(
     coffeeProfiles,
@@ -184,6 +184,28 @@ export function initializeLeadersFilters(
 
   // Initial table population and label state update
   applyFilters();
+
+  // Observe theme changes on the body and update multi-selects
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+        const isLightTheme = document.body.classList.contains('light-theme');
+        const isDarkMode = !isLightTheme;
+
+        if (msCountryInstance) {
+          msCountryInstance.refreshOptions({ darkMode: isDarkMode });
+        }
+        if (msProcessingInstance) {
+          msProcessingInstance.refreshOptions({ darkMode: isDarkMode });
+        }
+        if (msRoastInstance) {
+          msRoastInstance.refreshOptions({ darkMode: isDarkMode });
+        }
+      }
+    });
+  });
+
+  observer.observe(document.body, { attributes: true });
 }
 
 

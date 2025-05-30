@@ -163,9 +163,9 @@
         getDefaultTab,
         isValidTab,
       } from "./src/config.js";
-      import { initializeCheckerTab } from "./src/tabs/checker.mjs";
-      import { initializeTopTab } from "./src/tabs/top.mjs";
-      import { initializeFormulaTab } from "./src/tabs/formula.mjs";
+      import { initializeCheckerTab } from "./src/js/checker.mjs";
+      import { initializeLeadersTab } from "./src/js/leaders.mjs";
+      import { initializeAnalyzeTab } from "./src/js/analyze.mjs";
 
       // Content cache
       const contentCache = new Map();
@@ -215,12 +215,12 @@
               initializeCheckerTab();
               break;
 
-            case "top":
-              initializeTopTab();
+            case "leaders":
+              initializeLeadersTab();
               break;
 
-            case "formula":
-              initializeFormulaTab();
+            case "analyze":
+              initializeAnalyzeTab();
               break;
 
             default:
