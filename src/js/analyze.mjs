@@ -1,3 +1,4 @@
+import { ConnectionManager } from "./svg-connector.mjs";
 import {
   coffeeProfiles,
   processingMethods,
@@ -7,6 +8,9 @@ import {
   getCompatibilityGrade,
   characteristicDescriptions
 } from "../scoring.mjs";
+
+// Create a single ConnectionManager instance as a singleton for this module
+let connectionManager = null;
 
 // Use effects directly from scoring.mjs
 const processingEffects = Object.fromEntries(
@@ -70,7 +74,7 @@ function getArrowClass(char, originalValue, finalValue) {
   }
 }
 
-// Helper to calculate distance to the ideal range (0 if within range)
+// Helper function to calculate distance to the ideal range (0 if within range)
 function getDistanceToIdeal(char, value) {
   const range = idealLatteRanges[char];
   if (!range) return Math.abs(value); // Distance to 0 if no range? Or handle differently?
@@ -91,6 +95,24 @@ function getDistanceToIdeal(char, value) {
   }
 
   return 0; // Should not reach here if logic is correct
+}
+
+// Helper to get the color for an SVG line based on characteristic change and ideal range
+function getLineColor(char, originalValue, finalValue) {
+    const range = idealLatteRanges[char];
+    if (!range) return "#b8b8b8"; // Default neutral color
+
+    const originalDistanceToIdeal = getDistanceToIdeal(char, originalValue);
+    const finalDistanceToIdeal = getDistanceToIdeal(char, finalValue);
+
+    // Determine if the value moved closer or further from the ideal range
+    if (finalDistanceToIdeal < originalDistanceToIdeal) {
+        return "#28a745"; // Green for improvement
+    } else if (finalDistanceToIdeal > originalDistanceToIdeal) {
+        return "#dc3545"; // Red for worsening
+    } else {
+        return "#b8b8b8"; // Gray for neutral or no change
+    }
 }
 
 function calculateProfile() {
@@ -172,8 +194,7 @@ function calculateProfile() {
 }
 
 function updateDisplay() {
-  const { baseProfile, processedProfile, finalProfile, score } =
-    calculateProfile();
+  const { baseProfile, processedProfile, finalProfile, score } = calculateProfile();
 
   // If calculation failed (e.g., incomplete selections), reset display or show message
   if (score === null) {
@@ -185,24 +206,30 @@ function updateDisplay() {
     document.getElementById("formula-description").textContent =
       "Please select Origin, Process, and Roast to calculate the latte profile.";
 
-    // Clear characteristic values
+    // Clear characteristic values in the new grid structure
+    const stages = ["origin", "processing", "roasting", "final"];
     const chars = ["acidity", "body", "sweetness", "bitterness", "balance"];
-    chars.forEach((char) => {
-      document.getElementById(`${char}-orig`).textContent = "-";
-      document.getElementById(`${char}-proc`).textContent = "-";
-      document.getElementById(`${char}-final`).textContent = "-";
 
-      // Remove all specific classes
-      document.getElementById(`${char}-orig`).className = "char-value original";
-      document.getElementById(`${char}-proc`).className =
-        "char-value processed";
-      document.getElementById(`${char}-final`).className = "char-value final";
-
-      // Reset arrow colors
-      const arrows = document.querySelectorAll(
-        `#${char}-orig ~ .char-arrow, #${char}-proc ~ .char-arrow`
-      );
-      arrows.forEach((arrow) => (arrow.className = "char-arrow arrow-neutral"));
+    stages.forEach(stageId => {
+        chars.forEach(char => {
+            const element = document.querySelector(`#${stageId}-stage .characteristics-section .${char} .characteristic-label-container`);
+            if (element) {
+                const valueElement = element.querySelector('.char-value');
+                if(valueElement) {
+                  valueElement.textContent = "-";
+                }
+                element.classList.remove("perfect", "good", "bad");
+            } else if (stageId === 'final') { // Handle case where final stage might not have all elements initially
+                 const element = document.querySelector(`#${stageId}-stage .characteristics-section .${char} .characteristic-label-container`);
+                 if (element) {
+                    const valueElement = element.querySelector('.char-value');
+                    if(valueElement) {
+                      valueElement.textContent = "-";
+                    }
+                    element.classList.remove("perfect", "good", "bad");
+                 }
+            }
+        });
     });
 
     // Clear impact details
@@ -262,51 +289,45 @@ function updateDisplay() {
   ).textContent = `${normalizedScore.toFixed(1)}/10`;
   document.getElementById("formula-description").textContent = description;
 
-  // Update characteristics and apply color classes
+  // Update characteristics in the new grid structure
   const chars = ["acidity", "body", "sweetness", "bitterness", "balance"];
-  chars.forEach((char) => {
-    const origValue = baseProfile[char];
-    const procValue = processedProfile[char];
-    const finalValue = finalProfile[char];
 
-    const origElement = document.getElementById(`${char}-orig`);
-    const procElement = document.getElementById(`${char}-proc`);
-    const finalElement = document.getElementById(`${char}-final`);
+  // Map profiles to stages
+  const stageProfiles = {
+      "origin": baseProfile,
+      "processing": processedProfile,
+      "roasting": finalProfile, // Roasting stage displays final profile
+      "final": finalProfile     // Final stage also displays final profile
+  };
 
-    origElement.textContent = origValue.toFixed(1);
-    procElement.textContent = procValue.toFixed(1);
-    finalElement.textContent = finalValue.toFixed(1);
+  for (const stageId in stageProfiles) {
+      const profile = stageProfiles[stageId];
+      if (!profile) continue; // Skip if profile is null/undefined
 
-    // Apply color classes to characteristic values
-    // Original value uses neutral style, processed and final get color based on range
-    origElement.className =
-      "char-value original " + getCharacteristicClass(char, origValue); // Keep original class and add color class
-    procElement.className =
-      "char-value processed " + getCharacteristicClass(char, procValue); // Keep processed class and add color class
-    finalElement.className =
-      "char-value final " + getCharacteristicClass(char, finalValue); // Keep final class and add color class
+      chars.forEach(char => {
+          const element = document.querySelector(`#${stageId}-stage .characteristics-section .${char} .characteristic-label-container`);
+          if (element && profile[char] !== undefined) {
+              const value = profile[char];
+              const valueElement = element.querySelector('.char-value'); // Get the value span
+              if(valueElement) {
+                  valueElement.textContent = value.toFixed(1); // Update only the value span
+              }
 
-    // Apply color classes to arrows based on impact
-    const arrows = document.querySelectorAll(
-      `#${char}-orig ~ .char-arrow, #${char}-proc ~ .char-arrow`
-    );
+              // Apply color classes based on the value and the ideal range to the parent .grid-item
+              element.classList.remove("perfect", "good", "bad"); // Remove previous color classes
+              element.classList.add(getCharacteristicClass(char, value)); // Add the correct color class
+          } else if (element) {
+               // If profile[char] is undefined, display placeholder or clear
+               const valueElement = element.querySelector('.char-value');
+               if(valueElement) {
+                 valueElement.textContent = "-";
+               }
+               element.classList.remove("perfect", "good", "bad");
+          }
+      });
+  }
 
-    // Arrow after original -> processed
-    const arrow1 = origElement.nextElementSibling; // The first arrow after original
-    if (arrow1 && arrow1.classList.contains("char-arrow")) {
-      arrow1.className =
-        "char-arrow " + getArrowClass(char, origValue, procValue);
-    }
-
-    // Arrow after processed -> final
-    const arrow2 = procElement.nextElementSibling; // The first arrow after processed
-    if (arrow2 && arrow2.classList.contains("char-arrow")) {
-      arrow2.className =
-        "char-arrow " + getArrowClass(char, procValue, finalValue);
-    }
-  });
-
-  // Update score breakdown (keeping the previous format for now)
+  // Update score breakdown
   document.getElementById(
     "score-breakdown"
   ).textContent = `Body(${finalProfile.body.toFixed(
@@ -321,6 +342,12 @@ function updateDisplay() {
 
   updateProcessingDetails();
   updateRoastingDetails();
+
+  // Draw SVG connections after updating display
+  requestAnimationFrame(() => {
+      // Use the singleton connectionManager instance
+      drawConnections({ baseProfile, processedProfile, finalProfile });
+  });
 }
 
 function updateProcessingDetails() {
@@ -527,8 +554,165 @@ export function initializeAnalyzeTab() {
   // Initialize options from existing data
   initializeOptions();
 
-  // No need to re-add toggle section listeners here, they are added in initializeOptions
+  // Create the ConnectionManager after DOM is loaded
+  const connectionSvg = document.getElementById('connection-svg');
+  if (!connectionSvg) {
+    console.error('Connection SVG element not found');
+    return;
+  }
+  connectionManager = new ConnectionManager(connectionSvg);
 
-  // Initial display (already called in initializeOptions)
-  // updateDisplay();
+  // Add resize event listener to refresh connections on the singleton manager
+  window.addEventListener('resize', () => {
+      if (connectionManager) {
+          connectionManager.refreshAllConnections();
+      }
+  });
+
+  // Initial display, using the singleton connection manager instance
+  updateDisplay();
+}
+
+// Function to draw SVG connections between stages
+// Uses the singleton ConnectionManager instance
+function drawConnections({ baseProfile, processedProfile, finalProfile }) {
+    if (!connectionManager) {
+        console.error('ConnectionManager not initialized');
+        return;
+    }
+
+    const stages = ["origin", "processing", "roasting"]; // Exclude 'final' stage for main connections
+    const profiles = { "origin": baseProfile, "processing": processedProfile, "roasting": finalProfile }; // Use finalProfile for roasting stage data
+    const chars = ["acidity", "body", "sweetness", "bitterness", "balance"];
+
+    // Clear any existing connections first
+    connectionManager.clearAllConnections();
+
+    // Iterate through stages that have a next stage (up to roasting)
+    for (let i = 0; i < stages.length - 1; i++) {
+        const currentStageId = stages[i];
+        const nextStageId = stages[i + 1];
+
+        const currentProfile = profiles[currentStageId];
+        const nextProfile = profiles[nextStageId];
+
+        // Ensure both profiles are available
+        if (!currentProfile || !nextProfile) {
+            continue;
+        }
+
+        chars.forEach(char => {
+            // Get the characteristic item elements' selectors
+            const currentItemSelector = `#${currentStageId}-stage .characteristics-section .${char} .characteristic-label-container`;
+            const nextItemSelector = `#${nextStageId}-stage .characteristics-section .${char} .characteristic-label-container`;
+
+                // Get the characteristic values for color determination
+            const value1 = currentProfile[char];
+            const value2 = nextProfile[char];
+
+                 // Ensure values are valid before determining color and drawing line
+                 if (value1 !== undefined && value2 !== undefined) {
+                // Calculate the difference and format the label text
+                const difference = value2 - value1;
+                const labelText = difference > 0 ? `+${difference.toFixed(1)}` : difference.toFixed(1);
+
+                    // Determine line color based on value change from value1 to value2
+                const colorAfter = getLineColor(char, value1, value2);
+                const colorBefore = '#b8b8b8'; // Neutral color for the first segment
+
+                // Create a unique ID for the connection
+                const connectionId = `${currentStageId}-to-${nextStageId}-${char}-connection`;
+
+                // Use the singleton ConnectionManager instance to create the connection
+                connectionManager.createConnection(
+                    connectionId,
+                    currentItemSelector,
+                    nextItemSelector,
+                    labelText, // Use the difference as label text
+                    colorBefore, // Color before label
+                    colorAfter // Color after label
+                );
+             }
+        });
+    }
+
+    // Draw connections from Roasting stage characteristics to the Score block
+    const roastingProfile = profiles["roasting"];
+    const scoreElementSelector = "#formula-result";
+    const scoreElement = document.querySelector(scoreElementSelector);
+    const roastingElementSelector = "#roasting-stage";
+    const roastingElement = document.querySelector(roastingElementSelector);
+
+    if (roastingProfile && scoreElement) {
+        chars.forEach(char => {
+            const characteristicElementSelector = `#roasting-stage .characteristics-section .${char} .characteristic-label-container`;
+            const characteristicElement = document.querySelector(characteristicElementSelector);
+            const containerRect = connectionManager.svg.getBoundingClientRect();
+
+            if (characteristicElement && roastingProfile[char] !== undefined) {
+                const value = roastingProfile[char];
+                let contributionText = "";
+                let connectionColor = getLineColor(char, value, value); // Determine color based on the final value's status
+
+                // Calculate contribution text based on the characteristic and its weight/penalty
+                switch (char) {
+                    case 'body':
+                        contributionText = `+${(value * 0.3).toFixed(1)}`;
+                        break;
+                    case 'sweetness':
+                        contributionText = `+${(value * 0.25).toFixed(1)}`;
+                        break;
+                    case 'balance':
+                        contributionText = `+${(value * 0.3).toFixed(1)}`;
+                        break;
+                    case 'acidity':
+                         // Acidity contributes positively but also has a penalty
+                        const acidityContribution = value * 0.2;
+                        let acidityNote = '';
+                         if (value < 4) {
+                            acidityNote = ` (Penalty: ${(4 - value) * 1.5})`;
+                         } else if (value > 7) {
+                            acidityNote = ` (Penalty: ${(value - 7) * 1.0})`;
+                         }
+                        contributionText = `+${acidityContribution.toFixed(1)}${acidityNote}`;
+                        break;
+                    case 'bitterness':
+                        // Bitterness only applies a penalty if above 6
+                        let bitternessNote = '';
+                        if (value > 6) {
+                            bitternessNote = ` (Penalty: ${(value - 6) * 2.0})`;
+                        }
+                        contributionText = `-${(value - 6) * 2.0}`; // Show penalty as negative contribution for bitterness > 6
+                        // For bitterness, the color should probably reflect the penalty status
+                         if (value > 6) {
+                             connectionColor = '#dc3545'; // Red for bad bitterness
+                         } else {
+                             connectionColor = '#b8b8b8'; // Gray for acceptable bitterness
+                         }
+                        break;
+                    default:
+                        contributionText = char;
+                }
+
+                 // Create a unique ID for the connection to the score block
+                const connectionId = `roasting-to-score-${char}-connection`;
+
+                connectionManager.createVerticalConnection(
+                    connectionId,
+                    characteristicElementSelector,
+                    scoreElementSelector,
+                    contributionText, // Text showing contribution
+                    '#b8b8b8', // Color before label (neutral)
+                    connectionColor, // Color after label (based on final value/penalty)
+                    // Determine xOffsetPercentage based on character index, with a smaller range
+                    0.2 + (chars.indexOf(char) / (chars.length - 1)) * 0.6, // Distribute points between 20% and 80% of the width
+                    // Calculate a consistent horizontal segment Y position
+                    (roastingElement.getBoundingClientRect().bottom - containerRect.top + scoreElement.getBoundingClientRect().top - containerRect.top) / 2 // Midpoint between roasting stage bottom and score block top
+                );
+            }
+        });
+    }
+
+    // The ConnectionManager handles removing old connections internally when creating new ones with the same ID.
+    // The clearAllConnections at the start ensures connections from removed stages are also cleared.
 }

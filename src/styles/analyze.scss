@@ -215,6 +215,7 @@
   justify-content: space-between;
   align-items: center;
   user-select: none;
+  -webkit-user-select: none;
 }
 
 .toggle-header h3 {
@@ -286,102 +287,6 @@
   font-size: 13px;
   line-height: 1.5;
   color: #b8b8b8;
-}
-
-/* Mobile Optimization */
-@media (max-width: 768px) {
-  .formula-container {
-    padding: 16px;
-  }
-
-  .profile-transition {
-    flex-direction: column;
-    gap: 12px;
-
-    .profile-stage {
-      width: 100%;
-    }
-
-    .arrow {
-      transform: rotate(90deg);
-      justify-self: center;
-    }
-  }
-
-  .characteristics {
-    margin-bottom: 12px;
-    gap: 4px 8px;
-    padding: 0 10px;
-  }
-
-  .toggle-section {
-    margin-bottom: 10px;
-  }
-
-  .toggle-header {
-    padding: 10px;
-  }
-
-  .toggle-header h3 {
-    font-size: 14px;
-  }
-
-  .explanation {
-    padding: 12px;
-    margin-bottom: 12px;
-  }
-
-  .explanation h3 {
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
-}
-
-/* Desktop Optimization */
-@media (min-width: 768px) {
-  .formula-container {
-    max-width: 800px;
-    margin: 20px auto;
-    width: 100%;
-    padding: 20px;
-  }
-
-  .profile-transition {
-    margin-bottom: 20px;
-
-    .floating-label select {
-      min-width: 150px;
-      padding-right: 30px;
-    }
-  }
-
-  .characteristics {
-    margin-bottom: 20px;
-    padding: 0 20px;
-    gap: 8px 16px;
-  }
-
-  .toggle-section {
-    margin-bottom: 16px;
-  }
-
-  .toggle-header {
-    padding: 16px;
-  }
-
-  .toggle-header h3 {
-    font-size: 16px;
-  }
-
-  .explanation {
-    padding: 16px;
-    margin-bottom: 16px;
-  }
-
-  .explanation h3 {
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
 }
 
 /* Light Theme Adjustments */
@@ -475,4 +380,744 @@ body.light-theme {
   .toggle-content {
     background-color: var(--surface-hover-color);
   }
-} 
+
+  /* Characteristic value states for grid-item border in light theme */
+  .grid-item.perfect,
+  .grid-item.good,
+  .grid-item.bad,
+  .grid-item.neutral,
+  .grid-item.original,
+  .grid-item.processed,
+  .grid-item.final {
+    border-color: initial; /* Reset or use a default grid-item border */
+  }
+
+  /* Characteristic value states for container border in light theme */
+  .characteristic-label-container.perfect {
+    border-color: #a5d6a7;
+  }
+
+  .characteristic-label-container.good {
+    border-color: #fff59d;
+  }
+
+  .characteristic-label-container.bad {
+    border-color: #ef9a9a;
+  }
+
+  .characteristic-label-container.neutral,
+  .characteristic-label-container.original,
+  .characteristic-label-container.processed,
+  .characteristic-label-container.final {
+    border-color: var(--border-color);
+  }
+}
+
+.analyze-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 15px;
+}
+
+.stage {
+  background-color: var(--surface-color);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stage h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 5px;
+}
+
+.stage-content {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: stretch;
+}
+
+.editor-section {
+  flex-shrink: 0;
+}
+
+.characteristics-section {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.grid-item {
+  border-radius: 6px;
+  text-align: center;
+  color: var(--text-color);
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+
+  &:empty {
+    background-color: transparent !important;
+    border: none !important;
+  }
+}
+
+.characteristic-label-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  border: none;
+  box-sizing: border-box;
+}
+
+.grid-item .char-name {
+  position: static;
+  top: auto;
+  left: auto;
+  transform: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-color-lighter);
+  transition: none;
+  pointer-events: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: auto;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.grid-item .char-value {
+  height: auto;
+  flex-shrink: 0;
+  display: block;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  flex-grow: 0;
+  width: auto;
+  box-sizing: border-box;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 2px;
+}
+
+.characteristic-label-container.has-value .char-name,
+.characteristic-label-container:focus-within .char-name {
+  position: static;
+  top: auto;
+  left: auto;
+  transform: none;
+  font-size: 0.8rem;
+  color: var(--text-color-lighter);
+  width: auto;
+  text-align: center;
+}
+
+.stage-editor {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  min-width: auto;
+  max-width: none;
+  max-height: none;
+  writing-mode: initial;
+  text-orientation: initial;
+  transform: none;
+  transform-origin: initial;
+
+  .floating-label {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+
+    label {
+      font-size: 0.6rem;
+      top: 0.2rem;
+      position: absolute;
+      margin-right: 0;
+      left: 0.8rem;
+      white-space: nowrap;
+      &.has-value,
+      &:focus {
+        top: -0.4rem;
+        left: 0.5rem;
+      }
+    }
+
+    select {
+      width: 100%;
+      height: 100%;
+      padding: 4px 8px;
+      font-size: 12px;
+      min-width: auto;
+    }
+  }
+}
+
+
+/* New container for characteristics in the second row (mobile will use this for horizontal layout) */
+.characteristics-row-mobile {
+  display: contents;
+  grid-column: 1 / span 6;
+  grid-row: 2 / span 1;
+
+  .grid-item {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto;
+    gap: 5px;
+    align-items: center;
+
+    &.acidity {
+      grid-column: 1 / span 1;
+      grid-row: 1 / span 1;
+    }
+    &.balance {
+      grid-column: 2 / span 1;
+      grid-row: 1 / span 1;
+    }
+    &.bitterness {
+      grid-column: 3 / span 1;
+      grid-row: 1 / span 1;
+    }
+    &.body {
+      grid-column: 5 / span 1;
+      grid-row: 1 / span 1;
+    }
+    &.sweetness {
+      grid-column: 6 / span 1;
+      grid-row: 1 / span 1;
+    }
+
+    &:empty {
+      display: block;
+      width: 45px;
+      height: 45px;
+      background-color: transparent !important;
+      border: none !important;
+    }
+  }
+}
+
+/* Hide the old grid and mobile row containers on desktop */
+.characteristics-grid {
+  display: none !important;
+}
+.characteristics-row-mobile {
+  display: none !important;
+}
+
+/* Desktop Optimization */
+@media (min-width: 768px) {
+  .formula-container {
+    max-width: 800px;
+    margin: 20px auto;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .profile-transition {
+    margin-bottom: 20px;
+
+    .floating-label select {
+      min-width: 150px;
+      padding-right: 30px;
+    }
+  }
+
+  .characteristics {
+    margin-bottom: 20px;
+    padding: 0 20px;
+    gap: 8px 16px;
+  }
+
+  .toggle-section {
+    margin-bottom: 16px;
+  }
+
+  .toggle-header {
+    padding: 16px;
+  }
+
+  .toggle-header h3 {
+    font-size: 16px;
+  }
+
+  .explanation {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .explanation h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .stage-content {
+    align-items: stretch;
+  }
+
+  .editor-section {
+     flex-shrink: 0;
+     width: 120px;
+  }
+
+  .characteristics-section {
+     align-items: stretch;
+     padding: 0;
+  }
+
+  .grid-item {
+     height: auto;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     border: none;
+     padding: 0;
+     min-height: 0;
+     position: relative;
+  }
+
+  .characteristic-label-container {
+      position: static;
+      display: inline-block;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 8px 12px;
+      background-color: var(--surface-color);
+      text-align: center;
+      width: auto;
+      height: auto;
+      box-sizing: border-box;
+      margin-top: 8px;
+  }
+
+  .grid-item .char-name {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--surface-color);
+      padding: 0 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-color-lighter);
+      transition: none;
+      pointer-events: auto;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: auto;
+      text-align: center;
+      z-index: 1;
+  }
+
+  .grid-item .char-value {
+      height: auto;
+      flex-shrink: 0;
+      display: block;
+      padding: 0;
+      flex-grow: 0;
+      width: auto;
+      box-sizing: border-box;
+      font-size: 14px;
+      text-align: center;
+      margin: 0;
+  }
+
+  .characteristic-label-container.has-value .char-name,
+  .characteristic-label-container:focus-within .char-name {
+   position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+    font-size: 0.8rem;
+    color: var(--text-color-lighter);
+    width: auto;
+    text-align: center;
+    background-color: var(--surface-color);
+  }
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .formula-container {
+    padding: 16px;
+  }
+
+  .profile-transition {
+    flex-direction: column;
+    gap: 12px;
+
+    .profile-stage {
+      width: 100%;
+    }
+
+    .arrow {
+      transform: rotate(90deg);
+      justify-self: center;
+    }
+  }
+
+  .characteristics {
+    margin-bottom: 12px;
+    gap: 4px 8px;
+    padding: 0 10px;
+  }
+
+  .toggle-section {
+    margin-bottom: 10px;
+  }
+
+  .toggle-header {
+    padding: 10px;
+  }
+
+  .toggle-header h3 {
+    font-size: 14px;
+  }
+
+  .explanation {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .explanation h3 {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .analyze-container {
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .stage {
+    padding: 10px;
+    gap: 20px;
+  }
+
+  .stage h2 {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+
+  .stage-content {
+    flex-direction: row;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .editor-section {
+    flex-shrink: 0;
+    width: 40px;
+    height: 170px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .characteristics-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    justify-content: space-around;
+    align-items: stretch;
+  }
+
+  .grid-item {
+    width: 35px;
+    height: 100%;
+    padding: 2px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    text-align: center;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+  }
+
+  .characteristic-label-container {
+      position: static;
+      width: auto;
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: flex-start;
+      align-items: stretch;
+      padding: 0;
+      /* Add default border for mobile */
+      border: 1px solid var(--border-color);
+  }
+
+  .grid-item .char-name {
+    font-size: 0.8125rem;
+    writing-mode: vertical-rl !important;
+    text-orientation: mixed !important;
+    transform: rotate(180deg) !important;
+    transform-origin: center center !important;
+    margin: 0;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: static;
+    align-self: center;
+  }
+
+  .grid-item .char-value {
+    font-size: 12px;
+    height: 15px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .stage-content .stage-editor {
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    min-width: auto;
+    max-width: none;
+    max-height: none;
+    flex-shrink: 0;
+
+    .floating-label {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+
+      label {
+        display: none;
+      }
+
+      select {
+        writing-mode: vertical-rl !important;
+        text-orientation: mixed !important;
+        transform: rotate(180deg) !important;
+        transform-origin: center center !important;
+        width: 100%;
+        height: 100%;
+        padding: 4px 8px;
+        font-size: 12px;
+        min-width: auto;
+      }
+    }
+  }
+
+  .characteristics-grid {
+    display: none !important;
+  }
+
+  .characteristics-row-mobile {
+    display: none !important;
+  }
+
+  .toggle-section {
+    margin-bottom: 8px;
+  }
+
+  .toggle-header {
+    padding: 8px;
+  }
+
+  .toggle-header h3 {
+    font-size: 14px;
+  }
+
+  .toggle-content {
+    padding: 8px;
+    &.active {
+      padding: 8px;
+    }
+  }
+
+  .explanation {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .explanation h3 {
+    font-size: 14px;
+  }
+
+  .explanation p {
+    font-size: 12px;
+  }
+
+  .impact-item {
+    padding: 8px;
+    margin-bottom: 8px;
+    gap: 3px;
+  }
+
+  .impact-char {
+    font-size: 0.9em;
+  }
+
+  .impact-desc {
+    font-size: 0.8em;
+  }
+
+  /* Characteristic value states for container border in mobile */
+  .characteristic-label-container.perfect {
+    border-color: #28a745; /* Green */
+  }
+
+  .characteristic-label-container.good {
+    border-color: #ffc107; /* Yellow/Orange */
+  }
+
+  .characteristic-label-container.bad {
+    border-color: #dc3545; /* Red */
+  }
+
+  .characteristic-label-container.neutral,
+  .characteristic-label-container.original,
+  .characteristic-label-container.processed,
+  .characteristic-label-container.final {
+    border-color: var(--border-color); /* Default border color */
+  }
+}
+
+/* Light Theme Adjustments */
+body.light-theme {
+  /* Mobile Optimization - Light Theme */
+  @media (max-width: 768px) {
+    /* Characteristic value states for container border in mobile light theme */
+    .characteristic-label-container.perfect {
+      border-color: #a5d6a7; /* Light theme green */
+    }
+
+    .characteristic-label-container.good {
+      border-color: #fff59d; /* Light theme yellow/orange */
+    }
+
+    .characteristic-label-container.bad {
+      border-color: #ef9a9a; /* Light theme red */
+    }
+
+    .characteristic-label-container.neutral,
+    .characteristic-label-container.original,
+    .characteristic-label-container.processed,
+    .characteristic-label-container.final {
+      border-color: var(--border-color); /* Default border color in light theme */
+    }
+
+    // ... rest of light theme mobile styles ...
+  }
+
+  // ... rest of light theme desktop styles ...
+}
+
+/* Remove characteristic value states for grid-item border */
+.grid-item.perfect,
+.grid-item.good,
+.grid-item.bad,
+.grid-item.neutral,
+.grid-item.original,
+.grid-item.processed,
+.grid-item.final {
+  border-color: initial; /* Reset or use a default grid-item border */
+}
+
+/* Characteristic value states for container border */
+.characteristic-label-container.perfect {
+  border-color: #28a745;
+}
+
+.characteristic-label-container.good {
+  border-color: #ffc107;
+}
+
+.characteristic-label-container.bad {
+  border-color: #dc3545;
+}
+
+.characteristic-label-container.neutral {
+  border-color: var(--border-color);
+}
+
+/* Assuming original, processed, and final might not have distinct borders or use neutral */
+.characteristic-label-container.original,
+.characteristic-label-container.processed,
+.characteristic-label-container.final {
+  border-color: var(--border-color);
+}
+
+/* Remove old characteristic-label-container state styles (these should be redundant now) */
+.characteristic-label-container.perfect,
+.characteristic-label-container.good,
+.characteristic-label-container.bad,
+.characteristic-label-container.neutral,
+.characteristic-label-container.original,
+.characteristic-label-container.processed,
+.characteristic-label-container.final {
+  /* Ensure no conflicting border-color here if not set above */
+}
+
+body.light-theme {
+  .characteristic-label-container.perfect,
+  .characteristic-label-container.good,
+  .characteristic-label-container.bad,
+  .characteristic-label-container.neutral,
+  .characteristic-label-container.original,
+  .characteristic-label-container.processed,
+  .characteristic-label-container.final {
+    /* Ensure no conflicting border-color here if not set above */
+  }
+}
+
+#connection-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allows clicking through the SVG */
+  z-index: 10; /* Ensure it's above other content */
+}

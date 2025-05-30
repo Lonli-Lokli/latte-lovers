@@ -192,6 +192,8 @@ body.light-theme .header {
   opacity: 0;
   pointer-events: none;
   user-select: none;
+  -webkit-user-select: none;
+  
 }
 
 .header-btn:hover {
