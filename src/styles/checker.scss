@@ -95,3 +95,29 @@
     margin-bottom: 12px;
   }
 } 
+
+
+/* Blend Group Indentation & Styling */
+.blend-group {
+  padding: 1.2rem 1rem 1rem 1.5rem;
+  border: 2px solid var(--border-color);
+  border-radius: 14px;
+  margin-bottom: 1.2rem;
+  background: var(--surface-color);
+  position: relative;
+}
+
+.blend-group-label {
+  position: absolute;
+  top: -0.6rem;
+  left: 1.2rem;
+  background: var(--surface-color);
+  color: var(--text-color);
+  font-size: 0.7rem;
+  padding: 0 0.5rem;
+  z-index: 4;
+  pointer-events: none;
+  transition: color 0.2s, box-shadow 0.2s;
+}
+
+

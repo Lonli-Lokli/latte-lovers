@@ -215,6 +215,7 @@ body.light-theme .header {
   background: var(--surface-color);
   padding: 0 3px;
   font-size: 0.875rem;
+  z-index: 2; /* Ensure label is above select/input */
 }
 
 .floating-label select,
@@ -241,11 +242,23 @@ body.light-theme .header {
 .floating-label select:not([value=""]):not(:focus) + label,
 .floating-label input:not(:placeholder-shown) + label,
 .floating-label.has-value label {
-  top: -0.4rem;
+  top: -0.5rem;
   font-size: 0.7rem;
   color: var(--primary-color);
   background: var(--surface-color);
   padding: 0 0.2rem;
+  z-index: 3; /* Float label above input/select */
+  box-shadow: 0 2px 6px -2px var(--surface-color), 0 -2px 6px -2px var(--surface-color); /* Prevent overlap */
+}
+
+.floating-label.always-float label {
+  top: -0.5rem;
+  font-size: 0.7rem;
+  color: var(--primary-color);
+  background: var(--surface-color);
+  padding: 0 0.2rem;
+  z-index: 3;
+  box-shadow: 0 2px 6px -2px var(--surface-color), 0 -2px 6px -2px var(--surface-color);
 }
 
 .floating-label select:not([value=""]):not(:focus) + label,
