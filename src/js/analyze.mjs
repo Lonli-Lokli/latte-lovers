@@ -1,3 +1,4 @@
+import { ConnectionManager } from "./svg-connector.mjs";
 import {
   coffeeProfiles,
   processingMethods,
@@ -5,8 +6,38 @@ import {
   calculateLatteScore,
   normalizeScore,
   getCompatibilityGrade,
-  characteristicDescriptions
+  characteristicDescriptions,
+  scoreConfig
 } from "../scoring.mjs";
+
+// Create a single ConnectionManager instance as a singleton for this module
+let connectionManager = null;
+
+export function initializeAnalyzeTab() {
+  renderAnalyzeStages();
+  // Initialize options from existing data
+  initializeOptions();
+
+  // No need to re-add toggle section listeners here, they are added in initializeOptions
+
+  // Initial display (already called in initializeOptions)
+  // updateDisplay();
+
+  // Create the ConnectionManager after DOM is loaded
+  const connectionSvg = document.getElementById("connection-svg");
+  if (!connectionSvg) {
+    console.error("Connection SVG element not found");
+    return;
+  }
+  connectionManager = new ConnectionManager(connectionSvg);
+
+  // Add resize event listener to refresh connections on the singleton manager
+  window.addEventListener("resize", () => {
+    if (connectionManager) {
+      connectionManager.refreshAllConnections();
+    }
+  });
+}
 
 // Use effects directly from scoring.mjs
 const processingEffects = Object.fromEntries(
@@ -16,6 +47,34 @@ const processingEffects = Object.fromEntries(
 const roastingEffects = Object.fromEntries(
   Object.entries(roastLevelEffects).map(([id, level]) => [id, level.effects])
 );
+
+const stages = [
+  {
+    id: "origin",
+    label: "Origin",
+    selectId: "country",
+    charSuffix: "-orig",
+  },
+  {
+    id: "processing",
+    label: "Process",
+    selectId: "processing",
+    charSuffix: "-proc",
+  },
+  {
+    id: "roasting",
+    label: "Roast",
+    selectId: "roasting",
+    charSuffix: "-final",
+  },
+];
+const chars = [
+  { name: "Acidity", id: "acidity" },
+  { name: "Balance", id: "balance" },
+  { name: "Bitterness", id: "bitterness" },
+  { name: "Body", id: "body" },
+  { name: "Sweetness", id: "sweetness" },
+];
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
@@ -286,11 +345,6 @@ function updateDisplay() {
     finalElement.className =
       "char-value final " + getCharacteristicClass(char, finalValue); // Keep final class and add color class
 
-    // Apply color classes to arrows based on impact
-    const arrows = document.querySelectorAll(
-      `#${char}-orig ~ .char-arrow, #${char}-proc ~ .char-arrow`
-    );
-
     // Arrow after original -> processed
     const arrow1 = origElement.nextElementSibling; // The first arrow after original
     if (arrow1 && arrow1.classList.contains("char-arrow")) {
@@ -321,15 +375,23 @@ function updateDisplay() {
 
   updateProcessingDetails();
   updateRoastingDetails();
+
+  requestAnimationFrame(() => {
+    drawConnections({
+      baseProfile,
+      processedProfile,
+      finalProfile,
+    });
+  });
 }
 
 function updateProcessingDetails() {
   const processing = document.getElementById("processing").value;
   const method = processingMethods[processing];
   const effects = method ? method.effects : {}; // Use empty object if method is null/undefined
-  const description = method ? method.description : 'No description available.'; // Get the description
+  const description = method ? method.description : "No description available."; // Get the description
 
-  let html = '';
+  let html = "";
 
   // Create a container for the description sub-section
   html += '<div class="explanation">'; // Use the same class for consistent styling
@@ -337,31 +399,37 @@ function updateProcessingDetails() {
   if (description) {
     html += `<p>${description}</p>`; // Description in p tags
   }
-  html += '</div>'; // Close explanation div
+  html += "</div>"; // Close explanation div
 
   // Get original values to compare with processed values
   const country = document.getElementById("country").value;
   const baseProfile = coffeeProfiles[country] || {}; // Use empty object if profile is null/undefined
 
   for (let char in effects) {
-    const originalValue = baseProfile[char] !== undefined ? baseProfile[char] : null; // Get original value, handle undefined
+    const originalValue =
+      baseProfile[char] !== undefined ? baseProfile[char] : null; // Get original value, handle undefined
     const effectValue = effects[char];
-    const processedValue = originalValue !== null ? clamp(originalValue + effectValue, 0, 10) : null; // Calculate processed value if original is available
+    const processedValue =
+      originalValue !== null ? clamp(originalValue + effectValue, 0, 10) : null; // Calculate processed value if original is available
 
     // Determine arrow class for impact description
-    let impactArrowClass = '';
+    let impactArrowClass = "";
     if (originalValue !== null && processedValue !== null) {
-        impactArrowClass = getArrowClass(char, originalValue, processedValue);
+      impactArrowClass = getArrowClass(char, originalValue, processedValue);
     }
 
     if (effectValue !== 0) {
-      const sign = effectValue > 0 ? '+' : '';
+      const sign = effectValue > 0 ? "+" : "";
       // Get the characteristic-specific taste impact description
-      const charImpactDescription = characteristicDescriptions[char] ? characteristicDescriptions[char].impact(effectValue) : '';
+      const charImpactDescription = characteristicDescriptions[char]
+        ? characteristicDescriptions[char].impact(effectValue)
+        : "";
 
       html += `
         <div class="impact-item">
-          <div class="impact-char ${impactArrowClass}">${char.charAt(0).toUpperCase() + char.slice(1)} (${sign}${effectValue})</div>
+          <div class="impact-char ${impactArrowClass}">${
+        char.charAt(0).toUpperCase() + char.slice(1)
+      } (${sign}${effectValue})</div>
           <div class="impact-desc">${charImpactDescription}</div> <!-- Use characteristic-specific impact description -->
         </div>
       `;
@@ -375,53 +443,63 @@ function updateRoastingDetails() {
   const roasting = document.getElementById("roasting").value;
   const level = roastLevelEffects[roasting];
   const effects = level ? level.effects : {}; // Use empty object if level is null/undefined
-  const description = level ? level.description : 'No description available.'; // Get the description
+  const description = level ? level.description : "No description available."; // Get the description
 
-  let html = '';
+  let html = "";
 
-   // Create a container for the description sub-section
-   html += '<div class="explanation">'; // Use the same class for consistent styling
-   html += `<h3>${level.displayName}</h3>`; // Sub-header
-   if (description) {
+  // Create a container for the description sub-section
+  html += '<div class="explanation">'; // Use the same class for consistent styling
+  html += `<h3>${level.displayName}</h3>`; // Sub-header
+  if (description) {
     html += `<p>${description}</p>`; // Description in p tags
   }
-  html += '</div>'; // Close explanation div
+  html += "</div>"; // Close explanation div
 
-   // Get processed values to compare with final values
+  // Get processed values to compare with final values
   const country = document.getElementById("country").value;
   const processing = document.getElementById("processing").value;
 
   const baseProfile = coffeeProfiles[country] || {}; // Use empty object if profile is null/undefined
-  const processingEffects = processingMethods[processing] ? processingMethods[processing].effects : {}; // Use empty object if effects are null/undefined
+  const processingEffects = processingMethods[processing]
+    ? processingMethods[processing].effects
+    : {}; // Use empty object if effects are null/undefined
 
   const processedProfile = {};
   for (let char in baseProfile) {
-     processedProfile[char] = clamp(
-       baseProfile[char] + (processingEffects[char] || 0),
-       0, 10
-     );
-   }
-
+    processedProfile[char] = clamp(
+      baseProfile[char] + (processingEffects[char] || 0),
+      0,
+      10
+    );
+  }
 
   for (let char in effects) {
-     const processedValue = processedProfile[char] !== undefined ? processedProfile[char] : null; // Get processed value, handle undefined
-     const effectValue = effects[char];
-     const finalValue = processedValue !== null ? clamp(processedValue + effectValue, 0, 10) : null; // Calculate final value if processed is available
+    const processedValue =
+      processedProfile[char] !== undefined ? processedProfile[char] : null; // Get processed value, handle undefined
+    const effectValue = effects[char];
+    const finalValue =
+      processedValue !== null
+        ? clamp(processedValue + effectValue, 0, 10)
+        : null; // Calculate final value if processed is available
 
-     // Determine arrow class for impact description
-     let impactArrowClass = '';
-      if (processedValue !== null && finalValue !== null) {
-        impactArrowClass = getArrowClass(char, processedValue, finalValue);
-     }
+    // Determine arrow class for impact description
+    let impactArrowClass = "";
+    if (processedValue !== null && finalValue !== null) {
+      impactArrowClass = getArrowClass(char, processedValue, finalValue);
+    }
 
     if (effectValue !== 0) {
-      const sign = effectValue > 0 ? '+' : '';
-       // Get the characteristic-specific taste impact description
-       const charImpactDescription = characteristicDescriptions[char] ? characteristicDescriptions[char].impact(effectValue) : '';
+      const sign = effectValue > 0 ? "+" : "";
+      // Get the characteristic-specific taste impact description
+      const charImpactDescription = characteristicDescriptions[char]
+        ? characteristicDescriptions[char].impact(effectValue)
+        : "";
 
       html += `
         <div class="impact-item">
-          <div class="impact-char ${impactArrowClass}">${char.charAt(0).toUpperCase() + char.slice(1)} (${sign}${effectValue})</div>
+          <div class="impact-char ${impactArrowClass}">${
+        char.charAt(0).toUpperCase() + char.slice(1)
+      } (${sign}${effectValue})</div>
           <div class="impact-desc">${charImpactDescription}</div> <!-- Use characteristic-specific impact description -->
         </div>
       `;
@@ -450,69 +528,61 @@ function toggleSection(event) {
 function initializeOptions() {
   // Initialize country options
   const countrySelect = document.getElementById("country");
-
-  // Get entries and sort by key (id) alphabetically
-  const sortedCountryOptions = Object.entries(coffeeProfiles)
-    .sort(([idA,], [idB,]) => idA.localeCompare(idB))
-    .map(([id, profile]) => `<option value="${id}">${profile.name || id.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}</option>`);
-
-  countrySelect.innerHTML = sortedCountryOptions.join("");
-
-  countrySelect.selectedIndex = 0; // Select the first data option (which is now the first alphabetically by key)
-  // Add class to floating label if an option is selected
-  if (countrySelect.value) {
-    countrySelect.closest(".floating-label").classList.add("has-value");
+  if (countrySelect) {
+    const sortedCountryOptions = Object.entries(coffeeProfiles)
+      .sort(([idA], [idB]) => idA.localeCompare(idB))
+      .map(
+        ([id, profile]) =>
+          `<option value="${id}">${
+            profile.name ||
+            id
+              .split("-")
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ")
+          }</option>`
+      );
+    countrySelect.innerHTML = sortedCountryOptions.join("");
+    countrySelect.selectedIndex = 0;
   }
 
   // Initialize processing options
   const processingSelect = document.getElementById("processing");
-  processingSelect.innerHTML = Object.entries(processingMethods)
-    .map(
-      ([id, method]) => `<option value="${id}">${method.displayName}</option>`
-    )
-    .join("");
-  processingSelect.selectedIndex = 0; // Select the first data option
-  // Add class to floating label if an option is selected
-  if (processingSelect.value) {
-    processingSelect.closest(".floating-label").classList.add("has-value");
+  if (processingSelect) {
+    processingSelect.innerHTML = Object.entries(processingMethods)
+      .map(
+        ([id, method]) => `<option value="${id}">${method.displayName}</option>`
+      )
+      .join("");
+    processingSelect.selectedIndex = 0;
   }
 
   // Initialize roasting options
   const roastingSelect = document.getElementById("roasting");
-  roastingSelect.innerHTML = Object.entries(roastLevelEffects)
-    .map(([id, level]) => `<option value="${id}">${level.displayName}</option>`)
-    .join("");
-  roastingSelect.selectedIndex = 0; // Select the first data option
-  // Add class to floating label if an option is selected
-  if (roastingSelect.value) {
-    roastingSelect.closest(".floating-label").classList.add("has-value");
+  if (roastingSelect) {
+    roastingSelect.innerHTML = Object.entries(roastLevelEffects)
+      .map(
+        ([id, level]) => `<option value="${id}">${level.displayName}</option>`
+      )
+      .join("");
+    roastingSelect.selectedIndex = 0;
   }
 
   // Add event listeners to update class on change
-  document.getElementById("country").addEventListener("change", function () {
-    if (this.value) {
-      this.closest(".floating-label").classList.add("has-value");
-    } else {
-      this.closest(".floating-label").classList.remove("has-value");
-    }
-    updateDisplay();
-  });
-  document.getElementById("processing").addEventListener("change", function () {
-    if (this.value) {
-      this.closest(".floating-label").classList.add("has-value");
-    } else {
-      this.closest(".floating-label").classList.remove("has-value");
-    }
-    updateDisplay();
-  });
-  document.getElementById("roasting").addEventListener("change", function () {
-    if (this.value) {
-      this.closest(".floating-label").classList.add("has-value");
-    } else {
-      this.closest(".floating-label").classList.remove("has-value");
-    }
-    updateDisplay();
-  });
+  if (countrySelect) {
+    countrySelect.addEventListener("change", function () {
+      updateDisplay();
+    });
+  }
+  if (processingSelect) {
+    processingSelect.addEventListener("change", function () {
+      updateDisplay();
+    });
+  }
+  if (roastingSelect) {
+    roastingSelect.addEventListener("change", function () {
+      updateDisplay();
+    });
+  }
 
   // Event listeners for toggle sections
   document.querySelectorAll(".toggle-header").forEach((header) => {
@@ -523,12 +593,175 @@ function initializeOptions() {
   updateDisplay();
 }
 
-export function initializeAnalyzeTab() {
-  // Initialize options from existing data
-  initializeOptions();
+// Helper to get the color for an SVG line based on characteristic change and ideal range
+function getLineColor(char, originalValue, finalValue) {
+  const range = idealLatteRanges[char];
+  if (!range) return "#b8b8b8"; // Default neutral color
 
-  // No need to re-add toggle section listeners here, they are added in initializeOptions
+  const originalDistanceToIdeal = getDistanceToIdeal(char, originalValue);
+  const finalDistanceToIdeal = getDistanceToIdeal(char, finalValue);
 
-  // Initial display (already called in initializeOptions)
-  // updateDisplay();
+  // Determine if the value moved closer or further from the ideal range
+  if (finalDistanceToIdeal < originalDistanceToIdeal) {
+    return "#28a745"; // Green for improvement
+  } else if (finalDistanceToIdeal > originalDistanceToIdeal) {
+    return "#dc3545"; // Red for worsening
+  } else {
+    return "#b8b8b8"; // Gray for neutral or no change
+  }
+}
+
+// Function to draw SVG connections between stages
+// Uses the singleton ConnectionManager instance
+function drawConnections({ baseProfile, processedProfile, finalProfile }) {
+  if (!connectionManager) {
+    console.error("ConnectionManager not initialized");
+    return;
+  }
+
+  const stageNames = stages.map((stage) => stage.id);
+  const profiles = {
+    origin: baseProfile,
+    processing: processedProfile,
+    roasting: finalProfile,
+  }; // Use finalProfile for roasting stage data
+  const charNames = chars.map((char) => char.id); // Use ids for characteristics
+
+  // Clear any existing connections first
+  connectionManager.clearAllConnections();
+
+  // Iterate through stages that have a next stage (up to roasting)
+  for (let i = 0; i < stageNames.length - 1; i++) {
+    const currentStageId = stageNames[i];
+    const nextStageId = stageNames[i + 1];
+
+    const currentProfile = profiles[currentStageId];
+    const nextProfile = profiles[nextStageId];
+
+    // Ensure both profiles are available
+    if (!currentProfile || !nextProfile) {
+      continue;
+    }
+
+    charNames.forEach((char) => {
+      // Get the characteristic item elements' selectors
+      const currentItemSelector = `#stage-${currentStageId} .analyze-char-item.${char}`;
+      const nextItemSelector = `#stage-${nextStageId} .analyze-char-item.${char}`;
+
+      // Get the characteristic values for color determination
+      const value1 = currentProfile[char];
+      const value2 = nextProfile[char];
+
+      // Ensure values are valid before determining color and drawing line
+      if (value1 !== undefined && value2 !== undefined) {
+        // Calculate the difference and format the label text
+        const difference = value2 - value1;
+        const labelText =
+          difference > 0 ? `+${difference.toFixed(1)}` : difference.toFixed(1);
+
+        // Determine line color based on value change from value1 to value2
+        const colorAfter = getLineColor(char, value1, value2);
+        const colorBefore = "#b8b8b8"; // Neutral color for the first segment
+
+        // Create a unique ID for the connection
+        const connectionId = `${currentStageId}-to-${nextStageId}-${char}-connection`;
+
+        // Use the singleton ConnectionManager instance to create the connection
+        connectionManager.createConnection(
+          connectionId,
+          currentItemSelector,
+          nextItemSelector,
+          labelText, // Use the difference as label text
+          colorBefore, // Color before label
+          colorAfter // Color after label
+        );
+      }
+    });
+  }
+  // Draw connections from Roast stage to final score section using ConnectionManager
+  drawRoastToScoreConnectionsWithManager(profiles["roasting"]);
+}
+
+// Helper to draw connections from each "Roast" char to the score section using ConnectionManager
+function drawRoastToScoreConnectionsWithManager(roastingProfile) {
+  if (!connectionManager || !roastingProfile) return;
+  connectionManager.clearConnectionsByPrefix("roast-to-score-");
+
+  const roastStage = document.getElementById("stage-roasting");
+  const scoreSelector = "#formula-result";
+  const scoreSection = document.querySelector(scoreSelector);
+  if (!roastStage || !scoreSection) return;
+
+  const totalScore = calculateLatteScore(roastingProfile);
+  const normalizedTotal = normalizeScore(totalScore);
+  const normalizationFactor = normalizedTotal / totalScore;
+
+  chars.forEach((char, idx) => {
+    const charSelector = `#stage-roasting .analyze-char-item.${char.id}`;
+
+    const charScoring = scoreConfig[char.id];
+
+    const contribution = charScoring.weight(roastingProfile);
+    const penalty = charScoring.penalty(roastingProfile);
+
+    let contributionText = contribution === 0 ? "0" : `+${(contribution *normalizationFactor).toFixed(2)}`;
+    let penaltyText = penalty !== 0 ? ` (Penalty: ${(penalty * normalizationFactor).toFixed(2)})` : "";
+
+    connectionManager.createVerticalConnection(
+      `roast-to-score-${char.id}`,
+      charSelector,
+      scoreSelector,
+      {text: contributionText, color: '--analyze-label-fg'},
+      {text: penaltyText, color: 'red'},
+      "#b8b8b8",
+      "#b8b8b8",
+      idx % 2 === 0 ? 0.55 : 0.75
+    );
+  });
+}
+
+function renderAnalyzeStages() {
+  const container = document.getElementById("analyze-stages-js");
+  container.innerHTML = "";
+  stages.forEach((stage) => {
+    const stageDiv = document.createElement("div");
+    stageDiv.className = "analyze-stage";
+    stageDiv.id = `stage-${stage.id}`;
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "analyze-stage-row";
+    // Editor
+    const editorDiv = document.createElement("div");
+    editorDiv.className = "analyze-stage-editor";
+    const label = document.createElement("label");
+    label.setAttribute("for", stage.selectId);
+    label.textContent = stage.label;
+    const select = document.createElement("select");
+    select.id = stage.selectId;
+    select.value = "";
+    const option = document.createElement("option");
+    option.value = "";
+    option.disabled = true;
+    option.selected = true;
+    editorDiv.appendChild(label);
+    select.appendChild(option);
+    editorDiv.appendChild(select);
+    rowDiv.appendChild(editorDiv);
+    // Char items
+    chars.forEach((char) => {
+      const charDiv = document.createElement("div");
+      charDiv.className = "analyze-char-item " + char.id;
+      const charName = document.createElement("span");
+      charName.className = "char-name";
+      charName.textContent = char.name;
+      const charValue = document.createElement("span");
+      charValue.className = "char-value";
+      charValue.id = `${char.id}${stage.charSuffix}`;
+      charValue.textContent = "-";
+      charDiv.appendChild(charName);
+      charDiv.appendChild(charValue);
+      rowDiv.appendChild(charDiv);
+    });
+    stageDiv.appendChild(rowDiv);
+    container.appendChild(stageDiv);
+  });
 }

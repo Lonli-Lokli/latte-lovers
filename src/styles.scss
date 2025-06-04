@@ -1,3 +1,15 @@
+/* Import Dependencies */
+@use 'multiple-select-vanilla/dist/styles/sass/multiple-select.scss';
+
+/* Import Shared Styles */
+@use 'styles/result.scss';
+
+/* Import Tab-specific Styles */
+@use 'styles/checker.scss';
+@use 'styles/leaders.scss';
+@use 'styles/analyze.scss';
+
+
 /* Global Variables */
 :root {
   --primary-color: #8b6f47;
@@ -32,16 +44,6 @@ body.light-theme {
   --button-shadow: rgba(107, 78, 61, 0.3);
 }
 
-/* Import Dependencies */
-@import 'multiple-select-vanilla/dist/styles/sass/multiple-select.scss';
-
-/* Import Shared Styles */
-@import 'styles/result.scss';
-
-/* Import Tab-specific Styles */
-@import 'styles/checker.scss';
-@import 'styles/leaders.scss';
-@import 'styles/analyze.scss';
 
 /* Global Reset */
 * {
@@ -270,7 +272,7 @@ body.light-theme .header {
 /* Tab Navigation */
 .tab-navigation {
   flex-shrink: 0;
-  margin: 0.75rem 1rem;
+  margin: 0.75rem 0;
   padding: 0;
   height: auto;
   box-sizing: border-box;

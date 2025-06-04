@@ -1,3 +1,13 @@
+:root {
+  --result-description-text-color: white;
+}
+
+/* Light Theme Variables */
+body.light-theme {
+  --result-description-text-color: red;
+}
+
+
 /* Shared Result Styles */
 .result {
   border-radius: 8px;
@@ -69,6 +79,7 @@
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   border: none;
 }
@@ -95,7 +106,7 @@
   padding: 10px 15px;
   font-size: 13px;
   line-height: 1.4;
-  color: white;
+  color: var('--result-description-text-color');
   background: rgba(0, 0, 0, 0.1);
 }
 

@@ -5,6 +5,7 @@ import {
   roastLevelEffects,
   createFinalProfile,
   normalizeScore,
+  mergeProfiles,
   getCompatibilityGrade
 } from "../scoring.mjs";
 
