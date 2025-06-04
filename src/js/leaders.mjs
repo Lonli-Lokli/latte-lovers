@@ -1,6 +1,5 @@
 import { multipleSelect } from "multiple-select-vanilla";
 
-
 import {
   coffeeProfiles,
   processingMethods,
@@ -9,7 +8,7 @@ import {
   applyRoastEffects,
   calculateLatteScore,
   normalizeScore,
-  getCompatibilityGrade
+  getCompatibilityGrade,
 } from "../scoring.mjs";
 
 export function initializeLeadersTab() {
@@ -121,7 +120,7 @@ export function initializeLeadersFilters(
       const leaderProcessingKey = leaderProcessingEntry
         ? leaderProcessingEntry[0]
         : null;
-      const leaderRoastKey = leader.roast.toLowerCase();
+      const leaderRoastKey = leader.roastDisplayName.toLowerCase();
 
       const countryMatch = selectedCountries.includes(leaderCountryKey);
       const processingMatch = selectedProcessings.includes(leaderProcessingKey);
@@ -147,20 +146,30 @@ export function initializeLeadersFilters(
         tableRow.innerHTML = `
                     <td class="table-cell table-rank">${index + 1}</td>
                     <td class="table-cell">${leader.country}</td>
-                     <td class="table-cell" data-processing="${
+                     <td class="table-cell" data-kind="processing" data-item="${
                        Object.entries(processingMethods).find(
                          ([_, method]) =>
                            method.abbreviation === leader.processingAbbreviation
                        )?.[0]
                      }">
-                      <span class="processing-abbreviation-mobile">${
+                      <span class="abbreviation-mobile">${
                         leader.processingAbbreviation
                       }</span>
-                      <span class="processing-fullname-desktop">${
+                      <span class="fullname-desktop">${
                         leader.processingDisplayName
                       }</span>
                     </td>
-                    <td class="table-cell">${leader.roast}</td>
+                    <td class="table-cell" data-kind="roast" data-item="${
+                      Object.entries(roastLevelEffects).find(
+                        ([_, method]) =>
+                          method.abbreviation === leader.roastAbbreviation
+                      )?.[0]
+                    }"> <span class="abbreviation-mobile">${
+          leader.roastAbbreviation
+        }</span>
+                      <span class="fullname-desktop">${
+                        leader.roastDisplayName
+                      }</span></td>
                     <td class="table-cell table-score ${leader.grade}">${
           leader.score
         }/10</td>
@@ -188,8 +197,11 @@ export function initializeLeadersFilters(
   // Observe theme changes on the body and update multi-selects
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-        const isLightTheme = document.body.classList.contains('light-theme');
+      if (
+        mutation.type === "attributes" &&
+        mutation.attributeName === "class"
+      ) {
+        const isLightTheme = document.body.classList.contains("light-theme");
         const isDarkMode = !isLightTheme;
 
         if (msCountryInstance) {
@@ -207,7 +219,6 @@ export function initializeLeadersFilters(
 
   observer.observe(document.body, { attributes: true });
 }
-
 
 // Function to generate and rank all possible coffee combinations
 function generateAndRankLeaders(
@@ -245,7 +256,9 @@ function generateAndRankLeaders(
           processingAbbreviation: processing.abbreviation,
           processingDisplayName: processing.displayName,
           processingDescription: processing.description,
-          roast: roastName.charAt(0).toUpperCase() + roastName.slice(1),
+          roastAbbreviation: roast.abbreviation,
+          roastDisplayName: roast.displayName,
+          roastDescription: roast.description,
           score: parseFloat(normalizedLatteScore.toFixed(1)),
           grade: getCompatibilityGrade(normalizedLatteScore),
         });
@@ -323,13 +336,23 @@ export function initializeTooltips() {
 
   // Add event listeners to all processing abbreviations and full names
   document
-    .querySelectorAll(
-      ".processing-abbreviation-mobile, .processing-fullname-desktop"
-    )
+    .querySelectorAll(".abbreviation-mobile, .fullname-desktop")
     .forEach((element) => {
-      const processingName =
-        element.parentElement.getAttribute("data-processing");
-      const processing = processingMethods[processingName];
+      const processingName = element.parentElement.getAttribute("data-item");
+      const cellKind = element.parentElement.getAttribute("data-kind");
+
+      const processingSource =
+        cellKind === "processing"
+          ? processingMethods
+          : cellKind === "roast"
+          ? roastLevelEffects
+          : null;
+      if (!processingSource) {
+        console.warn(`Unknown cell kind: ${cellKind}`);
+        return;
+      }
+
+      const processing = processingSource[processingName];
       if (processing) {
         const tooltipText = `${processing.displayName}: ${processing.description}`;
 

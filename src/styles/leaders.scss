@@ -106,7 +106,7 @@
 }
 
 /* Processing abbreviation styles */
-.processing-abbreviation-mobile {
+.abbreviation-mobile {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -125,12 +125,12 @@
   transition: background-color 0.2s ease;
 }
 
-.processing-abbreviation-mobile:hover,
-.processing-abbreviation-mobile:active {
+.abbreviation-mobile:hover,
+.abbreviation-mobile:active {
   background-color: var(--surface-hover-color);
 }
 
-.processing-fullname-desktop {
+.fullname-desktop {
   display: none;
 }
 
@@ -194,13 +194,13 @@
     font-size: 0.75rem;
   }
 
-  .processing-abbreviation-mobile {
+  .abbreviation-mobile {
     width: 26px;
     height: 26px;
     font-size: 0.7rem;
   }
 
-  .processing-fullname-desktop {
+  .fullname-desktop {
     display: none !important;
   }
 
@@ -215,11 +215,11 @@
 
 /* Desktop styles */
 @media (min-width: 768px) {
-  .processing-abbreviation-mobile {
+  .abbreviation-mobile {
     display: none !important;
   }
 
-  .processing-fullname-desktop {
+  .fullname-desktop {
     display: inline;
   }
 }

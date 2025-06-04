@@ -12,11 +12,11 @@
 
 /* Global Variables */
 :root {
-  --primary-color: #8b6f47;
-  --primary-hover: #a88c6c;
+  --primary-color: #ffd700;
+  --primary-hover: #bfa100;
   --surface-color: #2d2d2d;
   --surface-hover-color: #3d3d3d;
-  --text-color: #ffffff;
+  --text-color: #f5f5f5;
   --border-color: #404040;
   --header-gradient-start: #1a1a1a;
   --header-gradient-end: #2d2d2d;
@@ -29,11 +29,11 @@
 
 /* Light Theme Variables */
 body.light-theme {
-  --primary-color: #6b4e3d;
-  --primary-hover: #8b6f47;
+  --primary-color: #7b4f00;
+  --primary-hover: #4a2e00;
   --surface-color: #ffffff;
   --surface-hover-color: #f5f5f5;
-  --text-color: #333333;
+  --text-color: #23201d;
   --border-color: #e0e0e0;
   --header-gradient-start: #3e2723;
   --header-gradient-end: #5d4037;

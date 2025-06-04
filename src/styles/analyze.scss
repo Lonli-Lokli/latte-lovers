@@ -6,6 +6,9 @@
   --analyze-label-fg: #fff;
   --char-final: #292522;
   --description-text-color: #b8b8b8;
+  --text-color: #f5f5f5;
+  --primary-color: #ffd700;
+  --primary-color-dark: #bfa100;
 }
 
 /* Light Theme Variables */
@@ -14,9 +17,12 @@ body.light-theme {
   --select-bg: #fff;
   --select-dropdown-bg: #fff;
   --analyze-label-bg: #fff;
-  --analyze-label-fg: #292522;
+  --analyze-label-fg: #23201d;
   --char-final: green;
   --description-text-color: #bababa;
+  --text-color: #23201d;
+  --primary-color: #7b4f00;
+  --primary-color-dark: #4a2e00;
 }
 
 /* Formula Tab Styles */
@@ -580,6 +586,7 @@ body.light-theme {
     width: 80px;
     label {
       margin: 0 5px;
+      align-self: center;
     }
     select {
       writing-mode: vertical-rl;
