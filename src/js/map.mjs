@@ -18,11 +18,13 @@ function initializeMapSvg() {
   const container = document.querySelector(".map-container");
   if (container) {
     container.style.width = "100%";
-    container.style.maxWidth = "100vw";
+    container.style.height = "100%";
+    container.style.maxWidth = "none";
+    container.style.maxHeight = "none";
     container.style.overflow = "hidden";
     container.style.touchAction = "none";
-    container.style.height = "100dvh"; // Ensure full viewport height on mobile
-    container.style.minHeight = "100dvh";
+    container.style.margin = "0";
+    container.style.padding = "0";
   }
 
   // Responsive SVG sizing
@@ -31,8 +33,10 @@ function initializeMapSvg() {
     .attr("height", "100%")
     .attr("viewBox", `0 0 1000 500`)
     .style("display", "block")
-    .style("max-width", "100vw")
-    .style("height", "100dvh"); // Ensure SVG fills container vertically
+    .style("width", "100%")
+    .style("height", "100%")
+    .style("margin", "0")
+    .style("padding", "0");
 
   // D3 zoom behavior
   svg.call(
@@ -65,7 +69,8 @@ function initializeMapSvg() {
     .style("fill", (d) => {
       const countryName = d3CountryNameNormilizer(d.properties.name);
       const data = coffeeScore[countryName];
-      return data ? getColor(data.best.score) : "#555";
+      // Use a light gray for countries with no data
+      return data ? getColor(data.best.score) : "var(--map-country-nodata)";
     })
     .style("stroke", "#333")
     .style("stroke-width", 0.5)
@@ -79,6 +84,8 @@ function initializeMapSvg() {
           .style("stroke-width", 2)
           .style("filter", "brightness(1.2)");
         showTooltip(event, data, d.properties.name);
+      } else {
+        hideTooltip(); // Hide tooltip if no data
       }
     })
     .on("mousemove", function (event, d) {
@@ -86,18 +93,19 @@ function initializeMapSvg() {
       const data = coffeeScore[countryName];
       if (data) {
         moveTooltip(event);
+      } else {
+        hideTooltip(); // Hide tooltip if no data
       }
     })
     .on("mouseleave", function (event, d) {
       const countryName = d3CountryNameNormilizer(d.properties.name);
       const data = coffeeScore[countryName];
-      if (data) {
-        select(this)
-          .style("stroke", "#333")
-          .style("stroke-width", 0.5)
-          .style("filter", "none");
-        hideTooltip();
-      }
+      // Always hide tooltip on mouseleave, regardless of data
+      select(this)
+        .style("stroke", "#333")
+        .style("stroke-width", 0.5)
+        .style("filter", "none");
+      hideTooltip();
     });
 
   // Update statistics
@@ -112,31 +120,30 @@ const max = Math.max(...allScores);
 
 // Color mapping function
 function getColor(score) {
-  // Normalize score to [0, 1]
-  const t = (normalizeScore(score) - min) / (max - min);
-  // Color stops
-  const worst = { r: 198, g: 40, b: 40 }; // #c62828
-  const good = { r: 251, g: 192, b: 45 }; // #fbc02d
-  const best = { r: 46, g: 125, b: 50 }; // #2e7d32
-
+  const norm = normalizeScore(score);
+  let t, from, to;
+  if (norm > 8) {
+    // Green shade
+    t = (norm - 8) / 2; // 8..10 => 0..1
+    from = { r: 120, g: 200, b: 120 }; // light green
+    to = { r: 46, g: 125, b: 50 }; // dark green
+  } else if (norm >= 6) {
+    // Yellow shade
+    t = (norm - 6) / 2; // 6..8 => 0..1
+    from = { r: 251, g: 192, b: 45 }; // light yellow
+    to = { r: 255, g: 160, b: 0 }; // dark yellow
+  } else {
+    // Red shade
+    t = norm / 6; // 0..6 => 0..1
+    from = { r: 255, g: 138, b: 128 }; // light red
+    to = { r: 198, g: 40, b: 40 }; // dark red
+  }
   function lerp(a, b, t) {
     return a + (b - a) * t;
   }
-
-  let r, g, b;
-  if (t <= 0.5) {
-    // Interpolate from worst to good
-    const localT = t / 0.5;
-    r = Math.round(lerp(worst.r, good.r, localT));
-    g = Math.round(lerp(worst.g, good.g, localT));
-    b = Math.round(lerp(worst.b, good.b, localT));
-  } else {
-    // Interpolate from good to best
-    const localT = (t - 0.5) / 0.5;
-    r = Math.round(lerp(good.r, best.r, localT));
-    g = Math.round(lerp(good.g, best.g, localT));
-    b = Math.round(lerp(good.b, best.b, localT));
-  }
+  const r = Math.round(lerp(from.r, to.r, t));
+  const g = Math.round(lerp(from.g, to.g, t));
+  const b = Math.round(lerp(from.b, to.b, t));
   return `rgb(${r},${g},${b})`;
 }
 
@@ -186,7 +193,20 @@ function showTooltip(event, data, countryName) {
       .style("max-width", "100vw")
       .style("z-index", 9999);
   } else {
-    tooltip.classed("show", true);
+    tooltip
+      .classed("show", true)
+      .style("position", "absolute")
+      .style("pointer-events", "none")
+      .style("background", "#222")
+      .style("color", "#fff")
+      .style("border-radius", "8px")
+      .style("box-shadow", "0 2px 12px rgba(0,0,0,0.3)")
+      .style("padding", "16px 20px")
+      .style("min-width", "220px")
+      .style("max-width", "320px")
+      .style("font-size", "15px")
+      .style("line-height", "1.5")
+      .style("z-index", 9999);
     moveTooltip(event);
   }
 }
@@ -194,13 +214,32 @@ function showTooltip(event, data, countryName) {
 function moveTooltip(event) {
   if (window.innerWidth <= 768) return; // Don't move on mobile, it's pinned
   const tooltip = select("#tooltip");
-  const containerRect = document
-    .querySelector(".map-container")
-    .getBoundingClientRect();
+  const container = document.querySelector(".map-container");
+  const containerRect = container.getBoundingClientRect();
+  const tooltipNode = tooltip.node();
+
+  // Default position: right and slightly below the cursor
+  let left = event.clientX - containerRect.left + 10;
+  let top = event.clientY - containerRect.top - 10;
+
+  // Prevent tooltip from overflowing right edge
+  if (tooltipNode) {
+    const tooltipWidth = tooltipNode.offsetWidth;
+    if (left + tooltipWidth > containerRect.width) {
+      left = event.clientX - containerRect.left - tooltipWidth - 10;
+      if (left < 0) left = 0; // Clamp to left edge
+    }
+    // Prevent tooltip from overflowing bottom edge
+    const tooltipHeight = tooltipNode.offsetHeight;
+    if (top + tooltipHeight > containerRect.height) {
+      top = containerRect.height - tooltipHeight - 10;
+      if (top < 0) top = 0;
+    }
+  }
 
   tooltip
-    .style("left", event.clientX - containerRect.left + 10 + "px")
-    .style("top", event.clientY - containerRect.top - 10 + "px");
+    .style("left", left + "px")
+    .style("top", top + "px");
 }
 
 function hideTooltip() {
