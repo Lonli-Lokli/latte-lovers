@@ -1,9 +1,9 @@
 // Tab Configuration
 export const tabs = {
-  checker: {
-    id: "checker",
-    label: "Coffee Checker",
-    icon: "🔍",
+  score: {
+    id: "score",
+    label: "Score",
+    icon: "⭐",
     enabled: true,
     default: true,
   },
@@ -21,6 +21,13 @@ export const tabs = {
     enabled: true,
     default: false,
   },
+  map: {
+    id: "map",
+    label: "Map",
+    icon: "🌐",
+    enabled: true,
+    default: false,
+  },
   // Add new tabs here
 };
 
@@ -32,9 +39,7 @@ export const getEnabledTabs = () => {
 // Get default tab
 export const getDefaultTab = () => {
   return (
-    Object.values(tabs).find((tab) => tab.default)?.id ||
-    tabs[0]?.id ||
-    "checker"
+    Object.values(tabs).find((tab) => tab.default)?.id || tabs[0]?.id || "score"
   );
 };
 

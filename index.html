@@ -163,9 +163,10 @@
         getDefaultTab,
         isValidTab,
       } from "./src/config.js";
-      import { initializeCheckerTab } from "./src/js/checker.mjs";
+      import { initializeScoreTab } from "./src/js/score.mjs";
       import { initializeLeadersTab } from "./src/js/leaders.mjs";
       import { initializeAnalyzeTab } from "./src/js/analyze.mjs";
+      import { initializeMapTab } from "./src/js/map.mjs";
 
       // Content cache
       const contentCache = new Map();
@@ -211,8 +212,8 @@
 
           // Initialize elements and functionality based on tab content
           switch (tabName) {
-            case "checker":
-              initializeCheckerTab();
+            case "score":
+              initializeScoreTab();
               break;
 
             case "leaders":
@@ -221,6 +222,10 @@
 
             case "analyze":
               initializeAnalyzeTab();
+              break;
+
+            case "map":
+              initializeMapTab();
               break;
 
             default:

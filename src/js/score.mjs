@@ -9,7 +9,7 @@ import {
   getCompatibilityGrade
 } from "../scoring.mjs";
 
-export function initializeCheckerTab() {
+export function initializeScoreTab() {
   initializeCountryOptions();
   initializeProcessingOptions();
   initializeRoastingOptions();

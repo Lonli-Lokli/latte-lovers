@@ -6,7 +6,8 @@ import {
   processingMethods,
   roastLevelEffects,
   ACTUAL_MAX_RAW,
-  ACTUAL_MIN_RAW
+  ACTUAL_MIN_RAW,
+  coffeeScore,
 } from "../src/scoring.mjs";
 import { expect, test } from "vitest";
 
@@ -21,26 +22,16 @@ test("Find maximum score for single origin", () => {
 
   // Test all possible combinations
   Object.keys(coffeeProfiles).forEach((country) => {
-    Object.keys(processingMethods).forEach((processing) => {
-      Object.keys(roastLevelEffects).forEach((roastLevel) => {
-        const score = calculateLatteScore(
-          createFinalProfile(coffeeProfiles[country], processing, roastLevel)
-        );
-        if (score > maxScore) {
-          maxScore = score;
-          bestCombination = {
-            country,
-            processing,
-            roastLevel,
-            score,
-          };
-        }
-      });
-    });
+    expect(coffeeProfiles[country].sweetness, country).toBeDefined();
+    const { maxScore: tempMaxScore, bestCombination: tempBestCombination } =
+      getMaxScoreForCountry(country);
+    if (tempMaxScore > maxScore) {
+      maxScore = tempMaxScore;
+      bestCombination = tempBestCombination;
+    }
   });
 
-  console.log("Best Single Origin Combination:", bestCombination);
-  expect(maxScore.toFixed(3)).toBe('9.162');
+  expect(maxScore.toFixed(3)).toBe("9.162");
 });
 
 test("Find maximum score for blends", () => {
@@ -98,7 +89,6 @@ test("Find maximum score for blends", () => {
     }
   }
 
-  console.log("Best Blend Combination:", bestCombination);
   expect(maxScore.toFixed(3)).toBe(ACTUAL_MAX_RAW.toString());
 });
 
@@ -113,25 +103,15 @@ test("Find minimum score for single origin", () => {
 
   // Test all possible combinations
   Object.keys(coffeeProfiles).forEach((country) => {
-    Object.keys(processingMethods).forEach((processing) => {
-      Object.keys(roastLevelEffects).forEach((roastLevel) => {
-        const score = calculateLatteScore(
-          createFinalProfile(coffeeProfiles[country], processing, roastLevel)
-        );
-        if (score < minScore) {
-          minScore = score;
-          worstCombination = {
-            country,
-            processing,
-            roastLevel,
-            score,
-          };
-        }
-      });
-    });
+    expect(coffeeProfiles[country].sweetness, country).toBeDefined();
+    const { minScore: tempMinScore, worstCombination: tempWorstCombination } =
+      getMinScoreForCountry(country);
+    if (tempMinScore < minScore) {
+      minScore = tempMinScore;
+      worstCombination = tempWorstCombination;
+    }
   });
 
-  console.log("Worst Single Origin Combination:", worstCombination);
   expect(minScore.toFixed(3)).toBe(ACTUAL_MIN_RAW.toString());
 });
 
@@ -190,6 +170,83 @@ test("Find minimum score for blends", () => {
     }
   }
 
-  console.log("Worst Blend Combination:", worstCombination);
-  expect(minScore.toFixed(3)).toBe('4.275');
+  expect(minScore.toFixed(3)).toBe("4.275");
 });
+
+test("Coffee scores are in sync with coffee countries", () => {
+  const coffeeCountries = Object.keys(coffeeProfiles);
+  const coffeeScores = Object.keys(coffeeScore);
+  expect(coffeeCountries.sort()).toEqual(coffeeScores.sort());
+});
+
+test("Calculated Coffee Scores are up-to-date", () => {
+  const coffeeScores = Object.keys(coffeeScore);
+  for (const country of coffeeScores) {
+    const countryScore = coffeeScore[country];
+
+    const { maxScore, bestCombination } = getMaxScoreForCountry(country);
+    const { minScore, worstCombination } = getMinScoreForCountry(country);
+
+    expect(countryScore.best.score, country).toBeCloseTo(maxScore);
+    expect(countryScore.best.processing, country).toBe(bestCombination.processing);
+    expect(countryScore.best.roast, country).toBe(bestCombination.roastLevel);
+
+    expect(countryScore.worst.score, country).toBeCloseTo(minScore);
+    expect(countryScore.worst.processing, country).toBe(worstCombination.processing);
+    expect(countryScore.worst.roast, country).toBe(worstCombination.roastLevel);
+  }
+});
+
+function getMinScoreForCountry(country) {
+  let minScore = Infinity;
+  let worstCombination = {
+    country,
+    processing: "",
+    roastLevel: "",
+    score: 0,
+  };
+  Object.keys(processingMethods).forEach((processing) => {
+    Object.keys(roastLevelEffects).forEach((roastLevel) => {
+      const score = calculateLatteScore(
+        createFinalProfile(coffeeProfiles[country], processing, roastLevel)
+      );
+      if (score < minScore) {
+        minScore = score;
+        worstCombination = {
+          country,
+          processing,
+          roastLevel,
+          score,
+        };
+      }
+    });
+  });
+  return { minScore, worstCombination };
+}
+
+function getMaxScoreForCountry(country) {
+  let maxScore = -Infinity;
+  let bestCombination = {
+    country,
+    processing: "",
+    roastLevel: "",
+    score: 0,
+  };
+  Object.keys(processingMethods).forEach((processing) => {
+    Object.keys(roastLevelEffects).forEach((roastLevel) => {
+      const score = calculateLatteScore(
+        createFinalProfile(coffeeProfiles[country], processing, roastLevel)
+      );
+      if (score > maxScore) {
+        maxScore = score;
+        bestCombination = {
+          country,
+          processing,
+          roastLevel,
+          score,
+        };
+      }
+    });
+  });
+  return { maxScore, bestCombination };
+}

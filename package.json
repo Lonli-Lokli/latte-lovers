@@ -4,10 +4,16 @@
         "start": "vite dev",
         "build": "vite build",
         "test": "vitest run",
+        "test:watch": "vitest",
         "deploy": "npm run test && npm run build"
     },
     "dependencies": {
-        "multiple-select-vanilla": "4.1.4"
+        "d3": "^7.9.0",
+        "d3-geo": "^3.1.1",
+        "d3-geo-projection": "^4.0.0",
+        "multiple-select-vanilla": "4.1.4",
+        "ts-pattern": "^5.7.1",
+        "topojson-client": "^3.1.0"
     },
     "devDependencies": {
         "jsdom": "^26.1.0",

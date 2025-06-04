@@ -12,8 +12,6 @@ export default defineConfig({
         "192x192.png",
         "512x512.png",
         "og-image.png",
-        "checker.html",
-        "top.html",
       ],
       manifest: {
         name: "Latte Lovers",
