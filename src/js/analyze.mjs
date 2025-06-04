@@ -70,9 +70,9 @@ const stages = [
 ];
 const chars = [
   { name: "Acidity", id: "acidity" },
-  { name: "Balance", id: "balance" },
   { name: "Bitterness", id: "bitterness" },
   { name: "Body", id: "body" },
+  { name: "Balance", id: "balance" },    
   { name: "Sweetness", id: "sweetness" },
 ];
 
