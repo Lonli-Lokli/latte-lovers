@@ -86,6 +86,7 @@
           <a
             href="https://buymeacoffee.com/lonlilokliV"
             class="header-btn"
+            rel="noopener noreferrer"
             target="_blank"
             >☕ Buy Me a Coffee</a
           >
@@ -123,7 +124,7 @@
               name="_subject"
               value="New message from Latte Coffee Checker"
             />
-            <input type="hidden" name="_captcha" value="false" />            
+            <input type="hidden" name="_captcha" value="false" />
 
             <div class="modal-form-group">
               <label for="contactName">Name *</label>
@@ -156,6 +157,7 @@
         toggleTheme,
         openContactModal,
         closeContactModal,
+        TabManager,
       } from "./src/script.mjs";
       import {
         tabs,
@@ -163,13 +165,10 @@
         getDefaultTab,
         isValidTab,
       } from "./src/config.js";
-      import { initializeScoreTab } from "./src/js/score.mjs";
-      import { initializeLeadersTab } from "./src/js/leaders.mjs";
-      import { initializeAnalyzeTab } from "./src/js/analyze.mjs";
-      import { initializeMapTab } from "./src/js/map.mjs";
 
       // Content cache
       const contentCache = new Map();
+      const tabManager = new TabManager();
       let currentTab = getDefaultTab();
 
       // Load tab content
@@ -180,57 +179,35 @@
           return;
         }
 
-        // Create loading spinner if it doesn't exist
+        // Show loading spinner
         let spinner = contentContainer.querySelector(".loading-spinner");
         if (!spinner) {
           spinner = document.createElement("div");
           spinner.className = "loading-spinner";
           contentContainer.appendChild(spinner);
         }
-
-        // Show loading spinner
         spinner.classList.remove("hidden");
 
         try {
+          // Load HTML content (keep existing logic)
           let content;
-          // Check cache first
           if (contentCache.has(tabName)) {
             content = contentCache.get(tabName);
           } else {
-            // Dynamically import the HTML file using Vite
-            const module = await import(`./src/${tabName}.html?raw`); // Use ?raw to import as a string
-            content = module.default; // The HTML content will be the default export when using ?raw
+            const module = await import(`./src/${tabName}.html?raw`);
+            content = module.default;
             contentCache.set(tabName, content);
           }
 
           contentContainer.innerHTML = content;
 
-          // Re-add spinner after setting innerHTML
+          // Re-add spinner
           spinner = document.createElement("div");
           spinner.className = "loading-spinner";
           contentContainer.appendChild(spinner);
 
-          // Initialize elements and functionality based on tab content
-          switch (tabName) {
-            case "score":
-              initializeScoreTab();
-              break;
-
-            case "leaders":
-              initializeLeadersTab();
-              break;
-
-            case "analyze":
-              initializeAnalyzeTab();
-              break;
-
-            case "map":
-              initializeMapTab();
-              break;
-
-            default:
-              console.warn(`No initialization found for tab: ${tabName}`);
-          }
+          // Deferred JavaScript loading and initialization
+          await tabManager.initializeTab(tabName);
         } catch (error) {
           console.error("Error loading tab content:", error);
           contentContainer.innerHTML =
@@ -243,7 +220,6 @@
           }
         }
       }
-
       // Initialize tab navigation
       function initializeTabNavigation() {
         const tabNavigation = document.getElementById("tabNavigation");
