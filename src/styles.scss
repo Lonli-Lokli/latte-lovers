@@ -1,15 +1,14 @@
 /* Import Dependencies */
-@use 'multiple-select-vanilla/dist/styles/sass/multiple-select.scss';
+@use "multiple-select-vanilla/dist/styles/sass/multiple-select.scss";
 
 /* Import Shared Styles */
-@use 'styles/result.scss';
+@use "styles/result.scss";
 
 /* Import Tab-specific Styles */
-@use 'styles/score.scss';
-@use 'styles/leaders.scss';
-@use 'styles/analyze.scss';
-@use 'styles/map.scss';
-
+@use "styles/score.scss";
+@use "styles/leaders.scss";
+@use "styles/analyze.scss";
+@use "styles/map.scss";
 
 /* Global Variables */
 :root {
@@ -45,12 +44,21 @@ body.light-theme {
   --button-shadow: rgba(107, 78, 61, 0.3);
 }
 
-
 /* Global Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* Prevent Horizontal Overflow */
+html,
+body {
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 /* Global Body Styles */
@@ -186,6 +194,7 @@ body.light-theme .header {
   transition: all 0.3s ease;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); // Safari/iOS support
   white-space: nowrap;
   text-align: center;
   width: 100%;
@@ -195,6 +204,7 @@ body.light-theme .header {
   opacity: 0;
   pointer-events: none;
   user-select: none;
+  -webkit-user-select: none; // Safari/iOS support
 }
 
 .header-btn:hover {
@@ -251,7 +261,8 @@ body.light-theme .header {
   background: var(--surface-color);
   padding: 0 0.2rem;
   z-index: 3; /* Float label above input/select */
-  box-shadow: 0 2px 6px -2px var(--surface-color), 0 -2px 6px -2px var(--surface-color); /* Prevent overlap */
+  box-shadow: 0 2px 6px -2px var(--surface-color),
+    0 -2px 6px -2px var(--surface-color); /* Prevent overlap */
 }
 
 .floating-label.always-float label {
@@ -261,7 +272,8 @@ body.light-theme .header {
   background: var(--surface-color);
   padding: 0 0.2rem;
   z-index: 3;
-  box-shadow: 0 2px 6px -2px var(--surface-color), 0 -2px 6px -2px var(--surface-color);
+  box-shadow: 0 2px 6px -2px var(--surface-color),
+    0 -2px 6px -2px var(--surface-color);
 }
 
 .floating-label select:not([value=""]):not(:focus) + label,
@@ -380,6 +392,8 @@ body.light-theme .header {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+
+  -webkit-backdrop-filter: blur(5px); // Safari/iOS support
   backdrop-filter: blur(5px);
 }
 
@@ -483,7 +497,11 @@ body.light-theme .header {
 
 .modal-submit-btn {
   width: 100%;
-  background: linear-gradient(135deg, var(--button-gradient-start) 0%, var(--button-gradient-end) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--button-gradient-start) 0%,
+    var(--button-gradient-end) 100%
+  );
   color: var(--text-color);
   border: none;
   padding: 15px;
@@ -503,13 +521,17 @@ body.light-theme .header {
 @media (max-width: 768px) {
   body {
     min-height: 100dvh;
-    padding: 10px;
+    padding: 0;
     overflow-x: hidden;
   }
 
   .container {
-    margin: 10px auto;
-    max-height: calc(100dvh - 20px);
+    margin: 0 auto;
+    max-height: none;
+    height: 100dvh;
+    box-sizing: border-box;
+    border-radius: 0;
+    padding: 10px; // Add mobile padding here
   }
 
   .header {
