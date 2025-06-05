@@ -310,33 +310,41 @@
         let deferredPrompt;
         const installButton = document.getElementById("installPWA");
 
-        if (window.matchMedia("(display-mode: standalone)").matches) {
-          installButton.classList.add("hidden");
+        // Helper: check if running as PWA (standalone) on any platform
+        function isRunningStandalone() {
+          return (
+            window.matchMedia("(display-mode: standalone)").matches ||
+            window.navigator.standalone === true // iOS Safari
+          );
         }
 
-        const isIOS =
-          /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIOS) {
-          installButton.classList.remove("hidden");
-          installButton.addEventListener("click", () => {
-            alert(
-              'To install this app on your device, tap the Share button and then "Add to Home Screen"'
-            );
-          });
+        if (isRunningStandalone()) {
+          installButton.classList.add("hidden");
         } else {
-          window.addEventListener("beforeinstallprompt", (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
+          const isIOS =
+            /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+          if (isIOS) {
             installButton.classList.remove("hidden");
-          });
+            installButton.addEventListener("click", () => {
+              alert(
+                'To install this app on your device, tap the Share button and then "Add to Home Screen"'
+              );
+            });
+          } else {
+            window.addEventListener("beforeinstallprompt", (e) => {
+              e.preventDefault();
+              deferredPrompt = e;
+              installButton.classList.remove("hidden");
+            });
 
-          installButton.addEventListener("click", async () => {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            deferredPrompt = null;
-            installButton.classList.add("hidden");
-          });
+            installButton.addEventListener("click", async () => {
+              if (!deferredPrompt) return;
+              deferredPrompt.prompt();
+              const { outcome } = await deferredPrompt.userChoice;
+              deferredPrompt = null;
+              installButton.classList.add("hidden");
+            });
+          }
         }
       });
     </script>

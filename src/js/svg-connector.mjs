@@ -30,7 +30,8 @@ export class ConnectionManager {
     const element1 = document.querySelector(selector1);
     const element2 = document.querySelector(selector2);
 
-    if (!element1 || !element2) { // Corrected check: both elements must exist
+    if (!element1 || !element2) {
+      // Corrected check: both elements must exist
       console.error(`Elements not found: ${selector1}, ${selector2}`);
       return null;
     }
@@ -70,6 +71,7 @@ export class ConnectionManager {
 
     // Store connection data
     this.connections.set(id, {
+      type: "usual",
       selector1,
       selector2,
       labelText,
@@ -181,7 +183,7 @@ export class ConnectionManager {
     labelBox.setAttribute("height", boxHeight);
     labelBox.setAttribute("rx", 6);
     labelBox.setAttribute("ry", 6);
-    labelBox.setAttribute("fill", 'var(--analyze-label-bg)'); // Use CSS variable for background
+    labelBox.setAttribute("fill", "var(--analyze-label-bg)"); // Use CSS variable for background
     labelBox.setAttribute("stroke", colorAfter);
     labelBox.setAttribute("stroke-width", 2);
     labelBox.setAttribute("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.1))");
@@ -194,7 +196,7 @@ export class ConnectionManager {
     labelTextEl.setAttribute("x", midX);
     labelTextEl.setAttribute("y", midY + 4);
     labelTextEl.setAttribute("text-anchor", "middle");
-    labelTextEl.setAttribute("fill", 'var(--analyze-label-fg)');
+    labelTextEl.setAttribute("fill", "var(--analyze-label-fg)");
     labelTextEl.setAttribute("font-family", "Arial, sans-serif");
     labelTextEl.setAttribute("font-size", "11");
     labelTextEl.setAttribute("font-weight", "600");
@@ -233,24 +235,48 @@ export class ConnectionManager {
   refreshAllConnections() {
     // Recreate all connections (useful for window resize)
     const connectionData = Array.from(this.connections.entries());
+    for (const [, connection] of connectionData) {
+      if (connection && connection.group && connection.group.parentNode) {
+        connection.group.remove();
+      }
+    }
     this.connections.clear(); // Clear current connections before recreating
 
     connectionData.forEach(([id, data]) => {
-      this.createConnection(
-        id,
-        data.selector1,
-        data.selector2,
-        data.labelText,
-        data.colorBefore,
-        data.colorAfter
-      );
+      switch (data.type) {
+        case "vertical":
+          this.createVerticalConnection(
+            id,
+            data.selector1,
+            data.selector2,
+            data.label1Info,
+            data.label2Info,
+            data.colorBefore,
+            data.colorAfter,
+            data.offsetPercent
+          );
+          break;
+        case "usual":
+          this.createConnection(
+            id,
+            data.selector1,
+            data.selector2,
+            data.labelText,
+            data.colorBefore,
+            data.colorAfter
+          );
+          break;
+        default:
+          console.warn(`Unknown connection type: ${data.type}`);
+          return;
+      }
     });
   }
 
   clearAllConnections() {
-      this.connections.forEach((connection, id) => {
-          this.removeConnection(id);
-      });
+    this.connections.forEach((connection, id) => {
+      this.removeConnection(id);
+    });
   }
 
   /**
@@ -282,12 +308,14 @@ export class ConnectionManager {
     const element2 = document.querySelector(selector2); // This will be the score element
 
     if (!element1 || !element2) {
-      console.error(`Elements not found for vertical connection: ${selector1}, ${selector2}`);
+      console.error(
+        `Elements not found for vertical connection: ${selector1}, ${selector2}`
+      );
       return null;
     }
 
-    const {text: labelTextLine1, color: labelTextColor1, } = label1Info;
-    const {text: labelTextLine2, color: labelTextColor2} = label2Info;
+    const { text: labelTextLine1, color: labelTextColor1 } = label1Info;
+    const { text: labelTextLine2, color: labelTextColor2 } = label2Info;
     // Calculate positions
     const rect1 = element1.getBoundingClientRect();
     const rect2 = element2.getBoundingClientRect(); // Score element rect
@@ -298,16 +326,16 @@ export class ConnectionManager {
     const targetY = rect2.top - containerRect.top;
 
     const labelY = y1 + (targetY - y1) * offsetPercent;
-    const boxWidth = Math.max(30, Math.max(labelTextLine1.length, labelTextLine2.length) * 7 + 16);
+    const boxWidth = Math.max(
+      30,
+      Math.max(labelTextLine1.length, labelTextLine2.length) * 7 + 16
+    );
     const boxHeight = 34;
     const labelBoxX = x1 - boxWidth / 2;
     const labelBoxY = labelY - boxHeight / 2;
 
     // Single vertical line segment: from y1 to targetY
-    const line = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "line"
-    );
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line.setAttribute("x1", x1);
     line.setAttribute("y1", y1);
     line.setAttribute("x2", x1);
@@ -332,7 +360,7 @@ export class ConnectionManager {
     labelBox.setAttribute("height", boxHeight);
     labelBox.setAttribute("rx", 6);
     labelBox.setAttribute("ry", 6);
-    labelBox.setAttribute("fill", 'var(--analyze-label-bg)');
+    labelBox.setAttribute("fill", "var(--analyze-label-bg)");
     labelBox.setAttribute("stroke", colorAfter);
     labelBox.setAttribute("stroke-width", 1);
     labelBox.setAttribute("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.1))");
@@ -351,14 +379,20 @@ export class ConnectionManager {
     labelTextEl.setAttribute("font-weight", "600");
 
     // First text line (offset upwards)
-    const tspan1 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+    const tspan1 = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "tspan"
+    );
     tspan1.setAttribute("x", x1);
     tspan1.setAttribute("dy", "1.1em");
-    tspan1.setAttribute("fill", 'var(--analyze-label-fg');
+    tspan1.setAttribute("fill", "var(--analyze-label-fg");
     tspan1.textContent = labelTextLine1;
 
     // Second text line (offset downwards from the first line's position)
-    const tspan2 = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+    const tspan2 = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "tspan"
+    );
     tspan2.setAttribute("x", x1);
     tspan2.setAttribute("dy", "1.2em");
     tspan2.setAttribute("fill", labelTextColor2);
@@ -374,11 +408,14 @@ export class ConnectionManager {
     this.svg.appendChild(group);
 
     this.connections.set(id, {
+      type: "vertical",
       selector1,
       selector2,
-      labelText: `${labelTextLine1}\n${labelTextLine2}`,
+      label1Info,
+      label2Info,
       colorBefore,
       colorAfter,
+      offsetPercent,
       group,
     });
 

@@ -6,9 +6,6 @@ import { select, zoom } from "d3";
 import { countries110m as world } from "../data/countries-110m";
 import { coffeeScore, normalizeScore } from "../scoring.mjs";
 
-const width = 1000;
-const height = 500;
-
 export function initializeMapTab() {
   initializeMapSvg();
 }

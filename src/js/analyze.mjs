@@ -37,6 +37,13 @@ export function initializeAnalyzeTab() {
       connectionManager.refreshAllConnections();
     }
   });
+
+  // Add orientationchange event listener to refresh connections on orientation change
+  window.addEventListener("orientationchange", () => {
+    if (connectionManager) {
+      connectionManager.refreshAllConnections();
+    }
+  });
 }
 
 // Use effects directly from scoring.mjs

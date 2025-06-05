@@ -1,5 +1,5 @@
 :root {
-  --analyze-stage-editor-bg: #292522;
+  --analyze-stage-editor-bg: #3a3530;
   --select-bg: #292522;
   --select-dropdown-bg: #23201d;
   --analyze-label-bg: #292522;
@@ -43,18 +43,18 @@ body.light-theme {
     border: 1px solid var(--border-color);
     border-radius: 6px;
     background: var(--select-bg);
-    color: var(--text-color);
+    color: var(--text-color, #f5f5f5) !important;
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
+    filter: none;
     background-position: right 0.7rem center;
     background-size: 0.8rem;
     transition: all 0.2s ease;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 38px;
+    height: 38px;    
 
     &:hover {
       border-color: var(--primary-color);
@@ -72,6 +72,14 @@ body.light-theme {
       padding: 0.4rem;
     }
   }
+}
+
+.formula-container select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+}
+
+body.light-theme .formula-container select {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2323201d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
 }
 
 #connection-svg {
@@ -305,13 +313,16 @@ body.light-theme {
   border-radius: 0 0 8px 8px;
 
   &.active {
-    max-height: 500px;
+    max-height: none;
     padding: 10px;
+    overflow: visible;
   }
 }
 
 .content-inner {
   background-color: var(--surface-color-darker);
+  overflow: visible;
+  max-height: none;
 }
 
 .impact-item {
@@ -414,6 +425,10 @@ body.light-theme {
   border-color: var(--primary-color);
 }
 
+.analyze-stage-editor label {
+  margin-bottom: 0.5rem;
+}
+
 /* Toggle sections */
 .toggle-section {
   background: var(--surface-color);
@@ -453,13 +468,16 @@ body.light-theme {
   border-radius: 0 0 8px 8px;
 
   &.active {
-    max-height: 500px;
+    max-height: none;
     padding: 10px;
+    overflow: visible;
   }
 }
 
 .content-inner {
   background-color: var(--surface-color-darker);
+  overflow: visible;
+  max-height: none;
 }
 
 .impact-item {
@@ -604,9 +622,9 @@ body.light-theme {
   }
   .analyze-char-item {
     width: 40px;
-        height: 240px;
-     min-height: 240px;
-     max-height: 240px;
+    height: 240px;
+    min-height: 240px;
+    max-height: 240px;
     display: flex;
     flex-direction: column;
     align-items: center;
