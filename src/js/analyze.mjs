@@ -31,17 +31,18 @@ export function initializeAnalyzeTab() {
   }
   connectionManager = new ConnectionManager(connectionSvg);
 
-  // Add resize event listener to refresh connections on the singleton manager
+  // Add debounced resize event listener to refresh connections on the singleton manager
+  let resizeTimeout = null;
   window.addEventListener("resize", () => {
     if (connectionManager) {
-      connectionManager.refreshAllConnections();
-    }
-  });
-
-  // Add orientationchange event listener to refresh connections on orientation change
-  window.addEventListener("orientationchange", () => {
-    if (connectionManager) {
-      connectionManager.refreshAllConnections();
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            connectionManager.refreshAllConnections();
+          });
+        });
+      }, 200);
     }
   });
 }
