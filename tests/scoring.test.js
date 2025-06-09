@@ -29,7 +29,7 @@ test('Find maximum score for single origin', () => {
     }
   });
 
-  expect(maxScore.toFixed(3)).toBe('9.162');
+  expect(maxScore.toFixed(3)).toBe('9.025');
 });
 
 test('Find maximum score for blends', () => {
@@ -128,7 +128,7 @@ test('Find minimum score for blends', () => {
     }
   }
 
-  expect(minScore.toFixed(3)).toBe('4.275');
+  expect(minScore.toFixed(3)).toBe('3.070');
 });
 
 test('Coffee scores are in sync with coffee countries', () => {

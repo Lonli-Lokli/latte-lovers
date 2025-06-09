@@ -4,11 +4,11 @@ export const coffeeProfiles = {
       sweetness: 6,
       acidity: 5,
       body: 8,
-      balance: 9,
+      balance: 8,
       bitterness: 6,
     },
     notes:
-      'Known for its chocolatey sweetness and low acidity, Brazilian coffees are often well-balanced with a medium body.',
+      'Known for its chocolatey sweetness and low acidity, Brazilian coffees are often well-balanced with a full body.',
   },
   colombia: {
     profile: {
@@ -19,18 +19,18 @@ export const coffeeProfiles = {
       bitterness: 5,
     },
     notes:
-      'Colombian coffees are celebrated for their bright acidity and smooth body, often with fruity and floral notes.',
+      'Colombian coffees are celebrated for their bright acidity and medium body, often with fruity and nutty notes.',
   },
   ethiopia: {
     profile: {
-      sweetness: 6,
+      sweetness: 8,
       acidity: 9,
       body: 5,
       balance: 9,
       bitterness: 3,
     },
     notes:
-      'Ethiopian coffees are known for their complex flavors, often with bright acidity and floral or fruity notes.',
+      'Ethiopian coffees are known for their complex flavors, light body, bright acidity, and floral or fruity notes.',
   },
   guatemala: {
     profile: {
@@ -52,7 +52,7 @@ export const coffeeProfiles = {
       bitterness: 5,
     },
     notes:
-      'Costa Rican coffees are known for their bright acidity and full body, often with citrus and berry notes.',
+      'Costa Rican coffees are known for their clean acidity and full body, often with citrus and berry notes.',
   },
   honduras: {
     profile: {
@@ -60,7 +60,7 @@ export const coffeeProfiles = {
       acidity: 6,
       body: 7,
       balance: 7,
-      bitterness: 6,
+      bitterness: 5,
     },
     notes:
       'Honduran coffees are often sweet and fruity, with a medium body and balanced acidity.',
@@ -71,21 +71,21 @@ export const coffeeProfiles = {
       acidity: 6,
       body: 7,
       balance: 7,
-      bitterness: 6,
+      bitterness: 5,
     },
     notes:
-      'Nicaraguan coffees are known for their smooth body and mild acidity, often with chocolate and nutty flavors.',
+      'Nicaraguan coffees are known for their medium body and mild acidity, often with chocolate and nutty flavors.',
   },
   peru: {
     profile: {
       sweetness: 6,
       acidity: 6,
-      body: 8,
+      body: 6,
       balance: 7,
-      bitterness: 7,
+      bitterness: 5,
     },
     notes:
-      'Peruvian coffees are often mild and sweet, with a light body and pleasant acidity, featuring nutty and chocolate notes.',
+      'Peruvian coffees are often mild and sweet, with a medium body and pleasant acidity, featuring nutty and chocolate notes.',
   },
   mexico: {
     profile: {
@@ -93,10 +93,10 @@ export const coffeeProfiles = {
       acidity: 6,
       body: 7,
       balance: 7,
-      bitterness: 7,
+      bitterness: 5,
     },
     notes:
-      'Mexican coffees are typically light-bodied with a mild flavor profile, often featuring nutty and chocolate notes.',
+      'Mexican coffees are typically medium-bodied with a mild flavor profile, often featuring nutty and chocolate notes.',
   },
   jamaica: {
     profile: {
@@ -104,21 +104,21 @@ export const coffeeProfiles = {
       acidity: 5,
       body: 8,
       balance: 6,
-      bitterness: 8,
+      bitterness: 2,
     },
     notes:
-      'Jamaican coffees, especially Blue Mountain, are known for their smooth body and mild flavor with low acidity.',
+      'Jamaican coffees, especially Blue Mountain, are known for their full body, exceptional mildness, and lack of bitterness.',
   },
   kenya: {
     profile: {
       sweetness: 5,
       acidity: 8,
-      body: 5,
+      body: 8,
       balance: 8,
       bitterness: 3,
     },
     notes:
-      'Kenyan coffees are famous for their bright acidity and full body, often with berry and citrus notes.',
+      'Kenyan coffees are famous for their bright, wine-like acidity and full body, often with berry and citrus notes.',
   },
   rwanda: {
     profile: {
@@ -129,7 +129,7 @@ export const coffeeProfiles = {
       bitterness: 4,
     },
     notes:
-      'Rwandan coffees are known for their bright acidity and complex flavors, often with floral and fruity notes.',
+      'Rwandan coffees are known for their bright acidity, light body, and complex flavors, often with floral and fruity notes.',
   },
   burundi: {
     profile: {
@@ -140,7 +140,7 @@ export const coffeeProfiles = {
       bitterness: 4,
     },
     notes:
-      'Burundian coffees are often sweet and fruity, with a medium body and bright acidity.',
+      'Burundian coffees are often sweet and fruity, with a light body and bright acidity.',
   },
   tanzania: {
     profile: {
@@ -151,7 +151,7 @@ export const coffeeProfiles = {
       bitterness: 6,
     },
     notes:
-      'Tanzanian coffees are known for their bright acidity and full body, often with berry and citrus notes.',
+      'Tanzanian coffees are known for their bright acidity and medium body, often with berry and citrus notes.',
   },
   yemen: {
     profile: {
@@ -162,29 +162,30 @@ export const coffeeProfiles = {
       bitterness: 7,
     },
     notes:
-      'Yemeni coffees are rich and complex, often with deep chocolate and spice notes, and a full body.',
+      'Yemeni coffees are rich, wild, and complex, often with deep, earthy chocolate and spice notes, and a full body.',
   },
   indonesia: {
     profile: {
       sweetness: 6,
       acidity: 4,
       body: 8,
-      balance: 7,
+      balance: 5,
       bitterness: 8,
     },
     notes:
       'Indonesian coffees, especially from Sumatra, are known for their earthy and herbal flavors, with a full body and low acidity.',
   },
+
   vietnam: {
     profile: {
-      sweetness: 5,
+      sweetness: 3,
       acidity: 4,
       body: 8,
-      balance: 6,
+      balance: 4,
       bitterness: 9,
     },
     notes:
-      'Vietnamese coffees are often robust and earthy, with a full body and low acidity, commonly used in blends.',
+      'Vietnamese coffees are often bold and earthy with a strong bitter finish, featuring a full body and low acidity, commonly used in blends.',
   },
   india: {
     profile: {
@@ -206,7 +207,7 @@ export const coffeeProfiles = {
       bitterness: 5,
     },
     notes:
-      'Papua New Guinean coffees are often sweet and fruity, with a medium body and bright acidity.',
+      'Papua New Guinean coffees are often sweet and fruity, with a full body and moderate acidity.',
   },
   panama: {
     profile: {
@@ -217,7 +218,7 @@ export const coffeeProfiles = {
       bitterness: 4,
     },
     notes:
-      'Panamanian coffees, especially Geisha, are known for their floral and fruity notes, with a bright acidity and light body.',
+      'Panamanian coffees are known for their clean, bright acidity and medium body, often with floral and fruity notes.',
   },
   'el-salvador': {
     profile: {
@@ -239,7 +240,7 @@ export const coffeeProfiles = {
       bitterness: 5,
     },
     notes:
-      'Ugandan coffees are known for their rich body and fruity flavors, often with a pleasant acidity.',
+      'Ugandan coffees are known for their medium body and fruity flavors, often with a pleasant acidity.',
   },
   bolivia: {
     profile: {
@@ -250,7 +251,7 @@ export const coffeeProfiles = {
       bitterness: 4,
     },
     notes:
-      'Bolivian coffees are often sweet and floral, with a light body and bright acidity.',
+      'Bolivian coffees are often sweet and floral, with a medium body and bright acidity.',
   },
   ecuador: {
     profile: {
@@ -261,7 +262,7 @@ export const coffeeProfiles = {
       bitterness: 5,
     },
     notes:
-      'Ecuadorian coffees are known for their smooth body and mild flavor, often with chocolate and nutty notes.',
+      'Ecuadorian coffees are known for their medium body and mild flavor, often with chocolate and nutty notes.',
   },
   myanmar: {
     profile: {
@@ -283,29 +284,30 @@ export const coffeeProfiles = {
       bitterness: 4,
     },
     notes:
-      'Chinese coffees, especially from Yunnan, are known for their mild flavor and smooth body, often with floral and fruity notes.',
+      'Chinese coffees, especially from Yunnan, are known for their mild flavor and medium body, often with floral and fruity notes.',
   },
   'central-african-republic': {
     profile: {
-      sweetness: 5,
+      sweetness: 4,
       acidity: 4,
       body: 8,
       balance: 6,
       bitterness: 7,
     },
     notes:
-      'Coffees from the Central African Republic are often sweet and fruity, with a medium body and bright acidity.',
+      'Coffees from the Central African Republic are typically Robusta, with a bold, earthy flavor, full body, and strong bitterness.',
   },
   guinea: {
     profile: {
-      sweetness: 5,
+      sweetness: 4,
       acidity: 4,
       body: 8,
       balance: 6,
       bitterness: 8,
     },
     notes:
-      'Guinean coffees are known for their smooth body and mild flavor, often with chocolate and nutty notes.',
+      // CHANGED: The original note described a mild Arabica, which contradicts the Robusta-like profile.
+      'Guinean coffees are predominantly Robusta, known for their full body, potent bitterness, and earthy flavor.',
   },
   laos: {
     profile: {
@@ -316,18 +318,18 @@ export const coffeeProfiles = {
       bitterness: 6,
     },
     notes:
-      'Laotian coffees are often sweet and fruity, with a medium body and bright acidity.',
+      'Laotian coffees, often from the Bolaven Plateau, have a characteristically full body with moderate sweetness and bitterness.',
   },
   'ivory-coast': {
     profile: {
-      sweetness: 6,
+      sweetness: 4,
       acidity: 4,
       body: 8,
       balance: 6,
       bitterness: 7,
     },
     notes:
-      'Ivorian coffees are known for their smooth body and mild flavor, often with chocolate and nutty notes.',
+      'Ivorian coffees are mainly Robusta, valued for their full body, strong bitterness, and suitability for espresso blends.',
   },
   venezuela: {
     profile: {
@@ -338,17 +340,17 @@ export const coffeeProfiles = {
       bitterness: 4,
     },
     notes:
-      'Venezuelan coffees are often sweet and balanced, with a medium body and pleasant acidity, featuring chocolate and nutty notes.',
+      'Venezuelan coffees are often sweet and exceptionally balanced, with a medium body and pleasant, low acidity.',
   },
   malawi: {
     profile: {
       sweetness: 7,
       acidity: 6,
-      body: 8,
+      body: 6,
       balance: 8,
       bitterness: 4,
     },
     notes:
-      'Malawian coffees are known for their sweet and fruity flavors, with a medium body and bright acidity.',
+      'Malawian coffees are known for their delicate, sweet, and fruity flavors, with a medium body and soft acidity.',
   },
 };

@@ -17,12 +17,12 @@ export const countryScores = {
   },
   brazil: {
     best: {
-      score: 8.762,
+      score: 8.563,
       processing: 'anaerobic',
-      roast: 'light-medium',
+      roast: 'medium',
     },
     worst: {
-      score: 5.625,
+      score: 5.325,
       processing: 'monsooned',
       roast: 'dark',
     },
@@ -41,12 +41,12 @@ export const countryScores = {
   },
   'central-african-republic': {
     best: {
-      score: 7.313,
+      score: 7.063,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 4.275,
+      score: 3.925,
       processing: 'semi-washed',
       roast: 'dark',
     },
@@ -113,12 +113,12 @@ export const countryScores = {
   },
   ethiopia: {
     best: {
-      score: 8.575,
-      processing: 'natural',
+      score: 9,
+      processing: 'wet-hulled',
       roast: 'medium',
     },
     worst: {
-      score: 6.275,
+      score: 6.925,
       processing: 'monsooned',
       roast: 'dark',
     },
@@ -137,24 +137,24 @@ export const countryScores = {
   },
   guinea: {
     best: {
-      score: 7.112,
+      score: 6.862,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 4.275,
+      score: 3.925,
       processing: 'semi-washed',
       roast: 'dark',
     },
   },
   honduras: {
     best: {
-      score: 8.412,
+      score: 8.563,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 5.425,
+      score: 5.625,
       processing: 'monsooned',
       roast: 'dark',
     },
@@ -173,48 +173,48 @@ export const countryScores = {
   },
   indonesia: {
     best: {
-      score: 7.663,
+      score: 7.063,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 4.925,
+      score: 4.325,
       processing: 'washed',
       roast: 'dark',
     },
   },
   'ivory-coast': {
     best: {
-      score: 7.563,
+      score: 7.063,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 4.625,
-      processing: 'washed',
+      score: 3.925,
+      processing: 'semi-washed',
       roast: 'dark',
     },
   },
   jamaica: {
     best: {
-      score: 7.313,
+      score: 7.862,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 4.375,
+      score: 5.175,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   kenya: {
     best: {
-      score: 7.925,
+      score: 8.825,
       processing: 'honey',
       roast: 'medium',
     },
     worst: {
-      score: 5.425,
+      score: 6.175,
       processing: 'monsooned',
       roast: 'dark',
     },
@@ -233,25 +233,25 @@ export const countryScores = {
   },
   malawi: {
     best: {
-      score: 9.162,
+      score: 8.563,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 6.275,
+      score: 5.825,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   mexico: {
     best: {
-      score: 7.963,
+      score: 8.313,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 5.025,
-      processing: 'washed',
+      score: 5.275,
+      processing: 'monsooned',
       roast: 'dark',
     },
   },
@@ -269,12 +269,12 @@ export const countryScores = {
   },
   nicaragua: {
     best: {
-      score: 8.412,
+      score: 8.563,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 5.425,
+      score: 5.625,
       processing: 'monsooned',
       roast: 'dark',
     },
@@ -305,12 +305,12 @@ export const countryScores = {
   },
   peru: {
     best: {
-      score: 8.263,
+      score: 8.012,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 5.225,
+      score: 4.975,
       processing: 'monsooned',
       roast: 'dark',
     },
@@ -365,13 +365,13 @@ export const countryScores = {
   },
   vietnam: {
     best: {
-      score: 6.912,
+      score: 5.787,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 4.275,
-      processing: 'semi-washed',
+      score: 2.975,
+      processing: 'washed',
       roast: 'dark',
     },
   },
