@@ -94,8 +94,7 @@
   .form-group {
     margin-bottom: 12px;
   }
-} 
-
+}
 
 /* Blend Group Indentation & Styling */
 .blend-group {
@@ -117,7 +116,7 @@
   padding: 0 0.5rem;
   z-index: 4;
   pointer-events: none;
-  transition: color 0.2s, box-shadow 0.2s;
+  transition:
+    color 0.2s,
+    box-shadow 0.2s;
 }
-
-

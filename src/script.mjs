@@ -1,27 +1,27 @@
 export function openContactModal() {
-  document.getElementById("contactModal").style.display = "block";
-  document.body.style.overflow = "hidden";
+  document.getElementById('contactModal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
 }
 
 export function closeContactModal() {
-  document.getElementById("contactModal").style.display = "none";
-  document.body.style.overflow = "auto";
+  document.getElementById('contactModal').style.display = 'none';
+  document.body.style.overflow = 'auto';
 }
 
 export function toggleTheme() {
   const body = document.body;
-  const themeIcon = document.getElementById("themeIcon");
+  const themeIcon = document.getElementById('themeIcon');
 
-  body.classList.toggle("light-theme");
+  body.classList.toggle('light-theme');
 
-  const isLightTheme = body.classList.contains("light-theme");
+  const isLightTheme = body.classList.contains('light-theme');
 
   if (isLightTheme) {
-    themeIcon.textContent = "🌙";
-    localStorage.setItem("theme", "light");
+    themeIcon.textContent = '🌙';
+    localStorage.setItem('theme', 'light');
   } else {
-    themeIcon.textContent = "☀️";
-    localStorage.setItem("theme", "dark");
+    themeIcon.textContent = '☀️';
+    localStorage.setItem('theme', 'dark');
   }
 }
 
@@ -62,7 +62,7 @@ export class TabManager {
       score: () => import('./js/score.mjs'),
       leaders: () => import('./js/leaders.mjs'),
       analyze: () => import('./js/analyze.mjs'),
-      map: () => import('./js/map.mjs')
+      map: () => import('./js/map.mjs'),
     };
 
     if (!moduleMap[tabName]) {
@@ -75,13 +75,13 @@ export class TabManager {
   async initializeTab(tabName) {
     try {
       const module = await this.loadTabModule(tabName);
-      
+
       // Call the appropriate initialization function
       const initFunctionMap = {
         score: module.initializeScoreTab,
         leaders: module.initializeLeadersTab,
         analyze: module.initializeAnalyzeTab,
-        map: module.initializeMapTab
+        map: module.initializeMapTab,
       };
 
       const initFunction = initFunctionMap[tabName];
@@ -97,30 +97,30 @@ export class TabManager {
   }
 }
 // Event Listeners
-window.addEventListener("load", function () {
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "light") {
-    document.body.classList.add("light-theme");
-    document.getElementById("themeIcon").textContent = "🌙";
+window.addEventListener('load', function () {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-theme');
+    document.getElementById('themeIcon').textContent = '🌙';
   }
 });
 
-window.addEventListener("click", function (event) {
-  const modal = document.getElementById("contactModal");
+window.addEventListener('click', function (event) {
+  const modal = document.getElementById('contactModal');
   if (event.target === modal) {
     closeContactModal();
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   // Add event listeners
   document
-    .querySelector(".theme-toggle")
-    .addEventListener("click", toggleTheme);
+    .querySelector('.theme-toggle')
+    .addEventListener('click', toggleTheme);
 
   // Close modal when clicking outside
-  window.addEventListener("click", (event) => {
-    const modal = document.getElementById("contactModal");
+  window.addEventListener('click', (event) => {
+    const modal = document.getElementById('contactModal');
     if (event.target === modal) {
       closeContactModal();
     }

@@ -1,25 +1,28 @@
 {
-    "type": "module",
-    "scripts": {
-        "start": "vite dev",
-        "build": "vite build",
-        "test": "vitest run",
-        "test:watch": "vitest",
-        "deploy": "npm run test && npm run build"
-    },
-    "dependencies": {
-        "d3": "^7.9.0",
-        "d3-geo": "^3.1.1",
-        "d3-geo-projection": "^4.0.0",
-        "multiple-select-vanilla": "4.1.4",
-        "ts-pattern": "^5.7.1",
-        "topojson-client": "^3.1.0"
-    },
-    "devDependencies": {
-        "jsdom": "^26.1.0",
-        "sass-embedded": "1.89.0",
-        "vite": "^6.3.5",
-        "vite-plugin-pwa": "^1.0.0",
-        "vitest": "^3.1.4"
-    }
+  "type": "module",
+  "scripts": {
+    "start": "vite dev",
+    "build": "vite build",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "generate:country-scores": "node scripts/generate-country-scores.js && npm run format",
+    "deploy": "npm run test && npm run build"
+  },
+  "dependencies": {
+    "d3": "^7.9.0",
+    "d3-geo": "^3.1.1",
+    "d3-geo-projection": "^4.0.0",
+    "multiple-select-vanilla": "4.1.4",
+    "ts-pattern": "^5.7.1",
+    "topojson-client": "^3.1.0"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "sass-embedded": "1.89.0",
+    "vite": "^6.3.5",
+    "vite-plugin-pwa": "^1.0.0",
+    "vitest": "^3.1.4",
+    "prettier": "3.5.3"
+  }
 }

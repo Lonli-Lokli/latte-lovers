@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -158,13 +158,13 @@
         openContactModal,
         closeContactModal,
         TabManager,
-      } from "./src/script.mjs";
+      } from './src/script.mjs';
       import {
         tabs,
         getEnabledTabs,
         getDefaultTab,
         isValidTab,
-      } from "./src/config.js";
+      } from './src/config.js';
 
       // Content cache
       const contentCache = new Map();
@@ -173,20 +173,20 @@
 
       // Load tab content
       async function loadTabContent(tabName) {
-        const contentContainer = document.getElementById("content-container");
+        const contentContainer = document.getElementById('content-container');
         if (!contentContainer) {
-          console.error("Content container not found");
+          console.error('Content container not found');
           return;
         }
 
         // Show loading spinner
-        let spinner = contentContainer.querySelector(".loading-spinner");
+        let spinner = contentContainer.querySelector('.loading-spinner');
         if (!spinner) {
-          spinner = document.createElement("div");
-          spinner.className = "loading-spinner";
+          spinner = document.createElement('div');
+          spinner.className = 'loading-spinner';
           contentContainer.appendChild(spinner);
         }
-        spinner.classList.remove("hidden");
+        spinner.classList.remove('hidden');
 
         try {
           // Load HTML content (keep existing logic)
@@ -202,45 +202,45 @@
           contentContainer.innerHTML = content;
 
           // Re-add spinner
-          spinner = document.createElement("div");
-          spinner.className = "loading-spinner";
+          spinner = document.createElement('div');
+          spinner.className = 'loading-spinner';
           contentContainer.appendChild(spinner);
 
           // Deferred JavaScript loading and initialization
           await tabManager.initializeTab(tabName);
         } catch (error) {
-          console.error("Error loading tab content:", error);
+          console.error('Error loading tab content:', error);
           contentContainer.innerHTML =
             '<div class="error">Failed to load content. Please try again.</div>';
         } finally {
           // Hide loading spinner
-          spinner = contentContainer.querySelector(".loading-spinner");
+          spinner = contentContainer.querySelector('.loading-spinner');
           if (spinner) {
-            spinner.classList.add("hidden");
+            spinner.classList.add('hidden');
           }
         }
       }
       // Initialize tab navigation
       function initializeTabNavigation() {
-        const tabNavigation = document.getElementById("tabNavigation");
+        const tabNavigation = document.getElementById('tabNavigation');
         const enabledTabs = getEnabledTabs();
 
         tabNavigation.innerHTML = enabledTabs
           .map(
             (tab) => `
           <button class="tab-btn ${
-            tab.id === currentTab ? "active" : ""
+            tab.id === currentTab ? 'active' : ''
           }" data-tab="${tab.id}">
             <span class="tab-icon">${tab.icon}</span>
             <span class="tab-label">${tab.label}</span>
           </button>
-        `
+        `,
           )
-          .join("");
+          .join('');
 
         // Add click handlers
-        tabNavigation.querySelectorAll(".tab-btn").forEach((btn) => {
-          btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+        tabNavigation.querySelectorAll('.tab-btn').forEach((btn) => {
+          btn.addEventListener('click', () => switchTab(btn.dataset.tab));
         });
       }
 
@@ -254,14 +254,14 @@
         // Validate tab name
         if (!isValidTab(tabName)) {
           console.warn(
-            `Invalid tab name: ${tabName}. Defaulting to default tab`
+            `Invalid tab name: ${tabName}. Defaulting to default tab`,
           );
           tabName = getDefaultTab();
         }
 
         // Update active tab button
-        document.querySelectorAll(".tab-btn").forEach((btn) => {
-          btn.classList.toggle("active", btn.dataset.tab === tabName);
+        document.querySelectorAll('.tab-btn').forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.tab === tabName);
         });
 
         // Update URL hash
@@ -273,12 +273,12 @@
       }
 
       // Initialize when DOM is loaded
-      document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener('DOMContentLoaded', () => {
         // Initialize tab navigation
         initializeTabNavigation();
 
         // Handle hash changes
-        window.addEventListener("hashchange", () => {
+        window.addEventListener('hashchange', () => {
           const tabName = window.location.hash.slice(1) || getDefaultTab();
           switchTab(tabName);
         });
@@ -289,18 +289,18 @@
 
         // Theme toggle
         document
-          .querySelector(".theme-toggle")
-          .addEventListener("click", toggleTheme);
+          .querySelector('.theme-toggle')
+          .addEventListener('click', toggleTheme);
 
         // Contact modal handlers
         document
-          .getElementById("contactBtn")
-          .addEventListener("click", openContactModal);
+          .getElementById('contactBtn')
+          .addEventListener('click', openContactModal);
         document
-          .querySelector(".close")
-          .addEventListener("click", closeContactModal);
-        window.addEventListener("click", (event) => {
-          const modal = document.getElementById("contactModal");
+          .querySelector('.close')
+          .addEventListener('click', closeContactModal);
+        window.addEventListener('click', (event) => {
+          const modal = document.getElementById('contactModal');
           if (event.target === modal) {
             closeContactModal();
           }
@@ -308,41 +308,41 @@
 
         // PWA Installation
         let deferredPrompt;
-        const installButton = document.getElementById("installPWA");
+        const installButton = document.getElementById('installPWA');
 
         // Helper: check if running as PWA (standalone) on any platform
         function isRunningStandalone() {
           return (
-            window.matchMedia("(display-mode: standalone)").matches ||
+            window.matchMedia('(display-mode: standalone)').matches ||
             window.navigator.standalone === true // iOS Safari
           );
         }
 
         if (isRunningStandalone()) {
-          installButton.classList.add("hidden");
+          installButton.classList.add('hidden');
         } else {
           const isIOS =
             /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
           if (isIOS) {
-            installButton.classList.remove("hidden");
-            installButton.addEventListener("click", () => {
+            installButton.classList.remove('hidden');
+            installButton.addEventListener('click', () => {
               alert(
-                'To install this app on your device, tap the Share button and then "Add to Home Screen"'
+                'To install this app on your device, tap the Share button and then "Add to Home Screen"',
               );
             });
           } else {
-            window.addEventListener("beforeinstallprompt", (e) => {
+            window.addEventListener('beforeinstallprompt', (e) => {
               e.preventDefault();
               deferredPrompt = e;
-              installButton.classList.remove("hidden");
+              installButton.classList.remove('hidden');
             });
 
-            installButton.addEventListener("click", async () => {
+            installButton.addEventListener('click', async () => {
               if (!deferredPrompt) return;
               deferredPrompt.prompt();
               const { outcome } = await deferredPrompt.userChoice;
               deferredPrompt = null;
-              installButton.classList.add("hidden");
+              installButton.classList.add('hidden');
             });
           }
         }

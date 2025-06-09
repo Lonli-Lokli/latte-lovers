@@ -7,10 +7,10 @@ export class ConnectionManager {
 
   setupSVGDefs() {
     // Create defs element for gradients and markers
-    if (!this.svg.querySelector("defs")) {
+    if (!this.svg.querySelector('defs')) {
       const defs = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "defs"
+        'http://www.w3.org/2000/svg',
+        'defs',
       );
       this.svg.appendChild(defs);
     }
@@ -22,7 +22,7 @@ export class ConnectionManager {
     selector2,
     labelText,
     colorBefore,
-    colorAfter
+    colorAfter,
   ) {
     // Remove existing connection if it exists
     this.removeConnection(id);
@@ -47,10 +47,10 @@ export class ConnectionManager {
     const y2 = rect2.top - containerRect.top;
 
     // Create connection group
-    const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    group.setAttribute("data-connection-id", id);
+    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    group.setAttribute('data-connection-id', id);
 
-    if (!labelText || labelText.trim() === "") {
+    if (!labelText || labelText.trim() === '') {
       // Single line connection
       this.createSingleLine(group, x1, y1, x2, y2, colorBefore);
     } else {
@@ -63,7 +63,7 @@ export class ConnectionManager {
         y2,
         labelText,
         colorBefore,
-        colorAfter
+        colorAfter,
       );
     }
 
@@ -71,7 +71,7 @@ export class ConnectionManager {
 
     // Store connection data
     this.connections.set(id, {
-      type: "usual",
+      type: 'usual',
       selector1,
       selector2,
       labelText,
@@ -84,15 +84,15 @@ export class ConnectionManager {
   }
 
   createSingleLine(group, x1, y1, x2, y2, color) {
-    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line.setAttribute("x1", x1);
-    line.setAttribute("y1", y1);
-    line.setAttribute("x2", x2);
-    line.setAttribute("y2", y2);
-    line.setAttribute("stroke", color);
-    line.setAttribute("stroke-width", "2");
-    line.setAttribute("fill", "none");
-    line.setAttribute("stroke-linecap", "round");
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', y2);
+    line.setAttribute('stroke', color);
+    line.setAttribute('stroke-width', '2');
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke-linecap', 'round');
 
     group.appendChild(line);
   }
@@ -105,7 +105,7 @@ export class ConnectionManager {
     y2,
     labelText,
     colorBefore,
-    colorAfter
+    colorAfter,
   ) {
     const midX = (x1 + x2) / 2;
     const midY = (y1 + y2) / 2;
@@ -143,63 +143,63 @@ export class ConnectionManager {
 
     // First line segment
     const line1 = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "line"
+      'http://www.w3.org/2000/svg',
+      'line',
     );
-    line1.setAttribute("x1", x1);
-    line1.setAttribute("y1", y1);
-    line1.setAttribute("x2", midX - gapX);
-    line1.setAttribute("y2", midY - gapY);
-    line1.setAttribute("stroke", colorBefore);
-    line1.setAttribute("stroke-width", "2");
-    line1.setAttribute("fill", "none");
-    line1.setAttribute("stroke-linecap", "round");
+    line1.setAttribute('x1', x1);
+    line1.setAttribute('y1', y1);
+    line1.setAttribute('x2', midX - gapX);
+    line1.setAttribute('y2', midY - gapY);
+    line1.setAttribute('stroke', colorBefore);
+    line1.setAttribute('stroke-width', '2');
+    line1.setAttribute('fill', 'none');
+    line1.setAttribute('stroke-linecap', 'round');
 
     // Second line segment
     const line2 = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "line"
+      'http://www.w3.org/2000/svg',
+      'line',
     );
-    line2.setAttribute("x1", midX + gapX);
-    line2.setAttribute("y1", midY + gapY);
-    line2.setAttribute("x2", x2);
-    line2.setAttribute("y2", y2);
-    line2.setAttribute("stroke", colorAfter);
-    line2.setAttribute("stroke-width", "2");
-    line2.setAttribute("fill", "none");
-    line2.setAttribute("stroke-linecap", "round");
+    line2.setAttribute('x1', midX + gapX);
+    line2.setAttribute('y1', midY + gapY);
+    line2.setAttribute('x2', x2);
+    line2.setAttribute('y2', y2);
+    line2.setAttribute('stroke', colorAfter);
+    line2.setAttribute('stroke-width', '2');
+    line2.setAttribute('fill', 'none');
+    line2.setAttribute('stroke-linecap', 'round');
 
     group.appendChild(line1);
     group.appendChild(line2);
 
     // Label box
     const labelBox = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "rect"
+      'http://www.w3.org/2000/svg',
+      'rect',
     );
-    labelBox.setAttribute("x", midX - boxWidth / 2);
-    labelBox.setAttribute("y", midY - boxHeight / 2);
-    labelBox.setAttribute("width", boxWidth);
-    labelBox.setAttribute("height", boxHeight);
-    labelBox.setAttribute("rx", 6);
-    labelBox.setAttribute("ry", 6);
-    labelBox.setAttribute("fill", "var(--analyze-label-bg)"); // Use CSS variable for background
-    labelBox.setAttribute("stroke", colorAfter);
-    labelBox.setAttribute("stroke-width", 2);
-    labelBox.setAttribute("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.1))");
+    labelBox.setAttribute('x', midX - boxWidth / 2);
+    labelBox.setAttribute('y', midY - boxHeight / 2);
+    labelBox.setAttribute('width', boxWidth);
+    labelBox.setAttribute('height', boxHeight);
+    labelBox.setAttribute('rx', 6);
+    labelBox.setAttribute('ry', 6);
+    labelBox.setAttribute('fill', 'var(--analyze-label-bg)'); // Use CSS variable for background
+    labelBox.setAttribute('stroke', colorAfter);
+    labelBox.setAttribute('stroke-width', 2);
+    labelBox.setAttribute('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))');
 
     // Label text
     const labelTextEl = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "text"
+      'http://www.w3.org/2000/svg',
+      'text',
     );
-    labelTextEl.setAttribute("x", midX);
-    labelTextEl.setAttribute("y", midY + 4);
-    labelTextEl.setAttribute("text-anchor", "middle");
-    labelTextEl.setAttribute("fill", "var(--analyze-label-fg)");
-    labelTextEl.setAttribute("font-family", "Arial, sans-serif");
-    labelTextEl.setAttribute("font-size", "11");
-    labelTextEl.setAttribute("font-weight", "600");
+    labelTextEl.setAttribute('x', midX);
+    labelTextEl.setAttribute('y', midY + 4);
+    labelTextEl.setAttribute('text-anchor', 'middle');
+    labelTextEl.setAttribute('fill', 'var(--analyze-label-fg)');
+    labelTextEl.setAttribute('font-family', 'Arial, sans-serif');
+    labelTextEl.setAttribute('font-size', '11');
+    labelTextEl.setAttribute('font-weight', '600');
     labelTextEl.textContent = labelText;
 
     group.appendChild(labelBox);
@@ -220,7 +220,7 @@ export class ConnectionManager {
       connection.selector2,
       newLabelText !== undefined ? newLabelText : connection.labelText,
       newColorBefore !== undefined ? newColorBefore : connection.colorBefore,
-      newColorAfter !== undefined ? newColorAfter : connection.colorAfter
+      newColorAfter !== undefined ? newColorAfter : connection.colorAfter,
     );
   }
 
@@ -244,7 +244,7 @@ export class ConnectionManager {
 
     connectionData.forEach(([id, data]) => {
       switch (data.type) {
-        case "vertical":
+        case 'vertical':
           this.createVerticalConnection(
             id,
             data.selector1,
@@ -253,17 +253,17 @@ export class ConnectionManager {
             data.label2Info,
             data.colorBefore,
             data.colorAfter,
-            data.offsetPercent
+            data.offsetPercent,
           );
           break;
-        case "usual":
+        case 'usual':
           this.createConnection(
             id,
             data.selector1,
             data.selector2,
             data.labelText,
             data.colorBefore,
-            data.colorAfter
+            data.colorAfter,
           );
           break;
         default:
@@ -299,7 +299,7 @@ export class ConnectionManager {
     label2Info,
     colorBefore,
     colorAfter,
-    offsetPercent = 0.5 // Default to 0.5 (middle) if not provided
+    offsetPercent = 0.5, // Default to 0.5 (middle) if not provided
   ) {
     // Remove existing connection if it exists
     this.removeConnection(id);
@@ -309,7 +309,7 @@ export class ConnectionManager {
 
     if (!element1 || !element2) {
       console.error(
-        `Elements not found for vertical connection: ${selector1}, ${selector2}`
+        `Elements not found for vertical connection: ${selector1}, ${selector2}`,
       );
       return null;
     }
@@ -328,75 +328,75 @@ export class ConnectionManager {
     const labelY = y1 + (targetY - y1) * offsetPercent;
     const boxWidth = Math.max(
       30,
-      Math.max(labelTextLine1.length, labelTextLine2.length) * 7 + 16
+      Math.max(labelTextLine1.length, labelTextLine2.length) * 7 + 16,
     );
     const boxHeight = 34;
     const labelBoxX = x1 - boxWidth / 2;
     const labelBoxY = labelY - boxHeight / 2;
 
     // Single vertical line segment: from y1 to targetY
-    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line.setAttribute("x1", x1);
-    line.setAttribute("y1", y1);
-    line.setAttribute("x2", x1);
-    line.setAttribute("y2", targetY);
-    line.setAttribute("stroke", colorAfter);
-    line.setAttribute("stroke-width", "2");
-    line.setAttribute("fill", "none");
-    line.setAttribute("stroke-linecap", "round");
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x1);
+    line.setAttribute('y2', targetY);
+    line.setAttribute('stroke', colorAfter);
+    line.setAttribute('stroke-width', '2');
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke-linecap', 'round');
 
-    const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    group.setAttribute("data-connection-id", id);
+    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    group.setAttribute('data-connection-id', id);
     group.appendChild(line);
 
     // Label box (centered on the vertical line)
     const labelBox = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "rect"
+      'http://www.w3.org/2000/svg',
+      'rect',
     );
-    labelBox.setAttribute("x", labelBoxX);
-    labelBox.setAttribute("y", labelBoxY);
-    labelBox.setAttribute("width", boxWidth);
-    labelBox.setAttribute("height", boxHeight);
-    labelBox.setAttribute("rx", 6);
-    labelBox.setAttribute("ry", 6);
-    labelBox.setAttribute("fill", "var(--analyze-label-bg)");
-    labelBox.setAttribute("stroke", colorAfter);
-    labelBox.setAttribute("stroke-width", 1);
-    labelBox.setAttribute("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.1))");
+    labelBox.setAttribute('x', labelBoxX);
+    labelBox.setAttribute('y', labelBoxY);
+    labelBox.setAttribute('width', boxWidth);
+    labelBox.setAttribute('height', boxHeight);
+    labelBox.setAttribute('rx', 6);
+    labelBox.setAttribute('ry', 6);
+    labelBox.setAttribute('fill', 'var(--analyze-label-bg)');
+    labelBox.setAttribute('stroke', colorAfter);
+    labelBox.setAttribute('stroke-width', 1);
+    labelBox.setAttribute('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))');
 
     // Label text with two lines
     const labelTextEl = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "text"
+      'http://www.w3.org/2000/svg',
+      'text',
     );
-    labelTextEl.setAttribute("x", x1);
-    labelTextEl.setAttribute("y", labelBoxY + boxHeight / 2 - 8);
-    labelTextEl.setAttribute("text-anchor", "middle");
-    labelTextEl.setAttribute("fill", "#5D4037");
-    labelTextEl.setAttribute("font-family", "Arial, sans-serif");
-    labelTextEl.setAttribute("font-size", "11");
-    labelTextEl.setAttribute("font-weight", "600");
+    labelTextEl.setAttribute('x', x1);
+    labelTextEl.setAttribute('y', labelBoxY + boxHeight / 2 - 8);
+    labelTextEl.setAttribute('text-anchor', 'middle');
+    labelTextEl.setAttribute('fill', '#5D4037');
+    labelTextEl.setAttribute('font-family', 'Arial, sans-serif');
+    labelTextEl.setAttribute('font-size', '11');
+    labelTextEl.setAttribute('font-weight', '600');
 
     // First text line (offset upwards)
     const tspan1 = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "tspan"
+      'http://www.w3.org/2000/svg',
+      'tspan',
     );
-    tspan1.setAttribute("x", x1);
-    tspan1.setAttribute("dy", "1.1em");
-    tspan1.setAttribute("fill", "var(--analyze-label-fg");
+    tspan1.setAttribute('x', x1);
+    tspan1.setAttribute('dy', '1.1em');
+    tspan1.setAttribute('fill', 'var(--analyze-label-fg');
     tspan1.textContent = labelTextLine1;
 
     // Second text line (offset downwards from the first line's position)
     const tspan2 = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "tspan"
+      'http://www.w3.org/2000/svg',
+      'tspan',
     );
-    tspan2.setAttribute("x", x1);
-    tspan2.setAttribute("dy", "1.2em");
-    tspan2.setAttribute("fill", labelTextColor2);
-    tspan2.setAttribute("font-size", "9");
+    tspan2.setAttribute('x', x1);
+    tspan2.setAttribute('dy', '1.2em');
+    tspan2.setAttribute('fill', labelTextColor2);
+    tspan2.setAttribute('font-size', '9');
     tspan2.textContent = labelTextLine2;
 
     labelTextEl.appendChild(tspan1);
@@ -408,7 +408,7 @@ export class ConnectionManager {
     this.svg.appendChild(group);
 
     this.connections.set(id, {
-      type: "vertical",
+      type: 'vertical',
       selector1,
       selector2,
       label1Info,

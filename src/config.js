@@ -1,30 +1,30 @@
 // Tab Configuration
 export const tabs = {
   score: {
-    id: "score",
-    label: "Score",
-    icon: "⭐",
+    id: 'score',
+    label: 'Score',
+    icon: '⭐',
     enabled: true,
     default: true,
   },
   leaders: {
-    id: "leaders",
-    label: "Leaders",
-    icon: "🏆",
+    id: 'leaders',
+    label: 'Leaders',
+    icon: '🏆',
     enabled: true,
     default: false,
   },
   analyze: {
-    id: "analyze",
-    label: "Analyze",
-    icon: "👨‍💻",
+    id: 'analyze',
+    label: 'Analyze',
+    icon: '👨‍💻',
     enabled: true,
     default: false,
   },
   map: {
-    id: "map",
-    label: "Map",
-    icon: "🌐",
+    id: 'map',
+    label: 'Map',
+    icon: '🌐',
     enabled: true,
     default: false,
   },
@@ -39,7 +39,7 @@ export const getEnabledTabs = () => {
 // Get default tab
 export const getDefaultTab = () => {
   return (
-    Object.values(tabs).find((tab) => tab.default)?.id || tabs[0]?.id || "score"
+    Object.values(tabs).find((tab) => tab.default)?.id || tabs[0]?.id || 'score'
   );
 };
 

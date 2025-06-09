@@ -1,10 +1,11 @@
-import { match } from "ts-pattern";
-import * as topojson from "topojson-client";
-import { geoWinkel3 } from "d3-geo-projection";
-import { geoPath } from "d3-geo";
-import { select, zoom } from "d3";
-import { countries110m as world } from "../data/countries-110m";
-import { coffeeScore, normalizeScore } from "../scoring.mjs";
+import { match } from 'ts-pattern';
+import * as topojson from 'topojson-client';
+import { geoWinkel3 } from 'd3-geo-projection';
+import { geoPath } from 'd3-geo';
+import { select, zoom } from 'd3';
+import { countries110m as world } from '../data/countries-110m';
+import { countryScores } from '../data/country-scores.mjs';
+import { normalizeScore } from '../scoring.mjs';
 
 export function initializeMapTab() {
   initializeMapSvg();
@@ -12,36 +13,36 @@ export function initializeMapTab() {
 
 function initializeMapSvg() {
   // Responsive container sizing
-  const container = document.querySelector(".map-container");
+  const container = document.querySelector('.map-container');
   if (container) {
-    container.style.width = "100%";
-    container.style.height = "100%";
-    container.style.maxWidth = "none";
-    container.style.maxHeight = "none";
-    container.style.overflow = "hidden";
-    container.style.touchAction = "none";
-    container.style.margin = "0";
-    container.style.padding = "0";
+    container.style.width = '100%';
+    container.style.height = '100%';
+    container.style.maxWidth = 'none';
+    container.style.maxHeight = 'none';
+    container.style.overflow = 'hidden';
+    container.style.touchAction = 'none';
+    container.style.margin = '0';
+    container.style.padding = '0';
   }
 
   // Responsive SVG sizing
-  const svg = select("#world-map")
-    .attr("width", "100%")
-    .attr("height", "100%")
-    .attr("viewBox", `0 0 1000 500`)
-    .style("display", "block")
-    .style("width", "100%")
-    .style("height", "100%")
-    .style("margin", "0")
-    .style("padding", "0");
+  const svg = select('#world-map')
+    .attr('width', '100%')
+    .attr('height', '100%')
+    .attr('viewBox', `0 0 1000 500`)
+    .style('display', 'block')
+    .style('width', '100%')
+    .style('height', '100%')
+    .style('margin', '0')
+    .style('padding', '0');
 
   // D3 zoom behavior
   svg.call(
     zoom()
       .scaleExtent([1, 8])
-      .on("zoom", (event) => {
-        svg.selectAll("g").attr("transform", event.transform);
-      })
+      .on('zoom', (event) => {
+        svg.selectAll('g').attr('transform', event.transform);
+      }),
   );
 
   // Projection and path
@@ -51,57 +52,57 @@ function initializeMapSvg() {
   const path = geoPath().projection(projection);
 
   // Create a group for all map elements (for zooming)
-  let g = svg.select("g");
-  if (g.empty()) g = svg.append("g");
+  let g = svg.select('g');
+  if (g.empty()) g = svg.append('g');
 
   const countries = topojson.feature(world, world.objects.countries);
 
   // Draw countries
-  g.selectAll(".country")
+  g.selectAll('.country')
     .data(countries.features)
     .enter()
-    .append("path")
-    .attr("class", "country")
-    .attr("d", path)
-    .style("fill", (d) => {
+    .append('path')
+    .attr('class', 'country')
+    .attr('d', path)
+    .style('fill', (d) => {
       const countryName = d3CountryNameNormilizer(d.properties.name);
-      const data = coffeeScore[countryName];
+      const data = countryScores[countryName];
       // Use a light gray for countries with no data
-      return data ? getColor(data.best.score) : "var(--map-country-nodata)";
+      return data ? getColor(data.best.score) : 'var(--map-country-nodata)';
     })
-    .style("stroke", "#333")
-    .style("stroke-width", 0.5)
-    .style("cursor", "pointer")
-    .on("mouseenter", function (event, d) {
+    .style('stroke', '#333')
+    .style('stroke-width', 0.5)
+    .style('cursor', 'pointer')
+    .on('mouseenter', function (event, d) {
       const countryName = d3CountryNameNormilizer(d.properties.name);
-      const data = coffeeScore[countryName];
+      const data = countryScores[countryName];
       if (data) {
         select(this)
-          .style("stroke", "#fff")
-          .style("stroke-width", 2)
-          .style("filter", "brightness(1.2)");
+          .style('stroke', '#fff')
+          .style('stroke-width', 2)
+          .style('filter', 'brightness(1.2)');
         showTooltip(event, data, d.properties.name);
       } else {
         hideTooltip(); // Hide tooltip if no data
       }
     })
-    .on("mousemove", function (event, d) {
+    .on('mousemove', function (event, d) {
       const countryName = d3CountryNameNormilizer(d.properties.name);
-      const data = coffeeScore[countryName];
+      const data = countryScores[countryName];
       if (data) {
         moveTooltip(event);
       } else {
         hideTooltip(); // Hide tooltip if no data
       }
     })
-    .on("mouseleave", function (event, d) {
+    .on('mouseleave', function (event, d) {
       const countryName = d3CountryNameNormilizer(d.properties.name);
-      const data = coffeeScore[countryName];
+      const data = countryScores[countryName];
       // Always hide tooltip on mouseleave, regardless of data
       select(this)
-        .style("stroke", "#333")
-        .style("stroke-width", 0.5)
-        .style("filter", "none");
+        .style('stroke', '#333')
+        .style('stroke-width', 0.5)
+        .style('filter', 'none');
       hideTooltip();
     });
 
@@ -109,8 +110,8 @@ function initializeMapSvg() {
   //updateStatistics();
 }
 
-const allScores = Object.values(coffeeScore).map((data) =>
-  normalizeScore(data.best.score)
+const allScores = Object.values(countryScores).map((data) =>
+  normalizeScore(data.best.score),
 );
 const min = Math.min(...allScores);
 const max = Math.max(...allScores);
@@ -146,14 +147,14 @@ function getColor(score) {
 
 // Tooltip functions
 function showTooltip(event, data, countryName) {
-  const tooltip = select("#tooltip");
-  const titleElement = select("#tooltip-title");
-  const contentElement = select("#tooltip-content");
+  const tooltip = select('#tooltip');
+  const titleElement = select('#tooltip-title');
+  const contentElement = select('#tooltip-content');
 
   titleElement.text(data.name);
 
   const averageScore = Math.round(
-    (normalizeScore(data.worst.score) + normalizeScore(data.best.score)) / 2
+    (normalizeScore(data.worst.score) + normalizeScore(data.best.score)) / 2,
   );
 
   contentElement.html(`
@@ -162,8 +163,10 @@ function showTooltip(event, data, countryName) {
                 </div>
                 <div class="score-range">
                     <strong>Quality Range:</strong> ${normalizeScore(
-                      data.worst.score
-                    ).toFixed(1)} - ${normalizeScore(data.best.score).toFixed(1)}
+                      data.worst.score,
+                    ).toFixed(
+                      1,
+                    )} - ${normalizeScore(data.best.score).toFixed(1)}
                 </div>
                 <div class="score-range">
                     <strong>Average:</strong> ${averageScore}
@@ -179,39 +182,39 @@ function showTooltip(event, data, countryName) {
   // Mobile: pin tooltip to bottom, desktop: follow mouse
   if (window.innerWidth <= 768) {
     tooltip
-      .classed("show", true)
-      .style("position", "fixed")
-      .style("left", "0")
-      .style("right", "0")
-      .style("bottom", "0")
-      .style("top", "auto")
-      .style("margin", "0 auto")
-      .style("width", "100vw")
-      .style("max-width", "100vw")
-      .style("z-index", 9999);
+      .classed('show', true)
+      .style('position', 'fixed')
+      .style('left', '0')
+      .style('right', '0')
+      .style('bottom', '0')
+      .style('top', 'auto')
+      .style('margin', '0 auto')
+      .style('width', '100vw')
+      .style('max-width', '100vw')
+      .style('z-index', 9999);
   } else {
     tooltip
-      .classed("show", true)
-      .style("position", "absolute")
-      .style("pointer-events", "none")
-      .style("background", "#222")
-      .style("color", "#fff")
-      .style("border-radius", "8px")
-      .style("box-shadow", "0 2px 12px rgba(0,0,0,0.3)")
-      .style("padding", "16px 20px")
-      .style("min-width", "220px")
-      .style("max-width", "320px")
-      .style("font-size", "15px")
-      .style("line-height", "1.5")
-      .style("z-index", 9999);
+      .classed('show', true)
+      .style('position', 'absolute')
+      .style('pointer-events', 'none')
+      .style('background', '#222')
+      .style('color', '#fff')
+      .style('border-radius', '8px')
+      .style('box-shadow', '0 2px 12px rgba(0,0,0,0.3)')
+      .style('padding', '16px 20px')
+      .style('min-width', '220px')
+      .style('max-width', '320px')
+      .style('font-size', '15px')
+      .style('line-height', '1.5')
+      .style('z-index', 9999);
     moveTooltip(event);
   }
 }
 
 function moveTooltip(event) {
   if (window.innerWidth <= 768) return; // Don't move on mobile, it's pinned
-  const tooltip = select("#tooltip");
-  const container = document.querySelector(".map-container");
+  const tooltip = select('#tooltip');
+  const container = document.querySelector('.map-container');
   const containerRect = container.getBoundingClientRect();
   const tooltipNode = tooltip.node();
 
@@ -234,44 +237,42 @@ function moveTooltip(event) {
     }
   }
 
-  tooltip
-    .style("left", left + "px")
-    .style("top", top + "px");
+  tooltip.style('left', left + 'px').style('top', top + 'px');
 }
 
 function hideTooltip() {
-  select("#tooltip").classed("show", false);
+  select('#tooltip').classed('show', false);
 }
 
 function updateStatistics() {
-  const scores = Object.values(coffeeScore).map(
-    (data) => (data.worst.score + data.best.score) / 2
+  const scores = Object.values(countryScores).map(
+    (data) => (data.worst.score + data.best.score) / 2,
   );
   const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
 
   // Find top producer (highest best score)
-  let topProducer = "";
+  let topProducer = '';
   let highestScore = 0;
-  Object.entries(coffeeScore).forEach(([country, data]) => {
+  Object.entries(countryScores).forEach(([country, data]) => {
     if (data.best.score > highestScore) {
       highestScore = data.best.score;
       topProducer = country;
     }
   });
 
-  document.getElementById("avg-score").textContent = avgScore.toFixed(1);
-  document.getElementById("top-producer").textContent = topProducer;
-  document.getElementById("countries-count").textContent =
-    Object.keys(coffeeScore).length;
+  document.getElementById('avg-score').textContent = avgScore.toFixed(1);
+  document.getElementById('top-producer').textContent = topProducer;
+  document.getElementById('countries-count').textContent =
+    Object.keys(countryScores).length;
 }
 
 export const d3CountryNameNormilizer = (name) =>
   match(name)
-    .with("Central African Rep.", () => "central-african-republic")
-    .with(`Côte d'Ivoire`, () => "ivory-coast")
+    .with('Central African Rep.', () => 'central-african-republic')
+    .with(`Côte d'Ivoire`, () => 'ivory-coast')
     .otherwise(() =>
       name
-        .split(" ")
+        .split(' ')
         .map((word) => word.toLowerCase())
-        .join("-")
+        .join('-'),
     );

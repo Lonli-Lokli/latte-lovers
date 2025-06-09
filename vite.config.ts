@@ -1,5 +1,5 @@
-import { defineConfig } from "vite";
-import { VitePWA } from "vite-plugin-pwa";
+import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   build: {
@@ -8,29 +8,29 @@ export default defineConfig({
   plugins: [
     VitePWA({
       includeAssets: [
-        "favicon.svg",
-        "192x192.png",
-        "512x512.png",
-        "og-image.png",
+        'favicon.svg',
+        '192x192.png',
+        '512x512.png',
+        'og-image.png',
       ],
       manifest: {
-        name: "Latte Lovers",
-        short_name: "LatteLovers",
+        name: 'Latte Lovers',
+        short_name: 'LatteLovers',
         description:
-          "Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes.",
-        background_color: "#ffffff",
-        theme_color: "#2196F3",
-        orientation: "portrait-primary",
+          'Find the perfect coffee for your milk drinks. Check compatibility of different coffee origins, processing methods, and roast levels for lattes.',
+        background_color: '#ffffff',
+        theme_color: '#2196F3',
+        orientation: 'portrait-primary',
         icons: [
           {
-            src: "192x192.png",
-            sizes: "192x192",
-            type: "image/png",
+            src: '192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
           },
           {
-            src: "512x512.png",
-            sizes: "512x512",
-            type: "image/png",
+            src: '512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
           },
         ],
       },
@@ -39,10 +39,10 @@ export default defineConfig({
           {
             handler: 'NetworkFirst',
             urlPattern: /.*/,
-          }
-        ]
+          },
+        ],
       },
-      injectRegister: null
+      injectRegister: null,
     }),
   ],
 });

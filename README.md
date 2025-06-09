@@ -29,6 +29,7 @@ A modern web application that helps coffee enthusiasts find the perfect coffee f
 ## Getting Started
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/Lonli-Lokli/latte-lovers.git
 ```

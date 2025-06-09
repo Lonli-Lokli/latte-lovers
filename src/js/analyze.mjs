@@ -1,14 +1,14 @@
-import { ConnectionManager } from "./svg-connector.mjs";
+import { ConnectionManager } from './svg-connector.mjs';
 import {
-  coffeeProfiles,
-  processingMethods,
-  roastLevelEffects,
   calculateLatteScore,
   normalizeScore,
   getCompatibilityGrade,
-  characteristicDescriptions,
-  scoreConfig
-} from "../scoring.mjs";
+  scoreConfig,
+} from '../scoring.mjs';
+import { coffeeProfiles } from '../data/coffee-profiles.mjs';
+import { roastLevelEffects } from '../data/roast-levels.mjs';
+import { processingMethods } from '../data/processing-methods.mjs';
+import { characteristicDescriptions } from '../data/characteristic-descriptions.mjs';
 
 // Create a single ConnectionManager instance as a singleton for this module
 let connectionManager = null;
@@ -24,16 +24,16 @@ export function initializeAnalyzeTab() {
   // updateDisplay();
 
   // Create the ConnectionManager after DOM is loaded
-  const connectionSvg = document.getElementById("connection-svg");
+  const connectionSvg = document.getElementById('connection-svg');
   if (!connectionSvg) {
-    console.error("Connection SVG element not found");
+    console.error('Connection SVG element not found');
     return;
   }
   connectionManager = new ConnectionManager(connectionSvg);
 
   // Add debounced resize event listener to refresh connections on the singleton manager
   let resizeTimeout = null;
-  window.addEventListener("resize", () => {
+  window.addEventListener('resize', () => {
     if (connectionManager) {
       if (resizeTimeout) clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
@@ -49,39 +49,39 @@ export function initializeAnalyzeTab() {
 
 // Use effects directly from scoring.mjs
 const processingEffects = Object.fromEntries(
-  Object.entries(processingMethods).map(([id, method]) => [id, method.effects])
+  Object.entries(processingMethods).map(([id, method]) => [id, method.effects]),
 );
 
 const roastingEffects = Object.fromEntries(
-  Object.entries(roastLevelEffects).map(([id, level]) => [id, level.effects])
+  Object.entries(roastLevelEffects).map(([id, level]) => [id, level.effects]),
 );
 
 const stages = [
   {
-    id: "origin",
-    label: "Origin",
-    selectId: "country",
-    charSuffix: "-orig",
+    id: 'origin',
+    label: 'Origin',
+    selectId: 'country',
+    charSuffix: '-orig',
   },
   {
-    id: "processing",
-    label: "Process",
-    selectId: "processing",
-    charSuffix: "-proc",
+    id: 'processing',
+    label: 'Process',
+    selectId: 'processing',
+    charSuffix: '-proc',
   },
   {
-    id: "roasting",
-    label: "Roast",
-    selectId: "roasting",
-    charSuffix: "-final",
+    id: 'roasting',
+    label: 'Roast',
+    selectId: 'roasting',
+    charSuffix: '-final',
   },
 ];
 const chars = [
-  { name: "Acidity", id: "acidity" },
-  { name: "Bitterness", id: "bitterness" },
-  { name: "Body", id: "body" },
-  { name: "Balance", id: "balance" },    
-  { name: "Sweetness", id: "sweetness" },
+  { name: 'Acidity', id: 'acidity' },
+  { name: 'Bitterness', id: 'bitterness' },
+  { name: 'Body', id: 'body' },
+  { name: 'Balance', id: 'balance' },
+  { name: 'Sweetness', id: 'sweetness' },
 ];
 
 function clamp(value, min, max) {
@@ -100,11 +100,11 @@ const idealLatteRanges = {
 // Helper to get the class for a characteristic value based on its range
 function getCharacteristicClass(char, value) {
   const range = idealLatteRanges[char];
-  if (!range) return "neutral"; // Default to neutral if no range defined
+  if (!range) return 'neutral'; // Default to neutral if no range defined
 
   // Check if the value is within the perfect range
   if (value >= range.min && value <= range.max) {
-    return "perfect";
+    return 'perfect';
   }
 
   // Check if the value is slightly outside the range (within 1 unit)
@@ -112,28 +112,28 @@ function getCharacteristicClass(char, value) {
     (value >= range.min - 1 && value < range.min) ||
     (value > range.max && value <= range.max + 1)
   ) {
-    return "good";
+    return 'good';
   }
 
   // Otherwise, the value is significantly outside the range
-  return "bad";
+  return 'bad';
 }
 
 // Helper to get the class for an arrow based on characteristic change and ideal range
 function getArrowClass(char, originalValue, finalValue) {
   const range = idealLatteRanges[char];
-  if (!range) return "arrow-neutral"; // Default to neutral
+  if (!range) return 'arrow-neutral'; // Default to neutral
 
   const originalDistanceToIdeal = getDistanceToIdeal(char, originalValue);
   const finalDistanceToIdeal = getDistanceToIdeal(char, finalValue);
 
   // Determine if the value moved closer or further from the ideal range
   if (finalDistanceToIdeal < originalDistanceToIdeal) {
-    return "arrow-improve"; // Moved closer to ideal range
+    return 'arrow-improve'; // Moved closer to ideal range
   } else if (finalDistanceToIdeal > originalDistanceToIdeal) {
-    return "arrow-worsen"; // Moved further from ideal range
+    return 'arrow-worsen'; // Moved further from ideal range
   } else {
-    return "arrow-neutral"; // Stayed same distance or no change
+    return 'arrow-neutral'; // Stayed same distance or no change
   }
 }
 
@@ -161,16 +161,16 @@ function getDistanceToIdeal(char, value) {
 }
 
 function calculateProfile() {
-  const country = document.getElementById("country").value;
-  const processing = document.getElementById("processing").value;
-  const roasting = document.getElementById("roasting").value;
+  const country = document.getElementById('country').value;
+  const processing = document.getElementById('processing').value;
+  const roasting = document.getElementById('roasting').value;
 
   // Check if all selections are made
   if (!country || !processing || !roasting) {
     // Optionally clear display or show a message if selections are incomplete
     // For now, we'll let the rest of the function run, which might result in errors
     // if subsequent code expects defined profiles/effects.
-    console.log("Selections incomplete, cannot calculate profile.");
+    console.log('Selections incomplete, cannot calculate profile.');
     return {
       baseProfile: {},
       processedProfile: {},
@@ -205,7 +205,7 @@ function calculateProfile() {
       processedProfile[char] = clamp(
         baseProfile[char] + (currentProcessingEffects[char] || 0),
         0,
-        10
+        10,
       );
     }
   }
@@ -224,7 +224,7 @@ function calculateProfile() {
       finalProfile[char] = clamp(
         processedProfile[char] + (currentRoastingEffects[char] || 0),
         0,
-        10
+        10,
       );
     }
   }
@@ -245,47 +245,47 @@ function updateDisplay() {
   // If calculation failed (e.g., incomplete selections), reset display or show message
   if (score === null) {
     // Optionally clear fields or show a specific message
-    document.getElementById("formula-result").className = "result"; // Reset result class
-    document.getElementById("formula-emoji").textContent = "";
-    document.getElementById("formula-grade").textContent = "Select Options";
-    document.getElementById("formula-score").textContent = "";
-    document.getElementById("formula-description").textContent =
-      "Please select Origin, Process, and Roast to calculate the latte profile.";
+    document.getElementById('formula-result').className = 'result'; // Reset result class
+    document.getElementById('formula-emoji').textContent = '';
+    document.getElementById('formula-grade').textContent = 'Select Options';
+    document.getElementById('formula-score').textContent = '';
+    document.getElementById('formula-description').textContent =
+      'Please select Origin, Process, and Roast to calculate the latte profile.';
 
     // Clear characteristic values
-    const chars = ["acidity", "body", "sweetness", "bitterness", "balance"];
+    const chars = ['acidity', 'body', 'sweetness', 'bitterness', 'balance'];
     chars.forEach((char) => {
-      document.getElementById(`${char}-orig`).textContent = "-";
-      document.getElementById(`${char}-proc`).textContent = "-";
-      document.getElementById(`${char}-final`).textContent = "-";
+      document.getElementById(`${char}-orig`).textContent = '-';
+      document.getElementById(`${char}-proc`).textContent = '-';
+      document.getElementById(`${char}-final`).textContent = '-';
 
       // Remove all specific classes
-      document.getElementById(`${char}-orig`).className = "char-value original";
+      document.getElementById(`${char}-orig`).className = 'char-value original';
       document.getElementById(`${char}-proc`).className =
-        "char-value processed";
-      document.getElementById(`${char}-final`).className = "char-value final";
+        'char-value processed';
+      document.getElementById(`${char}-final`).className = 'char-value final';
 
       // Reset arrow colors
       const arrows = document.querySelectorAll(
-        `#${char}-orig ~ .char-arrow, #${char}-proc ~ .char-arrow`
+        `#${char}-orig ~ .char-arrow, #${char}-proc ~ .char-arrow`,
       );
-      arrows.forEach((arrow) => (arrow.className = "char-arrow arrow-neutral"));
+      arrows.forEach((arrow) => (arrow.className = 'char-arrow arrow-neutral'));
     });
 
     // Clear impact details
-    document.getElementById("processing-details").innerHTML = "";
-    document.getElementById("roasting-details").innerHTML = "";
+    document.getElementById('processing-details').innerHTML = '';
+    document.getElementById('roasting-details').innerHTML = '';
 
-    document.getElementById("score-breakdown").textContent =
-      "Select options to see breakdown.";
+    document.getElementById('score-breakdown').textContent =
+      'Select options to see breakdown.';
 
     return; // Stop update if calculation is incomplete/invalid
   }
 
   // Determine grade and description based on score
-  let grade = "";
-  let description = "";
-  let emoji = "";
+  let grade = '';
+  let description = '';
+  let emoji = '';
 
   // Normalize the raw score
   const normalizedScore = normalizeScore(score);
@@ -295,42 +295,41 @@ function updateDisplay() {
 
   // Determine grade, description, and emoji based on the normalized score grade
   switch (resultClass) {
-    case "perfect":
-      grade = "Perfect Latte!";
+    case 'perfect':
+      grade = 'Perfect Latte!';
       description =
-        "This coffee profile is ideal for a latte, offering excellent balance and flavor.";
-      emoji = "🎉";
+        'This coffee profile is ideal for a latte, offering excellent balance and flavor.';
+      emoji = '🎉';
       break;
-    case "good":
-      grade = "Good Latte";
+    case 'good':
+      grade = 'Good Latte';
       description =
-        "This coffee profile works well in a latte, with a good balance of characteristics.";
-      emoji = "👍";
+        'This coffee profile works well in a latte, with a good balance of characteristics.';
+      emoji = '👍';
       break;
-    case "bad":
-      grade = "Needs Adjustment";
+    case 'bad':
+      grade = 'Needs Adjustment';
       description =
-        "This coffee profile may be less suitable for a latte. Consider adjusting origin, processing, or roast.";
-      emoji = "🤔";
+        'This coffee profile may be less suitable for a latte. Consider adjusting origin, processing, or roast.';
+      emoji = '🤔';
       break;
     default:
-      grade = "Unknown";
-      description = "";
-      emoji = "";
+      grade = 'Unknown';
+      description = '';
+      emoji = '';
   }
 
   // Update the result display elements
-  const resultElement = document.getElementById("formula-result");
-  resultElement.className = "result " + resultClass; // Apply appropriate class for styling
-  document.getElementById("formula-emoji").textContent = emoji;
-  document.getElementById("formula-grade").textContent = grade;
-  document.getElementById(
-    "formula-score"
-  ).textContent = `${normalizedScore.toFixed(1)}/10`;
-  document.getElementById("formula-description").textContent = description;
+  const resultElement = document.getElementById('formula-result');
+  resultElement.className = 'result ' + resultClass; // Apply appropriate class for styling
+  document.getElementById('formula-emoji').textContent = emoji;
+  document.getElementById('formula-grade').textContent = grade;
+  document.getElementById('formula-score').textContent =
+    `${normalizedScore.toFixed(1)}/10`;
+  document.getElementById('formula-description').textContent = description;
 
   // Update characteristics and apply color classes
-  const chars = ["acidity", "body", "sweetness", "bitterness", "balance"];
+  const chars = ['acidity', 'body', 'sweetness', 'bitterness', 'balance'];
   chars.forEach((char) => {
     const origValue = baseProfile[char];
     const procValue = processedProfile[char];
@@ -347,39 +346,38 @@ function updateDisplay() {
     // Apply color classes to characteristic values
     // Original value uses neutral style, processed and final get color based on range
     origElement.className =
-      "char-value original " + getCharacteristicClass(char, origValue); // Keep original class and add color class
+      'char-value original ' + getCharacteristicClass(char, origValue); // Keep original class and add color class
     procElement.className =
-      "char-value processed " + getCharacteristicClass(char, procValue); // Keep processed class and add color class
+      'char-value processed ' + getCharacteristicClass(char, procValue); // Keep processed class and add color class
     finalElement.className =
-      "char-value final " + getCharacteristicClass(char, finalValue); // Keep final class and add color class
+      'char-value final ' + getCharacteristicClass(char, finalValue); // Keep final class and add color class
 
     // Arrow after original -> processed
     const arrow1 = origElement.nextElementSibling; // The first arrow after original
-    if (arrow1 && arrow1.classList.contains("char-arrow")) {
+    if (arrow1 && arrow1.classList.contains('char-arrow')) {
       arrow1.className =
-        "char-arrow " + getArrowClass(char, origValue, procValue);
+        'char-arrow ' + getArrowClass(char, origValue, procValue);
     }
 
     // Arrow after processed -> final
     const arrow2 = procElement.nextElementSibling; // The first arrow after processed
-    if (arrow2 && arrow2.classList.contains("char-arrow")) {
+    if (arrow2 && arrow2.classList.contains('char-arrow')) {
       arrow2.className =
-        "char-arrow " + getArrowClass(char, procValue, finalValue);
+        'char-arrow ' + getArrowClass(char, procValue, finalValue);
     }
   });
 
   // Update score breakdown (keeping the previous format for now)
-  document.getElementById(
-    "score-breakdown"
-  ).textContent = `Body(${finalProfile.body.toFixed(
-    1
-  )})×0.3 + Sweetness(${finalProfile.sweetness.toFixed(
-    1
-  )})×0.25 + Balance(${finalProfile.balance.toFixed(
-    1
-  )})×0.3 + Acidity(${finalProfile.acidity.toFixed(
-    1
-  )})×0.2 - penalties = ${normalizedScore.toFixed(1)}`;
+  document.getElementById('score-breakdown').textContent =
+    `Body(${finalProfile.body.toFixed(
+      1,
+    )})×0.3 + Sweetness(${finalProfile.sweetness.toFixed(
+      1,
+    )})×0.25 + Balance(${finalProfile.balance.toFixed(
+      1,
+    )})×0.3 + Acidity(${finalProfile.acidity.toFixed(
+      1,
+    )})×0.2 - penalties = ${normalizedScore.toFixed(1)}`;
 
   updateProcessingDetails();
   updateRoastingDetails();
@@ -394,12 +392,12 @@ function updateDisplay() {
 }
 
 function updateProcessingDetails() {
-  const processing = document.getElementById("processing").value;
+  const processing = document.getElementById('processing').value;
   const method = processingMethods[processing];
   const effects = method ? method.effects : {}; // Use empty object if method is null/undefined
-  const description = method ? method.description : "No description available."; // Get the description
+  const description = method ? method.description : 'No description available.'; // Get the description
 
-  let html = "";
+  let html = '';
 
   // Create a container for the description sub-section
   html += '<div class="explanation">'; // Use the same class for consistent styling
@@ -407,10 +405,10 @@ function updateProcessingDetails() {
   if (description) {
     html += `<p>${description}</p>`; // Description in p tags
   }
-  html += "</div>"; // Close explanation div
+  html += '</div>'; // Close explanation div
 
   // Get original values to compare with processed values
-  const country = document.getElementById("country").value;
+  const country = document.getElementById('country').value;
   const baseProfile = coffeeProfiles[country] || {}; // Use empty object if profile is null/undefined
 
   for (let char in effects) {
@@ -421,39 +419,39 @@ function updateProcessingDetails() {
       originalValue !== null ? clamp(originalValue + effectValue, 0, 10) : null; // Calculate processed value if original is available
 
     // Determine arrow class for impact description
-    let impactArrowClass = "";
+    let impactArrowClass = '';
     if (originalValue !== null && processedValue !== null) {
       impactArrowClass = getArrowClass(char, originalValue, processedValue);
     }
 
     if (effectValue !== 0) {
-      const sign = effectValue > 0 ? "+" : "";
+      const sign = effectValue > 0 ? '+' : '';
       // Get the characteristic-specific taste impact description
       const charImpactDescription = characteristicDescriptions[char]
         ? characteristicDescriptions[char].impact(effectValue)
-        : "";
+        : '';
 
       html += `
         <div class="impact-item">
           <div class="impact-char ${impactArrowClass}">${
-        char.charAt(0).toUpperCase() + char.slice(1)
-      } (${sign}${effectValue})</div>
+            char.charAt(0).toUpperCase() + char.slice(1)
+          } (${sign}${effectValue})</div>
           <div class="impact-desc">${charImpactDescription}</div> <!-- Use characteristic-specific impact description -->
         </div>
       `;
     }
   }
 
-  document.getElementById("processing-details").innerHTML = html;
+  document.getElementById('processing-details').innerHTML = html;
 }
 
 function updateRoastingDetails() {
-  const roasting = document.getElementById("roasting").value;
+  const roasting = document.getElementById('roasting').value;
   const level = roastLevelEffects[roasting];
   const effects = level ? level.effects : {}; // Use empty object if level is null/undefined
-  const description = level ? level.description : "No description available."; // Get the description
+  const description = level ? level.description : 'No description available.'; // Get the description
 
-  let html = "";
+  let html = '';
 
   // Create a container for the description sub-section
   html += '<div class="explanation">'; // Use the same class for consistent styling
@@ -461,11 +459,11 @@ function updateRoastingDetails() {
   if (description) {
     html += `<p>${description}</p>`; // Description in p tags
   }
-  html += "</div>"; // Close explanation div
+  html += '</div>'; // Close explanation div
 
   // Get processed values to compare with final values
-  const country = document.getElementById("country").value;
-  const processing = document.getElementById("processing").value;
+  const country = document.getElementById('country').value;
+  const processing = document.getElementById('processing').value;
 
   const baseProfile = coffeeProfiles[country] || {}; // Use empty object if profile is null/undefined
   const processingEffects = processingMethods[processing]
@@ -477,7 +475,7 @@ function updateRoastingDetails() {
     processedProfile[char] = clamp(
       baseProfile[char] + (processingEffects[char] || 0),
       0,
-      10
+      10,
     );
   }
 
@@ -491,51 +489,51 @@ function updateRoastingDetails() {
         : null; // Calculate final value if processed is available
 
     // Determine arrow class for impact description
-    let impactArrowClass = "";
+    let impactArrowClass = '';
     if (processedValue !== null && finalValue !== null) {
       impactArrowClass = getArrowClass(char, processedValue, finalValue);
     }
 
     if (effectValue !== 0) {
-      const sign = effectValue > 0 ? "+" : "";
+      const sign = effectValue > 0 ? '+' : '';
       // Get the characteristic-specific taste impact description
       const charImpactDescription = characteristicDescriptions[char]
         ? characteristicDescriptions[char].impact(effectValue)
-        : "";
+        : '';
 
       html += `
         <div class="impact-item">
           <div class="impact-char ${impactArrowClass}">${
-        char.charAt(0).toUpperCase() + char.slice(1)
-      } (${sign}${effectValue})</div>
+            char.charAt(0).toUpperCase() + char.slice(1)
+          } (${sign}${effectValue})</div>
           <div class="impact-desc">${charImpactDescription}</div> <!-- Use characteristic-specific impact description -->
         </div>
       `;
     }
   }
 
-  document.getElementById("roasting-details").innerHTML = html;
+  document.getElementById('roasting-details').innerHTML = html;
 }
 
 // Helper function to toggle section visibility
 function toggleSection(event) {
-  const header = event.target.closest(".toggle-header");
+  const header = event.target.closest('.toggle-header');
   if (!header) return;
 
   const content = header.nextElementSibling;
-  const icon = header.querySelector(".toggle-icon");
+  const icon = header.querySelector('.toggle-icon');
 
   if (content && icon) {
-    content.classList.toggle("active");
-    icon.style.transform = content.classList.contains("active")
-      ? "rotate(180deg)"
-      : "rotate(0deg)";
+    content.classList.toggle('active');
+    icon.style.transform = content.classList.contains('active')
+      ? 'rotate(180deg)'
+      : 'rotate(0deg)';
   }
 }
 
 function initializeOptions() {
   // Initialize country options
-  const countrySelect = document.getElementById("country");
+  const countrySelect = document.getElementById('country');
   if (countrySelect) {
     const sortedCountryOptions = Object.entries(coffeeProfiles)
       .sort(([idA], [idB]) => idA.localeCompare(idB))
@@ -544,57 +542,58 @@ function initializeOptions() {
           `<option value="${id}">${
             profile.name ||
             id
-              .split("-")
+              .split('-')
               .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(" ")
-          }</option>`
+              .join(' ')
+          }</option>`,
       );
-    countrySelect.innerHTML = sortedCountryOptions.join("");
+    countrySelect.innerHTML = sortedCountryOptions.join('');
     countrySelect.selectedIndex = 0;
   }
 
   // Initialize processing options
-  const processingSelect = document.getElementById("processing");
+  const processingSelect = document.getElementById('processing');
   if (processingSelect) {
     processingSelect.innerHTML = Object.entries(processingMethods)
       .map(
-        ([id, method]) => `<option value="${id}">${method.displayName}</option>`
+        ([id, method]) =>
+          `<option value="${id}">${method.displayName}</option>`,
       )
-      .join("");
+      .join('');
     processingSelect.selectedIndex = 0;
   }
 
   // Initialize roasting options
-  const roastingSelect = document.getElementById("roasting");
+  const roastingSelect = document.getElementById('roasting');
   if (roastingSelect) {
     roastingSelect.innerHTML = Object.entries(roastLevelEffects)
       .map(
-        ([id, level]) => `<option value="${id}">${level.displayName}</option>`
+        ([id, level]) => `<option value="${id}">${level.displayName}</option>`,
       )
-      .join("");
+      .join('');
     roastingSelect.selectedIndex = 0;
   }
 
   // Add event listeners to update class on change
   if (countrySelect) {
-    countrySelect.addEventListener("change", function () {
+    countrySelect.addEventListener('change', function () {
       updateDisplay();
     });
   }
   if (processingSelect) {
-    processingSelect.addEventListener("change", function () {
+    processingSelect.addEventListener('change', function () {
       updateDisplay();
     });
   }
   if (roastingSelect) {
-    roastingSelect.addEventListener("change", function () {
+    roastingSelect.addEventListener('change', function () {
       updateDisplay();
     });
   }
 
   // Event listeners for toggle sections
-  document.querySelectorAll(".toggle-header").forEach((header) => {
-    header.addEventListener("click", toggleSection);
+  document.querySelectorAll('.toggle-header').forEach((header) => {
+    header.addEventListener('click', toggleSection);
   });
 
   // Initial display
@@ -604,18 +603,18 @@ function initializeOptions() {
 // Helper to get the color for an SVG line based on characteristic change and ideal range
 function getLineColor(char, originalValue, finalValue) {
   const range = idealLatteRanges[char];
-  if (!range) return "#b8b8b8"; // Default neutral color
+  if (!range) return '#b8b8b8'; // Default neutral color
 
   const originalDistanceToIdeal = getDistanceToIdeal(char, originalValue);
   const finalDistanceToIdeal = getDistanceToIdeal(char, finalValue);
 
   // Determine if the value moved closer or further from the ideal range
   if (finalDistanceToIdeal < originalDistanceToIdeal) {
-    return "#28a745"; // Green for improvement
+    return '#28a745'; // Green for improvement
   } else if (finalDistanceToIdeal > originalDistanceToIdeal) {
-    return "#dc3545"; // Red for worsening
+    return '#dc3545'; // Red for worsening
   } else {
-    return "#b8b8b8"; // Gray for neutral or no change
+    return '#b8b8b8'; // Gray for neutral or no change
   }
 }
 
@@ -623,7 +622,7 @@ function getLineColor(char, originalValue, finalValue) {
 // Uses the singleton ConnectionManager instance
 function drawConnections({ baseProfile, processedProfile, finalProfile }) {
   if (!connectionManager) {
-    console.error("ConnectionManager not initialized");
+    console.error('ConnectionManager not initialized');
     return;
   }
 
@@ -669,7 +668,7 @@ function drawConnections({ baseProfile, processedProfile, finalProfile }) {
 
         // Determine line color based on value change from value1 to value2
         const colorAfter = getLineColor(char, value1, value2);
-        const colorBefore = "#b8b8b8"; // Neutral color for the first segment
+        const colorBefore = '#b8b8b8'; // Neutral color for the first segment
 
         // Create a unique ID for the connection
         const connectionId = `${currentStageId}-to-${nextStageId}-${char}-connection`;
@@ -681,22 +680,22 @@ function drawConnections({ baseProfile, processedProfile, finalProfile }) {
           nextItemSelector,
           labelText, // Use the difference as label text
           colorBefore, // Color before label
-          colorAfter // Color after label
+          colorAfter, // Color after label
         );
       }
     });
   }
   // Draw connections from Roast stage to final score section using ConnectionManager
-  drawRoastToScoreConnectionsWithManager(profiles["roasting"]);
+  drawRoastToScoreConnectionsWithManager(profiles['roasting']);
 }
 
 // Helper to draw connections from each "Roast" char to the score section using ConnectionManager
 function drawRoastToScoreConnectionsWithManager(roastingProfile) {
   if (!connectionManager || !roastingProfile) return;
-  connectionManager.clearConnectionsByPrefix("roast-to-score-");
+  connectionManager.clearConnectionsByPrefix('roast-to-score-');
 
-  const roastStage = document.getElementById("stage-roasting");
-  const scoreSelector = "#formula-result";
+  const roastStage = document.getElementById('stage-roasting');
+  const scoreSelector = '#formula-result';
   const scoreSection = document.querySelector(scoreSelector);
   if (!roastStage || !scoreSection) return;
 
@@ -712,42 +711,48 @@ function drawRoastToScoreConnectionsWithManager(roastingProfile) {
     const contribution = charScoring.weight(roastingProfile);
     const penalty = charScoring.penalty(roastingProfile);
 
-    let contributionText = contribution === 0 ? "0" : `+${(contribution *normalizationFactor).toFixed(2)}`;
-    let penaltyText = penalty !== 0 ? ` (Penalty: ${(penalty * normalizationFactor).toFixed(2)})` : "";
+    let contributionText =
+      contribution === 0
+        ? '0'
+        : `+${(contribution * normalizationFactor).toFixed(2)}`;
+    let penaltyText =
+      penalty !== 0
+        ? ` (Penalty: ${(penalty * normalizationFactor).toFixed(2)})`
+        : '';
 
     connectionManager.createVerticalConnection(
       `roast-to-score-${char.id}`,
       charSelector,
       scoreSelector,
-      {text: contributionText, color: '--analyze-label-fg'},
-      {text: penaltyText, color: 'red'},
-      "#b8b8b8",
-      "#b8b8b8",
-      idx % 2 === 0 ? 0.55 : 0.75
+      { text: contributionText, color: '--analyze-label-fg' },
+      { text: penaltyText, color: 'red' },
+      '#b8b8b8',
+      '#b8b8b8',
+      idx % 2 === 0 ? 0.55 : 0.75,
     );
   });
 }
 
 function renderAnalyzeStages() {
-  const container = document.getElementById("analyze-stages-js");
-  container.innerHTML = "";
+  const container = document.getElementById('analyze-stages-js');
+  container.innerHTML = '';
   stages.forEach((stage) => {
-    const stageDiv = document.createElement("div");
-    stageDiv.className = "analyze-stage";
+    const stageDiv = document.createElement('div');
+    stageDiv.className = 'analyze-stage';
     stageDiv.id = `stage-${stage.id}`;
-    const rowDiv = document.createElement("div");
-    rowDiv.className = "analyze-stage-row";
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'analyze-stage-row';
     // Editor
-    const editorDiv = document.createElement("div");
-    editorDiv.className = "analyze-stage-editor";
-    const label = document.createElement("label");
-    label.setAttribute("for", stage.selectId);
+    const editorDiv = document.createElement('div');
+    editorDiv.className = 'analyze-stage-editor';
+    const label = document.createElement('label');
+    label.setAttribute('for', stage.selectId);
     label.textContent = stage.label;
-    const select = document.createElement("select");
+    const select = document.createElement('select');
     select.id = stage.selectId;
-    select.value = "";
-    const option = document.createElement("option");
-    option.value = "";
+    select.value = '';
+    const option = document.createElement('option');
+    option.value = '';
     option.disabled = true;
     option.selected = true;
     editorDiv.appendChild(label);
@@ -756,15 +761,15 @@ function renderAnalyzeStages() {
     rowDiv.appendChild(editorDiv);
     // Char items
     chars.forEach((char) => {
-      const charDiv = document.createElement("div");
-      charDiv.className = "analyze-char-item " + char.id;
-      const charName = document.createElement("span");
-      charName.className = "char-name";
+      const charDiv = document.createElement('div');
+      charDiv.className = 'analyze-char-item ' + char.id;
+      const charName = document.createElement('span');
+      charName.className = 'char-name';
       charName.textContent = char.name;
-      const charValue = document.createElement("span");
-      charValue.className = "char-value";
+      const charValue = document.createElement('span');
+      charValue.className = 'char-value';
       charValue.id = `${char.id}${stage.charSuffix}`;
-      charValue.textContent = "-";
+      charValue.textContent = '-';
       charDiv.appendChild(charName);
       charDiv.appendChild(charValue);
       rowDiv.appendChild(charDiv);
