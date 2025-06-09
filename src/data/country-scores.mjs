@@ -5,385 +5,385 @@
 export const countryScores = {
   bolivia: {
     best: {
-      score: 8.313,
-      processing: 'black-honey',
+      score: 8.725,
+      processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.375,
+      score: 4.05,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   brazil: {
     best: {
-      score: 8.813,
-      processing: 'carbonic-maceration',
+      score: 8.9,
+      processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 5.325,
-      processing: 'monsooned',
+      score: 4.3,
+      processing: 'washed',
       roast: 'dark',
     },
   },
   burundi: {
     best: {
-      score: 8.438,
-      processing: 'red-honey',
+      score: 8.6,
+      processing: 'yellow-honey',
       roast: 'medium',
     },
     worst: {
-      score: 5.925,
+      score: 4.65,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   'central-african-republic': {
     best: {
-      score: 7.313,
+      score: 7.525,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 3.925,
+      score: 2.8,
       processing: 'washed',
       roast: 'dark',
     },
   },
   china: {
     best: {
-      score: 8.512,
+      score: 8.65,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.525,
+      score: 4.2,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   colombia: {
     best: {
-      score: 9.275,
-      processing: 'black-honey',
+      score: 9.5,
+      processing: 'red-honey',
       roast: 'medium',
     },
     worst: {
-      score: 6.325,
+      score: 5,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   'costa-rica': {
     best: {
-      score: 9.112,
+      score: 9.25,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.775,
+      score: 4.6,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   ecuador: {
     best: {
-      score: 8.313,
-      processing: 'black-honey',
+      score: 8.725,
+      processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.175,
+      score: 3.85,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   'el-salvador': {
     best: {
-      score: 8.563,
-      processing: 'black-honey',
+      score: 8.85,
+      processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.525,
+      score: 4.2,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   ethiopia: {
     best: {
-      score: 9,
+      score: 9.2,
       processing: 'wet-hulled',
       roast: 'medium',
     },
     worst: {
-      score: 6.925,
+      score: 5.65,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   guatemala: {
     best: {
-      score: 8.9,
+      score: 9.25,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 5.575,
+      score: 4.4,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   guinea: {
     best: {
-      score: 7.113,
+      score: 7.325,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 3.925,
+      score: 2.8,
       processing: 'washed',
       roast: 'dark',
     },
   },
   honduras: {
     best: {
-      score: 8.813,
+      score: 8.95,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.625,
+      score: 4.3,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   india: {
     best: {
-      score: 7.912,
+      score: 8.125,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 4.925,
+      score: 3.8,
       processing: 'washed',
       roast: 'dark',
     },
   },
   indonesia: {
     best: {
-      score: 7.313,
+      score: 7.525,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 4.325,
+      score: 3.2,
       processing: 'washed',
       roast: 'dark',
     },
   },
   'ivory-coast': {
     best: {
-      score: 7.313,
+      score: 7.525,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 3.925,
+      score: 2.8,
       processing: 'washed',
       roast: 'dark',
     },
   },
   jamaica: {
     best: {
-      score: 8.113,
+      score: 8.375,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.175,
-      processing: 'monsooned',
+      score: 4.15,
+      processing: 'washed',
       roast: 'dark',
     },
   },
   kenya: {
     best: {
-      score: 9,
-      processing: 'black-honey',
+      score: 9.3,
+      processing: 'red-honey',
       roast: 'medium',
     },
     worst: {
-      score: 6.175,
+      score: 5,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   laos: {
     best: {
-      score: 8.712,
+      score: 8.925,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.225,
-      processing: 'monsooned',
+      score: 4.2,
+      processing: 'washed',
       roast: 'dark',
     },
   },
   malawi: {
     best: {
-      score: 8.813,
-      processing: 'carbonic-maceration',
+      score: 8.8,
+      processing: 'red-honey',
       roast: 'medium',
     },
     worst: {
-      score: 5.825,
+      score: 4.5,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   mexico: {
     best: {
-      score: 8.563,
+      score: 8.825,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.275,
+      score: 3.95,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   myanmar: {
     best: {
-      score: 8.563,
-      processing: 'black-honey',
+      score: 8.85,
+      processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.725,
+      score: 4.4,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   nicaragua: {
     best: {
-      score: 8.813,
+      score: 8.95,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.625,
+      score: 4.3,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   panama: {
     best: {
-      score: 8.975,
-      processing: 'black-honey',
+      score: 9.2,
+      processing: 'red-honey',
       roast: 'medium',
     },
     worst: {
-      score: 6.225,
+      score: 4.9,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   'papua-new-guinea': {
     best: {
-      score: 8.813,
+      score: 8.95,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.475,
+      score: 4.3,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   peru: {
     best: {
-      score: 8.262,
+      score: 8.525,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 4.975,
+      score: 3.65,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   rwanda: {
     best: {
-      score: 8.738,
+      score: 8.9,
       processing: 'red-honey',
       roast: 'medium',
     },
     worst: {
-      score: 6.225,
+      score: 4.95,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   tanzania: {
     best: {
-      score: 8.575,
+      score: 8.875,
       processing: 'black-honey',
       roast: 'medium',
     },
     worst: {
-      score: 5.475,
-      processing: 'monsooned',
+      score: 4.3,
+      processing: 'washed',
       roast: 'dark',
     },
   },
   uganda: {
     best: {
-      score: 8.613,
-      processing: 'black-honey',
+      score: 9.025,
+      processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 5.475,
+      score: 4.15,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   venezuela: {
     best: {
-      score: 8.813,
-      processing: 'carbonic-maceration',
+      score: 8.8,
+      processing: 'red-honey',
       roast: 'medium',
     },
     worst: {
-      score: 5.825,
+      score: 4.5,
       processing: 'monsooned',
       roast: 'dark',
     },
   },
   vietnam: {
     best: {
-      score: 6.037,
+      score: 6.275,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 2.975,
+      score: 1.85,
       processing: 'washed',
       roast: 'dark',
     },
   },
   yemen: {
     best: {
-      score: 8.213,
+      score: 8.425,
       processing: 'carbonic-maceration',
       roast: 'medium',
     },
     worst: {
-      score: 4.925,
-      processing: 'monsooned',
+      score: 3.9,
+      processing: 'washed',
       roast: 'dark',
     },
   },

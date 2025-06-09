@@ -29,7 +29,7 @@ test('Find maximum score for single origin', () => {
     }
   });
 
-  expect(maxScore.toFixed(3)).toBe('9.275');
+  expect(maxScore.toFixed(3)).toBe('9.500');
 });
 
 test('Find maximum score for blends', () => {
@@ -69,7 +69,7 @@ test('Find maximum score for blends', () => {
     }
   }
 
-  expect(maxScore.toFixed(3)).toBe(ACTUAL_MAX_RAW.toString());
+  expect(maxScore.toFixed(3)).toBe(ACTUAL_MAX_RAW.toFixed(3).toString());
 });
 
 test('Find minimum score for single origin', () => {
@@ -88,7 +88,7 @@ test('Find minimum score for single origin', () => {
     }
   });
 
-  expect(minScore.toFixed(3)).toBe(ACTUAL_MIN_RAW.toString());
+  expect(minScore.toFixed(3)).toBe(ACTUAL_MIN_RAW.toFixed(3).toString());
 });
 
 test('Find minimum score for blends', () => {
@@ -128,7 +128,7 @@ test('Find minimum score for blends', () => {
     }
   }
 
-  expect(minScore.toFixed(3)).toBe('3.070');
+  expect(minScore.toFixed(3)).toBe('1.945');
 });
 
 test('Coffee scores are in sync with coffee countries', () => {

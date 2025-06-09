@@ -126,8 +126,8 @@ export const scoreConfig = {
   },
 };
 
-export const ACTUAL_MIN_RAW = 2.975;
-export const ACTUAL_MAX_RAW = 9.307;
+export const ACTUAL_MIN_RAW = 1.850;
+export const ACTUAL_MAX_RAW = 9.600;
 
 // Reusable function to normalize the raw latte score
 export function normalizeScore(rawScore) {
