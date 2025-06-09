@@ -5,6 +5,7 @@ import { geoPath } from 'd3-geo';
 import { select, zoom } from 'd3';
 import { countries110m as world } from '../data/countries-110m';
 import { countryScores } from '../data/country-scores.mjs';
+import { coffeeProfiles } from '../data/coffee-profiles.mjs';
 import { normalizeScore } from '../scoring.mjs';
 
 export function initializeMapTab() {
@@ -75,13 +76,14 @@ function initializeMapSvg() {
     .style('cursor', 'pointer')
     .on('mouseenter', function (event, d) {
       const countryName = d3CountryNameNormilizer(d.properties.name);
-      const data = countryScores[countryName];
-      if (data) {
+      const score = countryScores[countryName];
+      const profile = coffeeProfiles[countryName];
+      if (score) {
         select(this)
           .style('stroke', '#fff')
           .style('stroke-width', 2)
           .style('filter', 'brightness(1.2)');
-        showTooltip(event, data, d.properties.name);
+        showTooltip(event, score, profile, d.properties.name);
       } else {
         hideTooltip(); // Hide tooltip if no data
       }
@@ -96,9 +98,6 @@ function initializeMapSvg() {
       }
     })
     .on('mouseleave', function (event, d) {
-      const countryName = d3CountryNameNormilizer(d.properties.name);
-      const data = countryScores[countryName];
-      // Always hide tooltip on mouseleave, regardless of data
       select(this)
         .style('stroke', '#333')
         .style('stroke-width', 0.5)
@@ -109,12 +108,6 @@ function initializeMapSvg() {
   // Update statistics
   //updateStatistics();
 }
-
-const allScores = Object.values(countryScores).map((data) =>
-  normalizeScore(data.best.score),
-);
-const min = Math.min(...allScores);
-const max = Math.max(...allScores);
 
 // Color mapping function
 function getColor(score) {
@@ -146,15 +139,15 @@ function getColor(score) {
 }
 
 // Tooltip functions
-function showTooltip(event, data, countryName) {
+function showTooltip(event, score, profile, countryName) {
   const tooltip = select('#tooltip');
   const titleElement = select('#tooltip-title');
   const contentElement = select('#tooltip-content');
 
-  titleElement.text(data.name);
+  titleElement.text(score.name);
 
   const averageScore = Math.round(
-    (normalizeScore(data.worst.score) + normalizeScore(data.best.score)) / 2,
+    (normalizeScore(score.worst.score) + normalizeScore(score.best.score)) / 2,
   );
 
   contentElement.html(`
@@ -163,19 +156,19 @@ function showTooltip(event, data, countryName) {
                 </div>
                 <div class="score-range">
                     <strong>Quality Range:</strong> ${normalizeScore(
-                      data.worst.score,
+                      score.worst.score,
                     ).toFixed(
                       1,
-                    )} - ${normalizeScore(data.best.score).toFixed(1)}
+                    )} - ${normalizeScore(score.best.score).toFixed(1)}
                 </div>
                 <div class="score-range">
                     <strong>Average:</strong> ${averageScore}
                 </div>
                 <div class="score-bar">
-                    <div class="score-fill" style="width: ${data.best}%"></div>
+                    <div class="score-fill" style="width: ${score.best}%"></div>
                 </div>
                 <div style="margin-top: 8px; font-size: 12px; line-height: 1.4;">
-                    ${data.notes}
+                    ${profile.notes}
                 </div>
             `);
 
