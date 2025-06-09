@@ -29,7 +29,7 @@ test('Find maximum score for single origin', () => {
     }
   });
 
-  expect(maxScore.toFixed(3)).toBe('9.025');
+  expect(maxScore.toFixed(3)).toBe('9.275');
 });
 
 test('Find maximum score for blends', () => {

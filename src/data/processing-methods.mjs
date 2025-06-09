@@ -19,22 +19,74 @@ export const processingMethods = {
       'Coffee cherries are dried whole, allowing the fruit to naturally ferment',
     effects: {
       sweetness: 2,
-      acidity: -1,
+      acidity: 0,
       body: 1,
+      balance: -0.5,
+      bitterness: 0,
+    },
+  },
+  anaerobic: {
+    displayName: 'Anaerobic Fermentation',
+    abbreviation: 'A',
+    description:
+      'Beans are fermented in oxygen-free environments, often with additives, enhancing complex flavors',
+    effects: {
+      sweetness: 2.5,
+      acidity: 1,
+      body: 0.5,
       balance: 0,
       bitterness: 0,
     },
   },
-  honey: {
-    displayName: 'Honey Process',
-    abbreviation: 'HP',
+  'white-honey': {
+    displayName: 'White Honey',
+    abbreviation: 'WHH',
     description:
-      'Partial removal of the fruit pulp, leaving some mucilage during drying',
+      'Most mucilage removed (~80-100%), resulting in a clean, crisp profile similar to washed.',
+    effects: {
+      sweetness: 0.5,
+      acidity: 0.5,
+      body: 0,
+      balance: 1,
+      bitterness: 0,
+    },
+  },
+  'yellow-honey': {
+    displayName: 'Yellow Honey',
+    abbreviation: 'YH',
+    description:
+      'Some mucilage removed (~50-75%), creating a balanced profile of sweetness and acidity.',
     effects: {
       sweetness: 1,
       acidity: 0,
-      body: 0.5, // Added to reflect slight mouthfeel enhancement
+      body: 0.5,
       balance: 1,
+      bitterness: 0,
+    },
+  },
+  'red-honey': {
+    displayName: 'Red Honey',
+    abbreviation: 'RH',
+    description:
+      'Less mucilage removed (~25-50%), developing deeper fruit notes and a creamier body.',
+    effects: {
+      sweetness: 1.5,
+      acidity: 0,
+      body: 1,
+      balance: 0.5,
+      bitterness: 0,
+    },
+  },
+  'black-honey': {
+    displayName: 'Black Honey',
+    abbreviation: 'BH',
+    description:
+      'Almost all mucilage is left on, creating an intense, sweet, and fruit-forward cup similar to naturals.',
+    effects: {
+      sweetness: 2,
+      acidity: 0,
+      body: 1.5,
+      balance: 0,
       bitterness: 0,
     },
   },
@@ -45,8 +97,8 @@ export const processingMethods = {
     effects: {
       sweetness: 1,
       acidity: 0,
-      body: 0,
-      balance: 0,
+      body: 1,
+      balance: 0.5,
       bitterness: 0,
     },
   },
@@ -62,19 +114,7 @@ export const processingMethods = {
       bitterness: 0,
     },
   },
-  anaerobic: {
-    displayName: 'Anaerobic Fermentation',
-    abbreviation: 'A',
-    description:
-      'Beans are fermented in oxygen-free environments, often with additives, enhancing complex flavors',
-    effects: {
-      sweetness: 2,
-      acidity: 1,
-      body: 0,
-      balance: 0.5,
-      bitterness: 0,
-    },
-  },
+
   'carbonic-maceration': {
     displayName: 'Carbonic Maceration',
     abbreviation: 'CM',
@@ -82,9 +122,9 @@ export const processingMethods = {
       'Whole cherries are fermented in CO2-rich sealed tanks, producing fruit-forward profiles',
     effects: {
       sweetness: 2,
-      acidity: 1,
+      acidity: 1.5,
       body: 0,
-      balance: 0.5,
+      balance: 1,
       bitterness: 0,
     },
   },
