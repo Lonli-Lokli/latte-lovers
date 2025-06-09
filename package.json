@@ -4,9 +4,10 @@
     "start": "vite dev",
     "build": "vite build",
     "format": "prettier --write .",
+    "format:silent": "prettier --write  --log-level silent .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "generate:country-scores": "node scripts/generate-country-scores.js && npm run format",
+    "generate:country-scores": "node tools/generate-country-scores.mjs && npm run format:silent",
     "deploy": "npm run test && npm run build"
   },
   "dependencies": {

@@ -230,7 +230,8 @@ function generateAndRankLeaders(
 ) {
   const leaders = [];
 
-  for (const [country, profile] of Object.entries(coffeeProfiles)) {
+  for (const [country, countryObj] of Object.entries(coffeeProfiles)) {
+    const profile = countryObj.profile;
     for (const [processingName, processing] of Object.entries(
       processingMethods,
     )) {

@@ -180,7 +180,7 @@ function calculateProfile() {
   }
 
   // Get base profile, with error handling
-  const baseProfile = coffeeProfiles[country];
+  const baseProfile = coffeeProfiles[country]?.profile;
   if (!baseProfile) {
     console.error(`Unknown country selected: ${country}`);
     return {
@@ -409,7 +409,7 @@ function updateProcessingDetails() {
 
   // Get original values to compare with processed values
   const country = document.getElementById('country').value;
-  const baseProfile = coffeeProfiles[country] || {}; // Use empty object if profile is null/undefined
+  const baseProfile = coffeeProfiles[country]?.profile || {}; // Use empty object if profile is null/undefined
 
   for (let char in effects) {
     const originalValue =
@@ -465,7 +465,7 @@ function updateRoastingDetails() {
   const country = document.getElementById('country').value;
   const processing = document.getElementById('processing').value;
 
-  const baseProfile = coffeeProfiles[country] || {}; // Use empty object if profile is null/undefined
+  const baseProfile = coffeeProfiles[country]?.profile || {}; // Use empty object if profile is null/undefined
   const processingEffects = processingMethods[processing]
     ? processingMethods[processing].effects
     : {}; // Use empty object if effects are null/undefined

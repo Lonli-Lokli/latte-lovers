@@ -3,6 +3,18 @@
 // In case of test failure re-run `npm run generate:country-scores` to update this file.
 
 export const countryScores = {
+  bolivia: {
+    best: {
+      score: 8.125,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 5.375,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
   brazil: {
     best: {
       score: 8.762,
@@ -14,162 +26,6 @@ export const countryScores = {
       processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'Known for its chocolatey sweetness and low acidity, Brazilian coffees are often well-balanced with a medium body.',
-  },
-  colombia: {
-    best: {
-      score: 9.025,
-      processing: 'honey',
-      roast: 'medium',
-    },
-    worst: {
-      score: 6.325,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Colombian coffees are celebrated for their bright acidity and smooth body, often with fruity and floral notes.',
-  },
-  ethiopia: {
-    best: {
-      score: 8.575,
-      processing: 'natural',
-      roast: 'medium',
-    },
-    worst: {
-      score: 6.274,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Ethiopian coffees are known for their complex flavors, often with bright acidity and floral or fruity notes.',
-  },
-  guatemala: {
-    best: {
-      score: 8.775,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 5.575,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Guatemalan coffees are rich and full-bodied, often with chocolate and spice notes, balanced by a pleasant acidity.',
-  },
-  'costa-rica': {
-    best: {
-      score: 8.862,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 5.775,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Costa Rican coffees are known for their bright acidity and full body, often with citrus and berry notes.',
-  },
-  honduras: {
-    best: {
-      score: 8.412,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 5.425,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Honduran coffees are often sweet and fruity, with a medium body and balanced acidity.',
-  },
-  nicaragua: {
-    best: {
-      score: 8.412,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 5.425,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Nicaraguan coffees are known for their smooth body and mild acidity, often with chocolate and nutty flavors.',
-  },
-  peru: {
-    best: {
-      score: 8.262,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 5.225,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Peruvian coffees are often mild and sweet, with a light body and pleasant acidity, featuring nutty and chocolate notes.',
-  },
-  mexico: {
-    best: {
-      score: 7.962,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 5.025,
-      processing: 'washed',
-      roast: 'dark',
-    },
-    notes:
-      'Mexican coffees are typically light-bodied with a mild flavor profile, often featuring nutty and chocolate notes.',
-  },
-  jamaica: {
-    best: {
-      score: 7.31,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 4.375,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Jamaican coffees, especially Blue Mountain, are known for their smooth body and mild flavor with low acidity.',
-  },
-  kenya: {
-    best: {
-      score: 7.925,
-      processing: 'honey',
-      roast: 'medium',
-    },
-    worst: {
-      score: 5.425,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Kenyan coffees are famous for their bright acidity and full body, often with berry and citrus notes.',
-  },
-  rwanda: {
-    best: {
-      score: 8.675,
-      processing: 'honey',
-      roast: 'medium',
-    },
-    worst: {
-      score: 6.225,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Rwandan coffees are known for their bright acidity and complex flavors, often with floral and fruity notes.',
   },
   burundi: {
     best: {
@@ -182,54 +38,10 @@ export const countryScores = {
       processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'Burundian coffees are often sweet and fruity, with a medium body and bright acidity.',
   },
-  tanzania: {
+  'central-african-republic': {
     best: {
-      score: 8.325,
-      processing: 'honey',
-      roast: 'medium',
-    },
-    worst: {
-      score: 5.475,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Tanzanian coffees are known for their bright acidity and full body, often with berry and citrus notes.',
-  },
-  yemen: {
-    best: {
-      score: 7.962,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 4.925,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Yemeni coffees are rich and complex, often with deep chocolate and spice notes, and a full body.',
-  },
-  indonesia: {
-    best: {
-      score: 7.662,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 4.925,
-      processing: 'washed',
-      roast: 'dark',
-    },
-    notes:
-      'Indonesian coffees, especially from Sumatra, are known for their earthy and herbal flavors, with a full body and low acidity.',
-  },
-  vietnam: {
-    best: {
-      score: 6.912,
+      score: 7.313,
       processing: 'anaerobic',
       roast: 'medium',
     },
@@ -238,54 +50,10 @@ export const countryScores = {
       processing: 'semi-washed',
       roast: 'dark',
     },
-    notes:
-      'Vietnamese coffees are often robust and earthy, with a full body and low acidity, commonly used in blends.',
   },
-  india: {
+  china: {
     best: {
-      score: 7.662,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 4.925,
-      processing: 'washed',
-      roast: 'dark',
-    },
-    notes:
-      'Indian coffees, especially Monsooned Malabar, are known for their unique earthy flavors, low acidity, and full body.',
-  },
-  'papua-new-guinea': {
-    best: {
-      score: 8.562,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 5.475,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Papua New Guinean coffees are often sweet and fruity, with a medium body and bright acidity.',
-  },
-  panama: {
-    best: {
-      score: 8.725,
-      processing: 'honey',
-      roast: 'medium',
-    },
-    worst: {
-      score: 6.225,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Panamanian coffees, especially Geisha, are known for their floral and fruity notes, with a bright acidity and light body.',
-  },
-  'el-salvador': {
-    best: {
-      score: 8.375,
+      score: 8.262,
       processing: 'anaerobic',
       roast: 'medium',
     },
@@ -294,36 +62,30 @@ export const countryScores = {
       processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'El Salvadoran coffees are often sweet and balanced, with a medium body and pleasant acidity, featuring chocolate and nutty notes.',
   },
-  uganda: {
+  colombia: {
     best: {
-      score: 8.425,
+      score: 9.025,
+      processing: 'honey',
+      roast: 'medium',
+    },
+    worst: {
+      score: 6.325,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  'costa-rica': {
+    best: {
+      score: 8.863,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 5.475,
+      score: 5.775,
       processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'Ugandan coffees are known for their rich body and fruity flavors, often with a pleasant acidity.',
-  },
-  bolivia: {
-    best: {
-      score: 8.125,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 5.375,
-      processing: 'monsooned',
-      roast: 'dark',
-    },
-    notes:
-      'Bolivian coffees are often sweet and floral, with a light body and bright acidity.',
   },
   ecuador: {
     best: {
@@ -336,8 +98,162 @@ export const countryScores = {
       processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'Ecuadorian coffees are known for their smooth body and mild flavor, often with chocolate and nutty notes.',
+  },
+  'el-salvador': {
+    best: {
+      score: 8.375,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 5.525,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  ethiopia: {
+    best: {
+      score: 8.575,
+      processing: 'natural',
+      roast: 'medium',
+    },
+    worst: {
+      score: 6.275,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  guatemala: {
+    best: {
+      score: 8.775,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 5.575,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  guinea: {
+    best: {
+      score: 7.112,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 4.275,
+      processing: 'semi-washed',
+      roast: 'dark',
+    },
+  },
+  honduras: {
+    best: {
+      score: 8.412,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 5.425,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  india: {
+    best: {
+      score: 7.663,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 4.925,
+      processing: 'washed',
+      roast: 'dark',
+    },
+  },
+  indonesia: {
+    best: {
+      score: 7.663,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 4.925,
+      processing: 'washed',
+      roast: 'dark',
+    },
+  },
+  'ivory-coast': {
+    best: {
+      score: 7.563,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 4.625,
+      processing: 'washed',
+      roast: 'dark',
+    },
+  },
+  jamaica: {
+    best: {
+      score: 7.313,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 4.375,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  kenya: {
+    best: {
+      score: 7.925,
+      processing: 'honey',
+      roast: 'medium',
+    },
+    worst: {
+      score: 5.425,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  laos: {
+    best: {
+      score: 8.463,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 5.225,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  malawi: {
+    best: {
+      score: 9.162,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 6.275,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  mexico: {
+    best: {
+      score: 7.963,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 5.025,
+      processing: 'washed',
+      roast: 'dark',
+    },
   },
   myanmar: {
     best: {
@@ -350,54 +266,46 @@ export const countryScores = {
       processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'Myanmar coffees are often sweet and fruity, with a medium body and bright acidity.',
   },
-  china: {
+  nicaragua: {
     best: {
-      score: 8.2625,
+      score: 8.412,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 5.525,
+      score: 5.425,
       processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'Chinese coffees, especially from Yunnan, are known for their mild flavor and smooth body, often with floral and fruity notes.',
   },
-  'central-african-republic': {
+  panama: {
     best: {
-      score: 7.312,
+      score: 8.725,
+      processing: 'honey',
+      roast: 'medium',
+    },
+    worst: {
+      score: 6.225,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  'papua-new-guinea': {
+    best: {
+      score: 8.563,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 4.275,
-      processing: 'semi-washed',
+      score: 5.475,
+      processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'Coffees from the Central African Republic are often sweet and fruity, with a medium body and bright acidity.',
   },
-  guinea: {
+  peru: {
     best: {
-      score: 7.1125,
-      processing: 'anaerobic',
-      roast: 'medium',
-    },
-    worst: {
-      score: 4.275,
-      processing: 'semi-washed',
-      roast: 'dark',
-    },
-    notes:
-      'Guinean coffees are known for their smooth body and mild flavor, often with chocolate and nutty notes.',
-  },
-  laos: {
-    best: {
-      score: 8.4625,
+      score: 8.263,
       processing: 'anaerobic',
       roast: 'medium',
     },
@@ -406,26 +314,46 @@ export const countryScores = {
       processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'Laotian coffees are often sweet and fruity, with a medium body and bright acidity.',
   },
-  'ivory-coast': {
+  rwanda: {
     best: {
-      score: 7.5625,
+      score: 8.675,
+      processing: 'honey',
+      roast: 'medium',
+    },
+    worst: {
+      score: 6.225,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  tanzania: {
+    best: {
+      score: 8.325,
+      processing: 'honey',
+      roast: 'medium',
+    },
+    worst: {
+      score: 5.475,
+      processing: 'monsooned',
+      roast: 'dark',
+    },
+  },
+  uganda: {
+    best: {
+      score: 8.425,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 4.625,
-      processing: 'washed',
+      score: 5.475,
+      processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'Ivorian coffees are known for their smooth body and mild flavor, often with chocolate and nutty notes.',
   },
   venezuela: {
     best: {
-      score: 8.5625,
+      score: 8.563,
       processing: 'anaerobic',
       roast: 'medium',
     },
@@ -434,21 +362,29 @@ export const countryScores = {
       processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'Venezuelan coffees are often sweet and balanced, with a medium body and pleasant acidity, featuring chocolate and nutty notes.',
   },
-  malawi: {
+  vietnam: {
     best: {
-      score: 9.1625,
+      score: 6.912,
       processing: 'anaerobic',
       roast: 'medium',
     },
     worst: {
-      score: 6.275,
+      score: 4.275,
+      processing: 'semi-washed',
+      roast: 'dark',
+    },
+  },
+  yemen: {
+    best: {
+      score: 7.963,
+      processing: 'anaerobic',
+      roast: 'medium',
+    },
+    worst: {
+      score: 4.925,
       processing: 'monsooned',
       roast: 'dark',
     },
-    notes:
-      'Malawian coffees are known for their sweet and fruity flavors, with a medium body and bright acidity.',
   },
 };

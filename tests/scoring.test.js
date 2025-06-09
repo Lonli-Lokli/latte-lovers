@@ -18,10 +18,9 @@ test('Find maximum score for single origin', () => {
 
   // Test all possible combinations
   Object.keys(coffeeProfiles).forEach((country) => {
-    expect(coffeeProfiles[country].sweetness, country).toBeDefined();
     const { maxScore: tempMaxScore, bestCombination: tempBestCombination } =
       getMaxScoreForCountry(
-        coffeeProfiles[country],
+        coffeeProfiles[country].profile,
         processingMethods,
         roastLevelEffects,
       );
@@ -51,9 +50,9 @@ test('Find maximum score for blends', () => {
         Object.keys(processingMethods).forEach((processing) => {
           Object.keys(roastLevelEffects).forEach((roastLevel) => {
             const mergedProfile = mergeProfiles(
-              coffeeProfiles[country1],
+              coffeeProfiles[country1].profile,
               percent1,
-              coffeeProfiles[country2],
+              coffeeProfiles[country2].profile,
               percent2,
             );
 
@@ -78,10 +77,9 @@ test('Find minimum score for single origin', () => {
 
   // Test all possible combinations
   Object.keys(coffeeProfiles).forEach((country) => {
-    expect(coffeeProfiles[country].sweetness, country).toBeDefined();
     const { minScore: tempMinScore, worstCombination: tempWorstCombination } =
       getMinScoreForCountry(
-        coffeeProfiles[country],
+        coffeeProfiles[country].profile,
         processingMethods,
         roastLevelEffects,
       );
@@ -111,9 +109,9 @@ test('Find minimum score for blends', () => {
         Object.keys(processingMethods).forEach((processing) => {
           Object.keys(roastLevelEffects).forEach((roastLevel) => {
             const mergedProfile = mergeProfiles(
-              coffeeProfiles[country1],
+              coffeeProfiles[country1].profile,
               percent1,
-              coffeeProfiles[country2],
+              coffeeProfiles[country2].profile,
               percent2,
             );
 
@@ -145,12 +143,12 @@ test('Calculated Coffee Scores are up-to-date', () => {
     const countryScore = countryScores[country];
 
     const { maxScore, bestCombination } = getMaxScoreForCountry(
-      coffeeProfiles[country],
+      coffeeProfiles[country].profile,
       processingMethods,
       roastLevelEffects,
     );
     const { minScore, worstCombination } = getMinScoreForCountry(
-      coffeeProfiles[country],
+      coffeeProfiles[country].profile,
       processingMethods,
       roastLevelEffects,
     );

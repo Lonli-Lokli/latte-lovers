@@ -146,7 +146,7 @@ function checkCoffee() {
       alert('Please select a country');
       return;
     }
-    initialProfile = { ...coffeeProfiles[country] };
+    initialProfile = { ...coffeeProfiles[country].profile };
   } else if (coffeeType === 'blend') {
     const country1 = document.getElementById('blend1Country').value;
     const percent1 =
@@ -168,8 +168,8 @@ function checkCoffee() {
       return;
     }
 
-    const profile1 = coffeeProfiles[country1];
-    const profile2 = coffeeProfiles[country2];
+    const profile1 = coffeeProfiles[country1].profile;
+    const profile2 = coffeeProfiles[country2].profile;
 
     initialProfile = mergeProfiles(profile1, percent1, profile2, percent2);
   } else {
