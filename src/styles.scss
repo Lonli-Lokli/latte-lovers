@@ -712,6 +712,20 @@ body {
     font-size: 0.75rem;
     padding: 0 0.25rem;
   }
+
+  .form-group, .filter-row, .filter-bar, .filter-container {
+    gap: 4px !important;
+    margin-right: 2px !important;
+    margin-left: 0 !important;
+  }
+  .form-group > *, .filter-row > *, .filter-bar > *, .filter-container > * {
+    margin-right: 2px !important;
+    margin-left: 0 !important;
+  }
+  select, .three-state-slider, three-state-slider {
+    margin-right: 2px !important;
+    margin-left: 0 !important;
+  }
 }
 
 /* Desktop Optimization */

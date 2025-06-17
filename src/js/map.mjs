@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import * as topojson from 'topojson-client';
+import {feature} from 'topojson-client';
 import { geoWinkel3 } from 'd3-geo-projection';
 import { geoPath } from 'd3-geo';
 import { select, zoom } from 'd3';
@@ -56,7 +56,7 @@ function initializeMapSvg() {
   let g = svg.select('g');
   if (g.empty()) g = svg.append('g');
 
-  const countries = topojson.feature(world, world.objects.countries);
+  const countries = feature(world, world.objects.countries);
 
   // Draw countries
   g.selectAll('.country')

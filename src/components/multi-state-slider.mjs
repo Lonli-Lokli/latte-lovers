@@ -5,6 +5,8 @@ class ThreeStateSlider extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     this.options = [];
     this.currentValue = null;
+    this.compact = false;
+    this._handleResize = this._handleResize.bind(this);
   }
 
   static get observedAttributes() {
@@ -13,8 +15,23 @@ class ThreeStateSlider extends HTMLElement {
 
   connectedCallback() {
     this.parseOptions();
+    this._handleResize();
+    window.addEventListener('resize', this._handleResize);
     this.render();
     this.addEventListeners();
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('resize', this._handleResize);
+  }
+
+  _handleResize() {
+    const wasCompact = this.compact;
+    this.compact = window.matchMedia('(max-width: 480px)').matches;
+    if (wasCompact !== this.compact) {
+      this.render();
+      this.addEventListeners();
+    }
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -94,7 +111,7 @@ class ThreeStateSlider extends HTMLElement {
   }
 
   render() {
-    const width = this.getAttribute('width') || '180px';
+    const width = this.getAttribute('width'); // Only use if explicitly set
     const height = this.getAttribute('height') || '36px';
     const optionCount = this.options.length;
     const optionWidth = optionCount > 0 ? `${100 / optionCount}%` : '33.333%';
@@ -112,11 +129,13 @@ class ThreeStateSlider extends HTMLElement {
       })
       .join('\n          ');
 
-    // Generate option elements
+    // Generate option elements (compact mode: only first letter)
     const optionElements = this.options
       .map(
         (opt) =>
-          `<div class="option" data-value="${opt.value}">${opt.label}</div>`,
+          `<div class="option" data-value="${opt.value}">${
+            this.compact ? opt.label.charAt(0) : opt.label
+          }</div>`,
       )
       .join('');
 
@@ -146,13 +165,17 @@ class ThreeStateSlider extends HTMLElement {
         .slider {
           position: relative;
           display: flex;
+          align-items: stretch; /* Ensure children fill height */
           background: var(--slider-track-bg);
           border-radius: 8px;
           padding: 3px;
-          width: ${width};
+          ${width ? `width: ${width};` : ''}
+          max-width: 340px;
           height: ${height};
+          min-height: ${height};
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           box-sizing: border-box;
+          gap: 12px;
         }
 
         .option {
@@ -160,6 +183,7 @@ class ThreeStateSlider extends HTMLElement {
           display: flex;
           align-items: center;
           justify-content: center;
+          height: 100%;
           font-size: 13px;
           font-weight: 500;
           color: var(--slider-text-secondary);
@@ -169,6 +193,8 @@ class ThreeStateSlider extends HTMLElement {
           user-select: none;
           position: relative;
           z-index: 2;
+          padding: 0;
+          margin: 0;
         }
 
         .option.active {
@@ -200,12 +226,40 @@ class ThreeStateSlider extends HTMLElement {
           )
           .join('')}
 
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
+          .slider {
+            height: 28px !important;
+            min-height: 24px;
+            padding: 1px;
+            border-radius: 6px;
+            max-width: 110px;
+            width: auto !important;
+            gap: 2px; /* smaller gap for mobile */
+          }
           .option {
-            font-size: 12px;
+            font-size: 11px !important;
+            padding: 0 4px !important;
+            min-width: 22px;
+            height: 24px;
+            border-radius: 4px;
+            margin: 0 1px;
+          }
+          .indicator {
+            border-radius: 4px;
+            top: 1px;
+            left: 1px;
+            height: calc(100% - 2px);
           }
         }
-
+        @media (min-width: 769px) {
+          .slider {
+            max-width: 340px !important;
+            gap: 12px !important;
+          }
+          .option {
+            margin: 0 !important;
+          }
+        }
         @media (prefers-reduced-motion: reduce) {
           .indicator {
             transition: none;

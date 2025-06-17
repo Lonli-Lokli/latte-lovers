@@ -1,56 +1,51 @@
 <!-- Filtering Section -->
-<div class="filter-controls">
-  <select
-    title="Country Filter"
-    id="countryFilterSelect"
-    multiple
-    class="multiple-select country"
-    data-width="100"
-  >
-    <!-- Options will be populated by JavaScript -->
-  </select>
+<div class="leaders-flex-layout">
+  <div class="filter-controls">
+    <select
+      title="Country Filter"
+      id="countryFilterSelect"
+      multiple
+      class="multiple-select country"
+      data-width="100"
+    >
+      <!-- Options will be populated by JavaScript -->
+    </select>
 
-  <select
-    title="Processing Filter"
-    id="processingFilterSelect"
-    multiple
-    class="multiple-select process"
-    data-width="100"
-  >
-    <!-- Options will be populated by JavaScript -->
-  </select>
+    <select
+      title="Processing Filter"
+      id="processingFilterSelect"
+      multiple
+      class="multiple-select process"
+      data-width="100"
+    >
+      <!-- Options will be populated by JavaScript -->
+    </select>
 
-  <select
-    title="Roast Filter"
-    id="roastFilterSelect"
-    multiple
-    class="multiple-select roast"
-    data-width="100"
-  >
-    <!-- Options will be populated by JavaScript -->
-  </select>
+    <select
+      title="Roast Filter"
+      id="roastFilterSelect"
+      multiple
+      class="multiple-select roast"
+      data-width="100"
+    >
+      <!-- Options will be populated by JavaScript -->
+    </select>
 
- <three-state-slider options="best,all,worst" value="best" id="originSelection"></three-state-slider>
-</div>
-
-<div class="leaders-container">
-  <div class="leaders-table">
-    <table>
-      <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Country</th>
-          <th>Processing</th>
-          <th>Roast</th>
-          <th>Score</th>
-        </tr>
-      </thead>
-      <tbody class="table-body">
-        <!-- Table rows will be dynamically populated by JavaScript -->
-      </tbody>
-    </table>
+    <three-state-slider
+      options="best,all,worst"
+      value="best"
+      id="originSelection"
+      width="180px"
+    ></three-state-slider>
   </div>
-  <div class="chart-legend">
+
+  <div class="leaders-table-flex">
+    <virtualized-table id="virtualizedTable">
+      <link rel="stylesheet" href="src/styles/leaders.table.scss" slot="styles" />
+    </virtualized-table>
+  </div>
+
+  <div class="chart-legend-flex">
     <div class="legend-item">
       <span class="legend-color excellent"></span>
       <span>Excellent</span>

@@ -1,5 +1,6 @@
 import { multipleSelect } from 'multiple-select-vanilla';
 import '../components/multi-state-slider.mjs';
+import '../components/virtualized-table.mjs';
 
 import {
   applyFullProcessingEffects,
@@ -25,6 +26,7 @@ export function initializeLeadersTab() {
 let msCountryInstance = null;
 let msProcessingInstance = null;
 let msRoastInstance = null;
+let virtualizedTable = null;
 
 // Function to initialize leaders table and filters using multiple-select-vanilla
 export function initializeLeadersFilters(
@@ -35,8 +37,8 @@ export function initializeLeadersFilters(
   const countryFilter = document.getElementById('countryFilterSelect');
   const processingFilter = document.getElementById('processingFilterSelect');
   const roastFilter = document.getElementById('roastFilterSelect');
-  const tableBody = document.querySelector('.leaders-table .table-body');
   const originSelection = document.getElementById('originSelection');
+  virtualizedTable = document.querySelector('virtualized-table');
   const allLeaders = generateAndRankLeaders(
     coffeeProfiles,
     processingMethods,
@@ -170,52 +172,129 @@ export function initializeLeadersFilters(
     }
 
     // Update table with filtered leaders
-    if (tableBody) {
-      tableBody.innerHTML = ''; // Clear existing content
-      const topLeaders = filteredLeaders;
+    if (virtualizedTable) {
+      virtualizedTable.columns = [
+        { key: 'rank', label: 'Rank', style: 'width:auto;min-width:2ch;max-width:4ch;text-align:right;' },
+        { key: 'country', label: 'Country' },
+        {
+          key: 'processing',
+          label: 'Processing',
+          cellAttributes: (cell) => ({
+            kind: 'processing',
+            item: Object.entries(processingMethods).find(
+              ([_, method]) => method.abbreviation === cell.abbreviation,
+            )?.[0],
+          }),
+          render: (cell) => `<span class="abbreviation-mobile">${cell.abbreviation}</span>
+                       <span class="fullname-desktop">${cell.displayName}</span>`,
+          tooltipTemplate: (cell) => `${cell.displayName}: ${cell.description}`,
+        },
+        {
+          key: 'roast',
+          label: 'Roast',
+          width: 'auto',
+          cellAttributes: (cell) => ({
+            kind: 'roast',
+            item: Object.entries(roastLevelEffects).find(
+              ([_, method]) => method.abbreviation === cell.abbreviation,
+            )?.[0],
+          }),
+          render: (cell) => `<span class="abbreviation-mobile">${cell.abbreviation}</span>
+                       <span class="fullname-desktop">${cell.displayName}</span>`,
+          tooltipTemplate: (cell) => `${cell.displayName}: ${cell.description}`,
+        },
+        {
+          key: 'score',
+          label: 'Score',
+          width: 50,
+          render: (cell) => `${cell}/10`,
+          cellAttributes: (_, row) => ({
+            class: `table-score ${row.grade}`,
+          }),
+        },
+      ];
 
-      if (topLeaders.length === 0) {
-        tableBody.innerHTML =
-          '<tr><td colspan="5" style="text-align: center;">No results found for the selected filters.</td></tr>';
-        return;
+      virtualizedTable.data = filteredLeaders.map((leader, index) => ({
+        rank: index + 1,
+        country: leader.country,
+        processing: {
+          abbreviation: leader.processingAbbreviation,
+          displayName: leader.processingDisplayName,
+          description: leader.processingDescription,
+        },
+        roast: {
+          abbreviation: leader.roastAbbreviation,
+          displayName: leader.roastDisplayName,
+          description: leader.roastDescription,
+        },
+        score: leader.score,
+        grade: leader.grade,
+      }));
+
+      // Attach tooltip logic to table after rendering
+      setTimeout(() => attachTableTooltips(), 0);
+    }
+
+    function attachTableTooltips() {
+      // Create or reuse tooltip element
+      let tooltip = document.getElementById('table-tooltip');
+      if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.id = 'table-tooltip';
+        tooltip.className = 'tooltip';
+        tooltip.style.cssText = `
+          position: fixed;
+          background: var(--surface-color);
+          color: var(--text-color);
+          padding: 8px 12px;
+          border-radius: 6px;
+          font-size: 0.875rem;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          z-index: 1000;
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          max-width: 250px;
+          border: 1px solid var(--border-color);
+        `;
+        document.body.appendChild(tooltip);
       }
 
-      topLeaders.forEach((leader, index) => {
-        const tableRow = document.createElement('tr');
-        tableRow.classList.add('table-row');
-        tableRow.innerHTML = `
-                    <td class="table-cell table-rank">${index + 1}</td>
-                    <td class="table-cell">${leader.country}</td>
-                     <td class="table-cell" data-kind="processing" data-item="${
-                       Object.entries(processingMethods).find(
-                         ([_, method]) =>
-                           method.abbreviation ===
-                           leader.processingAbbreviation,
-                       )?.[0]
-                     }">
-                      <span class="abbreviation-mobile">${
-                        leader.processingAbbreviation
-                      }</span>
-                      <span class="fullname-desktop">${
-                        leader.processingDisplayName
-                      }</span>
-                    </td>
-                    <td class="table-cell" data-kind="roast" data-item="${
-                      Object.entries(roastLevelEffects).find(
-                        ([_, method]) =>
-                          method.abbreviation === leader.roastAbbreviation,
-                      )?.[0]
-                    }"> <span class="abbreviation-mobile">${
-                      leader.roastAbbreviation
-                    }</span>
-                      <span class="fullname-desktop">${
-                        leader.roastDisplayName
-                      }</span></td>
-                    <td class="table-cell table-score ${leader.grade}">${
-                      leader.score
-                    }/10</td>
-                `;
-        tableBody.appendChild(tableRow);
+      function showTooltip(event, text) {
+        const rect = event.target.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+        let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+        let top = rect.bottom + 8;
+        if (event.type === 'touchstart') {
+          top = rect.top - tooltipRect.height - 8;
+          if (left < 8) left = 8;
+          if (left + tooltipRect.width > window.innerWidth - 8) {
+            left = window.innerWidth - tooltipRect.width - 8;
+          }
+        }
+        if (event.type === 'mouseenter') {
+          if (left < 8) left = 8;
+          if (left + tooltipRect.width > window.innerWidth - 8) {
+            left = window.innerWidth - tooltipRect.width - 8;
+          }
+          if (top + tooltipRect.height > window.innerHeight - 8) {
+            top = rect.top - tooltipRect.height - 8;
+          }
+        }
+        tooltip.style.left = `${left}px`;
+        tooltip.style.top = `${top}px`;
+        tooltip.textContent = text;
+        tooltip.style.opacity = '1';
+      }
+      function hideTooltip() {
+        tooltip.style.opacity = '0';
+      }
+      document.querySelectorAll('[data-tooltip]').forEach((el) => {
+        const text = el.getAttribute('data-tooltip');
+        el.addEventListener('mouseenter', (e) => showTooltip(e, text));
+        el.addEventListener('mouseleave', hideTooltip);
+        el.addEventListener('touchstart', (e) => showTooltip(e, text), { passive: true });
+        el.addEventListener('touchend', hideTooltip, { passive: true });
       });
     }
     initializeTooltips(); // Re-initialize tooltips for new table rows
