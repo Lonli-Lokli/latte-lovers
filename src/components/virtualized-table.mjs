@@ -83,6 +83,8 @@ class VirtualizedTableElement extends HTMLElement {
     this._attachEventListeners();
     this._updateViewState();
     this._checkInitialTheme();
+    // Attach tooltip delegation once
+    this._attachTooltipDelegation();
   }
 
   disconnectedCallback() {
@@ -90,6 +92,12 @@ class VirtualizedTableElement extends HTMLElement {
       this.wrapper.removeEventListener('scroll', this._handleScroll);
     if (this._resizeObserver) this._resizeObserver.disconnect();
     if (this._themeObserver) this._themeObserver.disconnect();
+    if (this.tbody) {
+      this.tbody.removeEventListener('mouseenter', this._onTooltipEvent, true);
+      this.tbody.removeEventListener('mouseleave', this._onTooltipEvent, true);
+      this.tbody.removeEventListener('touchstart', this._onTooltipEvent, true);
+      this.tbody.removeEventListener('touchend', this._onTooltipEvent, true);
+    }
   }
 
   // --- Public API: Properties ---
@@ -434,6 +442,76 @@ class VirtualizedTableElement extends HTMLElement {
     this.thead.appendChild(r);
   }
 
+  _attachTooltipDelegation() {
+    // Bind once for delegation
+    let tooltipTimer = null;
+    let lastCell = null;
+    this._onTooltipEvent = (event) => {
+      const type = event.type;
+      let cell = event.target;
+      // Find the closest td with data-has-tooltip
+      while (cell && cell !== this.tbody && cell.nodeName !== 'TD') {
+        cell = cell.parentElement;
+      }
+      if (!cell || cell.nodeName !== 'TD' || !cell.hasAttribute('data-has-tooltip')) {
+        if (type === 'mouseleave' || type === 'touchend') {
+          clearTimeout(tooltipTimer);
+          this._tooltip.style.opacity = '0';
+          lastCell = null;
+        }
+        return;
+      }
+      // Find column index
+      const colIdx = Array.from(cell.parentNode.children).indexOf(cell);
+      const rowIdx = Array.from(this.tbody.children).indexOf(cell.parentNode);
+      const col = this._columns[colIdx];
+      if (!col || !col.tooltipTemplate) return;
+      const data = this._data[rowIdx + Math.max(0, Math.floor(this._scrollTop / this._rowHeight) - this._buffer)];
+      const cellData = data[col.key];
+      const tooltipContent = col.tooltipTemplate(cellData, data);
+      if (type === 'mouseenter' || type === 'touchstart') {
+        clearTimeout(tooltipTimer);
+        lastCell = cell;
+        tooltipTimer = setTimeout(() => {
+          // Only show if still on the same cell
+          if (lastCell !== cell) return;
+          this._tooltip.innerHTML = tooltipContent;
+          const rect = cell.getBoundingClientRect();
+          const tooltipRect = this._tooltip.getBoundingClientRect();
+          let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+          let top = rect.bottom + 8;
+          if (type === 'touchstart') {
+            top = rect.top - tooltipRect.height - 8;
+            if (left < 8) left = 8;
+            if (left + tooltipRect.width > window.innerWidth - 8) {
+              left = window.innerWidth - tooltipRect.width - 8;
+            }
+          }
+          if (type === 'mouseenter') {
+            if (left < 8) left = 8;
+            if (left + tooltipRect.width > window.innerWidth - 8) {
+              left = window.innerWidth - tooltipRect.width - 8;
+            }
+            if (top + tooltipRect.height > window.innerHeight - 8) {
+              top = rect.top - tooltipRect.height - 8;
+            }
+          }
+          this._tooltip.style.left = `${left}px`;
+          this._tooltip.style.top = `${top}px`;
+          this._tooltip.style.opacity = '1';
+        }, 200); // 200ms delay before showing tooltip
+      } else if (type === 'mouseleave' || type === 'touchend') {
+        clearTimeout(tooltipTimer);
+        this._tooltip.style.opacity = '0';
+        lastCell = null;
+      }
+    };
+    this.tbody.addEventListener('mouseenter', this._onTooltipEvent, true);
+    this.tbody.addEventListener('mouseleave', this._onTooltipEvent, true);
+    this.tbody.addEventListener('touchstart', this._onTooltipEvent, true);
+    this.tbody.addEventListener('touchend', this._onTooltipEvent, true);
+  }
+
   _render() {
     if (this.getAttribute('state') !== 'data' || !this._data) {
       this.tbody.innerHTML = '';
@@ -498,61 +576,6 @@ class VirtualizedTableElement extends HTMLElement {
           headerTable.style.width = bodyRect.width + 'px';
         }
       }
-    });
-
-    // Always re-attach tooltip listeners after every render
-    this._attachTooltipListeners();
-  }
-
-  _attachTooltipListeners() {
-    // Remove all previous listeners by cloning tbody
-    const newTbody = this.tbody.cloneNode(true);
-    this.tbody.parentNode.replaceChild(newTbody, this.tbody);
-    this.tbody = newTbody;
-    // Attach listeners to cells with tooltips
-    const rows = this.tbody.querySelectorAll('tr');
-    rows.forEach((row, rowIdx) => {
-      Array.from(row.children).forEach((cell, colIdx) => {
-        const col = this._columns[colIdx];
-        if (col && col.tooltipTemplate) {
-          const data = this._data[rowIdx + Math.max(0, Math.floor(this._scrollTop / this._rowHeight) - this._buffer)];
-          const cellData = data[col.key];
-          const tooltipContent = col.tooltipTemplate(cellData, data);
-          const show = (event) => {
-            this._tooltip.innerHTML = tooltipContent;
-            const rect = event.target.getBoundingClientRect();
-            const tooltipRect = this._tooltip.getBoundingClientRect();
-            let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
-            let top = rect.bottom + 8;
-            if (event.type === 'touchstart') {
-              top = rect.top - tooltipRect.height - 8;
-              if (left < 8) left = 8;
-              if (left + tooltipRect.width > window.innerWidth - 8) {
-                left = window.innerWidth - tooltipRect.width - 8;
-              }
-            }
-            if (event.type === 'mouseenter') {
-              if (left < 8) left = 8;
-              if (left + tooltipRect.width > window.innerWidth - 8) {
-                left = window.innerWidth - tooltipRect.width - 8;
-              }
-              if (top + tooltipRect.height > window.innerHeight - 8) {
-                top = rect.top - tooltipRect.height - 8;
-              }
-            }
-            this._tooltip.style.left = `${left}px`;
-            this._tooltip.style.top = `${top}px`;
-            this._tooltip.style.opacity = '1';
-          };
-          const hide = () => {
-            this._tooltip.style.opacity = '0';
-          };
-          cell.addEventListener('mouseenter', show);
-          cell.addEventListener('mouseleave', hide);
-          cell.addEventListener('touchstart', show, { passive: true });
-          cell.addEventListener('touchend', hide, { passive: true });
-        }
-      });
     });
   }
 }
