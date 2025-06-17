@@ -1,4 +1,5 @@
 import { multipleSelect } from 'multiple-select-vanilla';
+import '../components/multi-state-slider.mjs';
 
 import {
   applyFullProcessingEffects,
@@ -35,6 +36,7 @@ export function initializeLeadersFilters(
   const processingFilter = document.getElementById('processingFilterSelect');
   const roastFilter = document.getElementById('roastFilterSelect');
   const tableBody = document.querySelector('.leaders-table .table-body');
+  const originSelection = document.getElementById('originSelection');
   const allLeaders = generateAndRankLeaders(
     coffeeProfiles,
     processingMethods,
@@ -82,8 +84,6 @@ export function initializeLeadersFilters(
 
   const options = (name) => ({
     minimumCountSelected: 0,
-    autoAdjustDropHeight: true,
-    autoAdjustDropWidthByTextSize: true,
     allSelectedText: name,
     countSelectedText: name,
     darkMode: !document.body.classList.contains('light-theme'),
@@ -112,7 +112,7 @@ export function initializeLeadersFilters(
       ? Array.from(roastFilter.selectedOptions).map((option) => option.value)
       : Object.keys(roastLevelEffects);
 
-    const filteredLeaders = allLeaders.filter((leader) => {
+    let filteredLeaders = allLeaders.filter((leader) => {
       const leaderCountryKey = leader.country.toLowerCase().replace(/ /g, '-');
       const leaderProcessingEntry = Object.entries(processingMethods).find(
         ([key, method]) =>
@@ -130,10 +130,49 @@ export function initializeLeadersFilters(
       return countryMatch && processingMatch && roastMatch;
     });
 
+    // If 'Top per Origin' is checked, keep only the top entry per country
+    if (originSelection) {
+      const value = originSelection.getValue();
+      switch (value) {
+        case 'all':
+          // do nothing, show all
+          break;
+        case 'best':
+          // Top per country
+          const topByCountry = {};
+          for (const leader of filteredLeaders) {
+            const key = leader.country;
+            if (!topByCountry[key] || leader.score > topByCountry[key].score) {
+              topByCountry[key] = leader;
+            }
+          }
+          filteredLeaders = Object.values(topByCountry);
+          filteredLeaders.sort((a, b) => b.score - a.score);
+          break;
+        case 'worst':
+          // Worst per country
+          const worstByCountry = {};
+          for (const leader of filteredLeaders) {
+            const key = leader.country;
+            if (
+              !worstByCountry[key] ||
+              leader.score < worstByCountry[key].score
+            ) {
+              worstByCountry[key] = leader;
+            }
+          }
+          filteredLeaders = Object.values(worstByCountry);
+          filteredLeaders.sort((a, b) => a.score - b.score);
+          break;
+        default:
+          throw new Error(`Unknown origin selection value: ${value}`);
+      }
+    }
+
     // Update table with filtered leaders
     if (tableBody) {
       tableBody.innerHTML = ''; // Clear existing content
-      const topLeaders = filteredLeaders.slice(0, 10); // Display top 10 of filtered
+      const topLeaders = filteredLeaders;
 
       if (topLeaders.length === 0) {
         tableBody.innerHTML =
@@ -191,6 +230,9 @@ export function initializeLeadersFilters(
   }
   if (roastFilter) {
     roastFilter.addEventListener('change', applyFilters);
+  }
+  if (originSelection) {
+    originSelection.addEventListener('change', applyFilters);
   }
 
   // Initial table population and label state update
@@ -366,11 +408,12 @@ export function initializeTooltips() {
         element.addEventListener('mouseleave', hideTooltip);
 
         // Mobile touch
-        element.addEventListener('touchstart', (e) => {
-          e.preventDefault();
-          showTooltip(e, tooltipText);
-        });
-        element.addEventListener('touchend', hideTooltip);
+        element.addEventListener(
+          'touchstart',
+          (e) => showTooltip(e, tooltipText),
+          { passive: true },
+        );
+        element.addEventListener('touchend', hideTooltip, { passive: true });
       }
     });
 }

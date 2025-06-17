@@ -1,6 +1,11 @@
 /* Leaders Tab Styles */
+
 .leaders-container {
-  padding: 1rem;
+  /* Make container use all available vertical space below filters */
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  min-height: 0;
 }
 
 .leaders-container h2 {
@@ -9,7 +14,24 @@
   color: var(--text-color);
 }
 
+.filter-controls {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  margin-bottom: 0;
+  padding: 1rem;
+}
+
 .leaders-table {
+  /* Take all available space except legend */
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  height: auto;
+  overflow-y: auto;
+  display: block;
   width: 100%;
   border-collapse: collapse;
   table-layout: auto;
@@ -20,10 +42,18 @@
   box-shadow: var(--box-shadow);
 }
 
+.leaders-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
 .leaders-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface-color);
   text-align: left;
   padding: 0.75rem 1rem;
-  background: var(--surface-color);
   font-weight: 600;
   color: var(--text-color);
   border-bottom: 1px solid var(--border-color);
@@ -134,15 +164,24 @@
   display: none;
 }
 
-.filter-controls {
-  padding: 1rem;
+.abbreviation-mobile,
+.fullname-desktop {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none;     /* IE10+/Edge */
+  user-select: none;
 }
 
 .chart-legend {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background: var(--surface-color);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.03);
+  margin-top: 0;
   display: flex;
   gap: 1.5em;
   align-items: center;
-  margin-top: 10px;
+  padding: 0.5rem 1rem;
 }
 
 .legend-item {
@@ -173,10 +212,30 @@
   }
 }
 
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.switch-label.top-per-origin {
+  margin: 0;
+  padding: 0 0.25rem;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  font-size: 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 /* Mobile Optimization */
 @media (max-width: 768px) {
   .leaders-container {
     padding: 0.5rem;
+    height: 100dvh;
   }
 
   .leaders-container h2 {
@@ -210,6 +269,11 @@
 
   .filter-controls {
     padding: 0;
+    flex-wrap: nowrap;
+  }
+
+  .leaders-table {
+    max-height: none;
   }
 }
 
@@ -222,4 +286,16 @@
   .fullname-desktop {
     display: inline;
   }
+}
+
+/* For the main content area (if not already set) */
+body,
+html {
+  height: auto;
+}
+
+main,
+.main-content,
+#main-content {
+  height: auto;
 }
