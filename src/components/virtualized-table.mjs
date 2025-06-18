@@ -290,12 +290,14 @@ class VirtualizedTableElement extends HTMLElement {
       assigned.forEach((node) => {
         if (node.nodeName === 'LINK' && node.rel === 'stylesheet') {
           // Clone and append to shadowRoot if not already present
-          if (
-            !Array.from(this.shadowRoot.querySelectorAll('link')).some(
-              (l) => l.href === node.href,
-            )
-          ) {
+          if (!Array.from(this.shadowRoot.querySelectorAll('link')).some((l) => l.href === node.href)) {
             const clone = node.cloneNode();
+            this.shadowRoot.appendChild(clone);
+          }
+        } else if (node.nodeName === 'STYLE') {
+          // Clone and append <style> if not already present (by textContent)
+          if (!Array.from(this.shadowRoot.querySelectorAll('style')).some((s) => s.textContent === node.textContent)) {
+            const clone = node.cloneNode(true);
             this.shadowRoot.appendChild(clone);
           }
         }
