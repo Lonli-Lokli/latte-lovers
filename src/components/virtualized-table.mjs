@@ -235,6 +235,8 @@ class VirtualizedTableElement extends HTMLElement {
             .virtual-table-wrapper {
                 height: 100%; width: 100%; overflow: auto; position: relative;
                 border: var(--wrapper-border); box-sizing: border-box; border-radius: 8px;
+                /* Ensure stacking context for header z-index */
+                z-index: 0;
             }
             .virtual-table {
                 width: 100%;
@@ -243,9 +245,13 @@ class VirtualizedTableElement extends HTMLElement {
                 table-layout: auto; /* Use auto layout for content-fit columns */
             }
             .virtual-table--header {
-                position: sticky; top: 0; z-index: 10; background-color: var(--header-bg);
+                position: sticky; top: 0; z-index: 2; background-color: var(--header-bg);
+                /* Ensure header is above body */
             }
-            /* Make th/td shrink to fit content */
+            .virtual-table--body {
+                z-index: 1;
+                position: relative;
+            }
             .virtual-table th,
             .virtual-table td {
                 padding: 0.75rem 1rem;
@@ -264,7 +270,6 @@ class VirtualizedTableElement extends HTMLElement {
                 min-height: unset;
             }
             .virtual-table thead th { background-color: var(--header-bg); }
-            .virtual-table tbody tr:nth-child(even) { background-color: var(--row-bg-even); }
             .virtual-table tbody tr:hover td { background-color: var(--row-hover-bg); }
             .virtual-table-body-container { position: relative; } /* Positioning context for content */
             .virtual-table-sizer { position: relative; width: 100%; }
@@ -570,12 +575,12 @@ class VirtualizedTableElement extends HTMLElement {
             bodyCols[i].setAttribute('width', widths[i]);
           }
         }
-        // Synchronize header table width to body table width for sticky effect
+        // Synchronize body table width to header table width for sticky effect
         const bodyTable = this.bodyTable;
         const headerTable = this.headerTable;
         if (bodyTable && headerTable) {
-          const bodyRect = bodyTable.getBoundingClientRect();
-          headerTable.style.width = bodyRect.width + 'px';
+          const headerRect = headerTable.getBoundingClientRect();
+          bodyTable.style.width = headerRect.width + 'px';
         }
       }
     });

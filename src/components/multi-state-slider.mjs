@@ -17,12 +17,24 @@ class ThreeStateSlider extends HTMLElement {
     this.parseOptions();
     this._handleResize();
     window.addEventListener('resize', this._handleResize);
+    this._themeObserver = new MutationObserver(() => this._updateThemeAttribute());
+    this._themeObserver.observe(document.body, { attributes: true });
+    this._updateThemeAttribute();
     this.render();
     this.addEventListeners();
   }
 
   disconnectedCallback() {
     window.removeEventListener('resize', this._handleResize);
+    if (this._themeObserver) this._themeObserver.disconnect();
+  }
+
+  _updateThemeAttribute() {
+    if (document.body.classList.contains('light-theme')) {
+      this.setAttribute('theme', 'light');
+    } else {
+      this.setAttribute('theme', 'dark');
+    }
   }
 
   _handleResize() {
@@ -141,7 +153,7 @@ class ThreeStateSlider extends HTMLElement {
 
     this.shadowRoot.innerHTML = `
       <style>
-        :host {
+        :host([theme="dark"]) {
           --slider-bg-primary: #0f172a;
           --slider-bg-secondary: #1e293b;
           --slider-text-primary: #f1f5f9;
@@ -151,8 +163,7 @@ class ThreeStateSlider extends HTMLElement {
           ${darkColorProperties}
           display: inline-block;
         }
-
-        :host-context(.light-theme) {
+        :host([theme="light"]) {
           --slider-bg-primary: #f8fafc;
           --slider-bg-secondary: #e2e8f0;
           --slider-text-primary: #1e293b;
@@ -165,7 +176,7 @@ class ThreeStateSlider extends HTMLElement {
         .slider {
           position: relative;
           display: flex;
-          align-items: stretch; /* Ensure children fill height */
+          align-items: stretch;
           background: var(--slider-track-bg);
           border-radius: 8px;
           padding: 3px;
@@ -175,11 +186,16 @@ class ThreeStateSlider extends HTMLElement {
           min-height: ${height};
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           box-sizing: border-box;
-          gap: 12px;
+          /* Remove gap to make options fill all space */
+          gap: 0;
         }
 
         .option {
-          flex: 1;
+          flex: 1 1 0%;
+          min-width: 0;
+          /* Remove margin and padding that could affect width */
+          margin: 0;
+          padding: 0;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -189,42 +205,21 @@ class ThreeStateSlider extends HTMLElement {
           color: var(--slider-text-secondary);
           cursor: pointer;
           border-radius: 6px;
-          transition: color 0.2s ease;
+          transition: color 0.2s ease, background 0.2s ease;
           user-select: none;
           position: relative;
           z-index: 2;
-          padding: 0;
-          margin: 0;
+          background: none;
         }
 
         .option.active {
-          color: white;
+          color: #fff;
+          background: var(--color-active, #6366f1);
         }
 
         .option:hover:not(.active) {
           color: var(--slider-text-primary);
         }
-
-        .indicator {
-          position: absolute;
-          top: 3px;
-          left: 3px;
-          width: calc(${optionWidth} - 2px);
-          height: calc(100% - 6px);
-          border-radius: 6px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          z-index: 1;
-        }
-
-        ${this.options
-          .map(
-            (opt, index) => `
-        .indicator.${opt.value} {
-          transform: translateX(${index * 100}%);
-          background: var(--color-${opt.value});
-        }`,
-          )
-          .join('')}
 
         @media (max-width: 768px) {
           .slider {
@@ -243,12 +238,6 @@ class ThreeStateSlider extends HTMLElement {
             height: 24px;
             border-radius: 4px;
             margin: 0 1px;
-          }
-          .indicator {
-            border-radius: 4px;
-            top: 1px;
-            left: 1px;
-            height: calc(100% - 2px);
           }
         }
         @media (min-width: 769px) {
@@ -269,7 +258,6 @@ class ThreeStateSlider extends HTMLElement {
       
       <div class="slider">
         ${optionElements}
-        <div class="indicator ${this.currentValue}"></div>
       </div>
     `;
     this.updateUI(); // Ensure active class is set after rendering
@@ -318,18 +306,19 @@ class ThreeStateSlider extends HTMLElement {
   }
 
   updateUI() {
-    const indicator = this.shadowRoot.querySelector('.indicator');
     const options = this.shadowRoot.querySelectorAll('.option');
-
-    if (indicator) {
-      indicator.className = `indicator ${this.currentValue}`;
-    }
-
     options.forEach((option) => {
-      option.classList.toggle(
-        'active',
-        option.dataset.value === this.currentValue,
-      );
+      const isActive = option.dataset.value === this.currentValue;
+      option.classList.toggle('active', isActive);
+      if (isActive) {
+        // Set background color for active option
+        const opt = this.options.find(o => o.value === this.currentValue);
+        option.style.background = opt ? opt.color : '#6366f1';
+        option.style.color = '#fff';
+      } else {
+        option.style.background = 'none';
+        option.style.color = 'var(--slider-text-secondary)';
+      }
     });
   }
 

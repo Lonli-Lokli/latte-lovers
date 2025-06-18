@@ -164,6 +164,12 @@ function showTooltip(event, score, profile, countryName) {
                 <div class="score-range">
                     <strong>Average:</strong> ${averageScore}
                 </div>
+                <div class="score-range">
+                    <strong>Best Roast:</strong> ${score.best.roast || '—'}
+                </div>
+                <div class="score-range">
+                    <strong>Best Processing:</strong> ${score.best.processing || '—'}
+                </div>
                 <div class="score-bar">
                     <div class="score-fill" style="width: ${score.best}%"></div>
                 </div>
@@ -174,16 +180,21 @@ function showTooltip(event, score, profile, countryName) {
 
   // Mobile: pin tooltip to bottom, desktop: follow mouse
   if (window.innerWidth <= 768) {
+    // Attach tooltip to map-container and pin to bottom
+    const mapContainer = document.querySelector('.map-container');
+    if (mapContainer && tooltip.node() && !mapContainer.contains(tooltip.node())) {
+      mapContainer.appendChild(tooltip.node());
+    }
     tooltip
       .classed('show', true)
-      .style('position', 'fixed')
+      .style('position', 'absolute')
       .style('left', '0')
       .style('right', '0')
       .style('bottom', '0')
       .style('top', 'auto')
       .style('margin', '0 auto')
-      .style('width', '100vw')
-      .style('max-width', '100vw')
+      .style('width', '100%')
+      .style('max-width', '100%')
       .style('z-index', 9999);
   } else {
     tooltip

@@ -9,6 +9,8 @@
   --text-color: #f5f5f5;
   --primary-color: #ffd700;
   --primary-color-dark: #bfa100;
+  --explanation-bg: rgba(255, 255, 255, 0.03);
+  --explanation-border: rgba(255, 255, 255, 0.05);
 }
 
 /* Light Theme Variables */
@@ -23,6 +25,8 @@ body.light-theme {
   --text-color: #23201d;
   --primary-color: #7b4f00;
   --primary-color-dark: #4a2e00;
+  --explanation-bg: #fffbe8;
+  --explanation-border: #f3e9c7;
 }
 
 /* Formula Tab Styles */
@@ -348,11 +352,12 @@ body.light-theme .formula-container select {
 }
 
 .explanation {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--explanation-bg);
+  border: 1p solid var(--explanation-border);  
   border-radius: 16px;
-  padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 16px;  
   margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(212, 165, 116, 0.08);
 
   h3 {
     font-size: 16px;
@@ -674,3 +679,4 @@ body.light-theme .formula-container select {
     }
   }
 }
+
